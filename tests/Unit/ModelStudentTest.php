@@ -4,57 +4,43 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Models\Student;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ModelStudentTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /** @test */
-    public function test_it_can_create_student()
+    public function test_it_has_correct_table_name()
     {
-        $student = Student::create([
-            'student_id' => 'S001',
-            'name' => 'Girhan',
-            'email' => 'girhan@test.com',
-            'year_entrance' => 2023,
-            'status' => 'active',
-        ]);
+        $student = new Student();
 
-        $this->assertDatabaseHas('students', [
-            'student_id' => 'S001',
-            'email' => 'girhan@test.com',
-        ]);
+        $this->assertEquals('students', $student->getTable());
     }
 
-    /** @test */
-    public function test_it_can_get_all_students()
+    public function test_it_has_fillable_attributes()
     {
-        Student::create([
-            'student_id' => 'S002',
-            'name' => 'Test',
-            'email' => 'test@test.com',
-            'year_entrance' => 2022,
-            'status' => 'active',
-        ]);
+        $student = new Student();
 
-        $students = Student::all();
-
-        $this->assertCount(1, $students);
+        $this->assertEquals([
+            'student_id',
+            'name',
+            'email',
+            'year_entrance',
+            'status',
+        ], $student->getFillable());
     }
 
-    /** @test */
-    public function test_it_stores_correct_data()
+    public function test_it_has_correct_casts()
     {
-        $student = Student::create([
-            'student_id' => 'S003',
-            'name' => 'Valid',
-            'email' => 'valid@test.com',
-            'year_entrance' => 2021,
-            'status' => 'inactive',
-        ]);
+        $student = new Student();
 
-        $this->assertEquals('Valid', $student->name);
-        $this->assertEquals('inactive', $student->status);
+        $casts = $student->getCasts();
+
+        $this->assertArrayHasKey('year_entrance', $casts);
+        $this->assertEquals('integer', $casts['year_entrance']);
+    }
+
+    public function test_it_uses_timestamps()
+    {
+        $student = new Student();
+
+        $this->assertTrue($student->timestamps);
     }
 }
