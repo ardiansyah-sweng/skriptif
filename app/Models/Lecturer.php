@@ -2,24 +2,40 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Lecturer extends Model
 {
-    use HasFactory;
-
-    // Nama tabel (opsional kalau sama)
+    /**
+     * Table name
+     */
     protected $table = 'lecturers';
 
-    // Kolom yang boleh diisi (mass assignment)
+    /**
+     * Primary key
+     */
+    protected $primaryKey = 'id';
+
+    /**
+     * Mass assignable attributes
+     */
     protected $fillable = [
         'lecturer_id',
         'name',
         'email',
-        'expertise'
+        'expertise',
+        'status',
     ];
 
-    // Kalau pakai created_at & updated_at
+    /**
+     * Default values
+     */
+    protected $attributes = [
+        'status' => 'active',
+    ];
+
+    /**
+     * Timestamps
+     */
     public $timestamps = true;
 }

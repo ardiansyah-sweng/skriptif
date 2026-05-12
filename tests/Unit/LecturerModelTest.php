@@ -7,28 +7,40 @@ use App\Models\Lecturer;
 
 class LecturerModelTest extends TestCase
 {
-    public function test_lecturer_model_maps_to_table(): void
+    public function test_it_has_correct_table_name()
     {
         $lecturer = new Lecturer();
-        $this->assertSame('lecturers', $lecturer->getTable());
+
+        $this->assertEquals('lecturers', $lecturer->getTable());
     }
 
-    public function test_lecturer_model_has_fillable(): void
+    public function test_it_has_fillable_attributes()
     {
         $lecturer = new Lecturer();
-        $expected = [
+
+        $this->assertEquals([
             'lecturer_id',
             'name',
             'email',
-            'expertise'
-        ];
-
-        $this->assertSame($expected, $lecturer->getFillable());
+            'expertise',
+            'status',
+        ], $lecturer->getFillable());
     }
 
-    public function test_lecturer_model_timestamps_enabled(): void
+    public function test_it_has_default_attributes()
     {
         $lecturer = new Lecturer();
+
+        $attributes = $lecturer->getAttributes();
+
+        $this->assertArrayHasKey('status', $attributes);
+        $this->assertEquals('active', $attributes['status']);
+    }
+
+    public function test_it_uses_timestamps()
+    {
+        $lecturer = new Lecturer();
+
         $this->assertTrue($lecturer->timestamps);
     }
 }
