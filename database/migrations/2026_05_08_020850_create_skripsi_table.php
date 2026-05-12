@@ -20,7 +20,7 @@ return new class extends Migration
 
         $table->foreignId('supervisor_id')
               ->nullable() // nullable jika pembimbing belum ditentukan saat pengajuan
-              ->constrained('supervisors')
+              ->constrained('lecturers')
               ->onDelete('set null');
 
         $table->string('title');
