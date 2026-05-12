@@ -33,6 +33,7 @@ class Lecturer extends Model
     protected $attributes = [
         'status' => 'active',
     ];
+    
 
     /**
      * Timestamps
