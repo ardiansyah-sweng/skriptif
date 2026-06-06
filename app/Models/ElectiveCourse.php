@@ -7,60 +7,49 @@ use Illuminate\Database\Eloquent\Model;
 class ElectiveCourse extends Model
 {
     /**
-     * Table name
+     * Nama tabel.
      */
     protected $table = 'elective_courses';
 
     /**
-     * Primary key
+     * Primary key tabel.
      */
     protected $primaryKey = 'id';
 
     /**
+     * Tipe data primary key.
+     */
+    protected $keyType = 'int';
 
-     * Isi setelah migration tabel `elective_courses` selesai.
-     * Contoh kolom yang mungkin: 'course_code', 'name', 'credits', 'semester', 'quota', 'status'
+    /**
+     * Apakah primary key auto-increment.
+     */
+    public $incrementing = true;
+
+    /**
+     * Nonaktifkan timestamps otomatis (created_at & updated_at).
+     */
+    public $timestamps = false;
+
+    /**
+     * Kolom yang boleh diisi secara massal (mass assignment).
      */
     protected $fillable = [
-        // Tunggu migration selesai, lalu tambahkan kolom di sini.
+        'courses',
+        'timestamp',
     ];
 
     /**
-     * Attribute casting
+     * Casting atribut ke tipe native PHP.
      *
-     * Sesuaikan tipe cast setelah migration selesai.
-     * Contoh:
-     *   'credits'  => 'integer',
-     *   'quota'    => 'integer',
-     *   'is_active' => 'boolean',
+     * - 'timestamp' di-cast ke 'datetime' agar Eloquent mengembalikan
+     *   instance Carbon, sehingga bisa diformat, dibandingkan, dan
+     *   dimanipulasi dengan mudah (misal: $model->timestamp->format('d-m-Y')).
      */
     protected function casts(): array
     {
         return [
-            // Tunggu migration selesai.
+            'timestamp' => 'datetime',
         ];
     }
-
-   
-    public $timestamps = true;
-
-    // =========================================================================
-    // RELASI — Tambahkan setelah migration & model terkait tersedia
-    // =========================================================================
-
-    /**
-     * Contoh relasi yang mungkin dibutuhkan:
-     *
-     * // Dosen pengampu
-     * public function lecturer(): BelongsTo
-     * {
-     *     return $this->belongsTo(Lecturer::class);
-     * }
-     *
-     * // Mahasiswa yang mengambil MK pilihan ini
-     * public function students(): BelongsToMany
-     * {
-     *     return $this->belongsToMany(Student::class, 'elective_course_student');
-     * }
-     */
 }
