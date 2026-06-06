@@ -11,20 +11,12 @@ class ElectiveCourse extends Model
      */
     protected $table = 'elective_courses';
 
-    /**
-     * Primary key tabel.
-     */
     protected $primaryKey = 'id';
 
     /**
      * Tipe data primary key.
      */
     protected $keyType = 'int';
-
-    /**
-     * Apakah primary key auto-increment.
-     */
-    public $incrementing = true;
 
     /**
      * Nonaktifkan timestamps otomatis (created_at & updated_at).
@@ -39,17 +31,4 @@ class ElectiveCourse extends Model
         'timestamp',
     ];
 
-    /**
-     * Casting atribut ke tipe native PHP.
-     *
-     * - 'timestamp' di-cast ke 'datetime' agar Eloquent mengembalikan
-     *   instance Carbon, sehingga bisa diformat, dibandingkan, dan
-     *   dimanipulasi dengan mudah (misal: $model->timestamp->format('d-m-Y')).
-     */
-    protected function casts(): array
-    {
-        return [
-            'timestamp' => 'datetime',
-        ];
-    }
 }
