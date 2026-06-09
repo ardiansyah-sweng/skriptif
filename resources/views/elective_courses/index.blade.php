@@ -150,6 +150,21 @@
         }
         .btn-del:hover { background: #FCEBEB; border-color: #F09595; }
 
+        .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            background: transparent;
+            border: 0.5px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #185FA5;
+            text-decoration: none;
+        }
+        .btn-edit:hover { background: #E6F1FB; border-color: #85B7EB; }
+        .action-wrap { display: flex; gap: 6px; }
+
         .empty {
             text-align: center;
             padding: 56px 16px;
@@ -167,16 +182,16 @@
 <body>
     <div class="wrap">
         <div class="page-head">
-         <div>
-            <div class="crumb">
-                <i class="ti ti-home" style="font-size:11px"></i>
-                <span>Beranda</span>
-                <i class="ti ti-chevron-right" style="font-size:11px"></i>
-                <span>Mata Kuliah Pilihan</span>
+            <div>
+                <div class="crumb">
+                    <i class="ti ti-home" style="font-size:11px"></i>
+                    <span>Beranda</span>
+                    <i class="ti ti-chevron-right" style="font-size:11px"></i>
+                    <span>Mata Kuliah Pilihan</span>
+                </div>
+                <h1>Mata Kuliah Pilihan</h1>
+                <p>Daftar mata kuliah pilihan yang tersedia</p>
             </div>
-            <h1>Mata Kuliah Pilihan</h1>
-            <p>Daftar mata kuliah pilihan yang tersedia</p>
-         </div>
             <a href="{{ route('elective-courses.create') }}" class="btn-primary">
                 <i class="ti ti-plus"></i> Tambah Mata Kuliah
             </a>
@@ -223,13 +238,18 @@
                                 </td>
                                 <td class="date-col">{{ \Carbon\Carbon::parse($course->timestamp)->format('d M Y') }}</td>
                                 <td>
-                                    <form action="{{ route('elective-courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Hapus mata kuliah ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-del">
-                                            <i class="ti ti-trash"></i> Hapus
-                                        </button>
-                                    </form>
+                                    <div class="action-wrap">
+                                        <a href="{{ route('elective-courses.edit', $course->id) }}" class="btn-edit">
+                                            <i class="ti ti-edit"></i> Edit
+                                        </a>
+                                        <form action="{{ route('elective-courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Hapus mata kuliah ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-del">
+                                                <i class="ti ti-trash"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

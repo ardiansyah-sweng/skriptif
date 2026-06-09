@@ -12,4 +12,40 @@ class ElectiveCourseController extends Controller
         $courses = DB::table('elective_courses')->get();
         return view('elective_courses.index', compact('courses'));
     }
+
+    public function create()
+    {
+        return view('elective_courses.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate(['courses' => 'required|string|max:255']);
+        DB::table('elective_courses')->insert([
+            'courses'   => $request->courses,
+            'timestamp' => now(),
+        ]);
+        return redirect()->route('elective-courses.index');
+    }
+
+    public function edit($id)
+    {
+        $course = DB::table('elective_courses')->where('id', $id)->first();
+        return view('elective_courses.edit', compact('course'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate(['courses' => 'required|string|max:255']);
+        DB::table('elective_courses')->where('id', $id)->update([
+            'courses' => $request->courses,
+        ]);
+        return redirect()->route('elective-courses.index');
+    }
+
+    public function destroy($id)
+    {
+        DB::table('elective_courses')->where('id', $id)->delete();
+        return redirect()->route('elective-courses.index');
+    }
 }
