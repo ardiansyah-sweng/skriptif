@@ -76,15 +76,6 @@
                             <p class="text-gray-500 font-medium mb-3 flex items-center gap-2">
                                 <i class="ti ti-id"></i> NIDN: {{ $lecturer->lecturer_id }}
                             </p>
-                            @if($lecturer->status === 'active')
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                    <i class="ti ti-check mr-1"></i> Aktif
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                                    <i class="ti ti-x mr-1"></i> Non-aktif
-                                </span>
-                            @endif
                         </div>
                     </div>
 

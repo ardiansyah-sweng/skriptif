@@ -79,14 +79,6 @@
                                 <input type="email" id="email" name="email" value="{{ old('email', $lecturer->email) }}" class="form-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 outline-none transition-all">
                                 @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                             </div>
-                            <div>
-                                <label for="status" class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
-                                <select id="status" name="status" class="form-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 outline-none transition-all bg-white">
-                                    <option value="active" {{ old('status', $lecturer->status) == 'active' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="inactive" {{ old('status', $lecturer->status) == 'inactive' ? 'selected' : '' }}>Non-aktif</option>
-                                </select>
-                                @error('status') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
-                            </div>
                             <div class="md:col-span-2">
                                 <label for="expertise" class="block text-xs font-medium text-gray-500 mb-1.5">Bidang Keahlian</label>
                                 <input type="text" id="expertise" name="expertise" value="{{ old('expertise', $lecturer->expertise) }}" class="form-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 outline-none transition-all">

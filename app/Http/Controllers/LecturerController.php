@@ -11,10 +11,6 @@ class LecturerController extends Controller
     {
         $query = Lecturer::query();
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
         if ($request->filled('q')) {
             $query->where('name', 'like', '%' . $request->q . '%');
         }
@@ -31,7 +27,6 @@ class LecturerController extends Controller
             'name'        => 'required|string|max:100',
             'email'       => 'required|email|max:100|unique:lecturers,email',
             'expertise'   => 'nullable|string|max:150',
-            'status'      => 'required|in:active,inactive',
         ]);
 
         Lecturer::create($request->all());
@@ -61,7 +56,6 @@ class LecturerController extends Controller
             'name'        => 'required|string|max:100',
             'email'       => 'required|email|max:100|unique:lecturers,email,' . $lecturer->id,
             'expertise'   => 'nullable|string|max:150',
-            'status'      => 'required|in:active,inactive',
         ]);
 
         $lecturer->update($request->all());

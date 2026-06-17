@@ -141,16 +141,8 @@
                         <i class="ti ti-users text-sm"></i>
                         <span class="font-medium text-gray-800">{{ $lecturers->total() }}</span> total dosen
                     </div>
-                    <!-- Search and Filter -->
+                    <!-- Search -->
                     <form method="GET" action="{{ route('lecturers.index') }}" class="flex items-center gap-3">
-                        <div class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
-                            <i class="ti ti-filter text-gray-400 text-sm"></i>
-                            <select name="status" onchange="this.form.submit()" class="border-none outline-none bg-transparent text-sm text-gray-700 w-32">
-                                <option value="">Semua Status</option>
-                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
-                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Non-aktif</option>
-                            </select>
-                        </div>
                         <div class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
                             <i class="ti ti-search text-gray-400 text-sm"></i>
                             <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama dosen..." 
@@ -191,16 +183,6 @@
                                        placeholder="Contoh: budi@uad.ac.id"
                                        class="form-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 outline-none transition-all">
                                 @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
-                            </div>
-                            <!-- Status -->
-                            <div>
-                                <label for="status" class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
-                                <select id="status" name="status"
-                                        class="form-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 outline-none transition-all bg-white">
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Non-aktif</option>
-                                </select>
-                                @error('status') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                             </div>
                             <!-- Keahlian (full width) -->
                             <div class="md:col-span-2">
@@ -243,7 +225,6 @@
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Dosen</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Email</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Keahlian</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider" style="width:90px">Status</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider" style="width:90px">Aksi</th>
                                 </tr>
                             </thead>
@@ -268,17 +249,6 @@
                                                 {{ $lecturer->expertise }}
                                             @else
                                                 <span class="text-gray-300">—</span>
-                                            @endif
-                                        </td>
-                                        <td class="px-4 py-3.5">
-                                            @if($lecturer->status === 'active')
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                                                    Aktif
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600">
-                                                    Non-aktif
-                                                </span>
                                             @endif
                                         </td>
                                         <td class="px-4 py-3.5 flex items-center gap-2">
@@ -310,10 +280,9 @@
 
                 @if($lecturers->hasPages())
                     <div class="mt-4">
-                        {{ $lecturers->appends(request()->query())->links() }}
+                        {{ $lecturers->appends(request()->only('q'))->links() }}
                     </div>
                 @endif
-
             </main>
         </div>
 
@@ -325,6 +294,7 @@
             const form = document.getElementById('form-tambah');
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
+
     </script>
 </body>
 </html>

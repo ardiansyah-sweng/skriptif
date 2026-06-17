@@ -24,15 +24,9 @@ class Lecturer extends Model
         'name',
         'email',
         'expertise',
-        'status',
     ];
 
-    /**
-     * Default values
-     */
-    protected $attributes = [
-        'status' => 'active',
-    ];
+
     
 
     /**

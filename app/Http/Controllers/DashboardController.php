@@ -11,10 +11,8 @@ class DashboardController extends Controller
         // Total lecturers
         $totalLecturers = DB::table('lecturers')->count();
         
-        // Total active lecturers
-        $activeLecturers = DB::table('lecturers')
-            ->where('status', 'active')
-            ->count();
+        // Total active lecturers (same as total since no status column)
+        $activeLecturers = $totalLecturers;
         
         // Total students
         $totalStudents = DB::table('students')->count();
