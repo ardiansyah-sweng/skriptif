@@ -139,14 +139,25 @@
                     <!-- Count pill -->
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-500">
                         <i class="ti ti-users text-sm"></i>
-                        <span class="font-medium text-gray-800">{{ $lecturers->count() }}</span> dosen terdaftar
+                        <span class="font-medium text-gray-800">{{ $lecturers->total() }}</span> total dosen
                     </div>
-                    <!-- Search -->
-                    <div class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
-                        <i class="ti ti-search text-gray-400 text-sm"></i>
-                        <input type="text" id="q" placeholder="Cari nama dosen..." oninput="filterTable()"
-                               class="border-none outline-none bg-transparent text-sm text-gray-700 w-48 placeholder-gray-400">
-                    </div>
+                    <!-- Search and Filter -->
+                    <form method="GET" action="{{ route('lecturers.index') }}" class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
+                            <i class="ti ti-filter text-gray-400 text-sm"></i>
+                            <select name="status" onchange="this.form.submit()" class="border-none outline-none bg-transparent text-sm text-gray-700 w-32">
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Non-aktif</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
+                            <i class="ti ti-search text-gray-400 text-sm"></i>
+                            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama dosen..." 
+                                   class="border-none outline-none bg-transparent text-sm text-gray-700 w-48 placeholder-gray-400">
+                            <button type="submit" class="hidden">Search</button>
+                        </div>
+                    </form>
                 </div>
 
                 <!-- ============================== -->
@@ -239,7 +250,7 @@
                             <tbody id="tbody" class="divide-y divide-gray-50">
                                 @foreach($lecturers as $index => $lecturer)
                                     <tr class="hover:bg-gray-50/50 transition-colors">
-                                        <td class="px-4 py-3.5 text-xs text-gray-400">{{ $index + 1 }}</td>
+                                        <td class="px-4 py-3.5 text-xs text-gray-400">{{ $lecturers->firstItem() + $index }}</td>
                                         <td class="px-4 py-3.5">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
@@ -270,7 +281,15 @@
                                                 </span>
                                             @endif
                                         </td>
-                                        <td class="px-4 py-3.5">
+                                        <td class="px-4 py-3.5 flex items-center gap-2">
+                                            <a href="{{ route('lecturers.show', $lecturer->id) }}" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                                                <i class="ti ti-eye text-sm"></i>
+                                                Detail
+                                            </a>
+                                            <a href="{{ route('lecturers.edit', $lecturer->id) }}" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-amber-600 bg-white border border-gray-200 rounded-lg hover:bg-amber-50 hover:border-amber-200 transition-colors">
+                                                <i class="ti ti-pencil text-sm"></i>
+                                                Edit
+                                            </a>
                                             <form action="{{ route('lecturers.destroy', $lecturer->id) }}" method="POST"
                                                   onsubmit="return confirm('Hapus dosen {{ $lecturer->name }}?')">
                                                 @csrf
@@ -289,6 +308,12 @@
                     @endif
                 </div>
 
+                @if($lecturers->hasPages())
+                    <div class="mt-4">
+                        {{ $lecturers->appends(request()->query())->links() }}
+                    </div>
+                @endif
+
             </main>
         </div>
 
@@ -299,15 +324,6 @@
         function toggleForm() {
             const form = document.getElementById('form-tambah');
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Filter tabel by nama dosen
-        function filterTable() {
-            const q = document.getElementById('q').value.toLowerCase();
-            document.querySelectorAll('#tbody tr').forEach(r => {
-                const name = r.querySelector('.lecturer-name')?.textContent.toLowerCase() ?? '';
-                r.style.display = name.includes(q) ? '' : 'none';
-            });
         }
     </script>
 </body>

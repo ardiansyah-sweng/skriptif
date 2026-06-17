@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lecturer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LecturerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $lecturers = DB::table('lecturers')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Lecturer::query();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('q')) {
+            $query->where('name', 'like', '%' . $request->q . '%');
+        }
+
+        $lecturers = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('lecturers.index', compact('lecturers'));
     }
@@ -26,29 +34,46 @@ class LecturerController extends Controller
             'status'      => 'required|in:active,inactive',
         ]);
 
-        DB::table('lecturers')->insert([
-            'lecturer_id' => $request->lecturer_id,
-            'name'        => $request->name,
-            'email'       => $request->email,
-            'expertise'   => $request->expertise,
-            'status'      => $request->status,
-            'created_at'  => now(),
-            'updated_at'  => now(),
-        ]);
+        Lecturer::create($request->all());
 
         return redirect()->route('lecturers.index')
             ->with('success', 'Data dosen berhasil ditambahkan.');
     }
 
+    public function show($id)
+    {
+        $lecturer = Lecturer::findOrFail($id);
+        return view('lecturers.show', compact('lecturer'));
+    }
+
+    public function edit($id)
+    {
+        $lecturer = Lecturer::findOrFail($id);
+        return view('lecturers.edit', compact('lecturer'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $lecturer = Lecturer::findOrFail($id);
+
+        $request->validate([
+            'lecturer_id' => 'required|string|max:20|unique:lecturers,lecturer_id,' . $lecturer->id,
+            'name'        => 'required|string|max:100',
+            'email'       => 'required|email|max:100|unique:lecturers,email,' . $lecturer->id,
+            'expertise'   => 'nullable|string|max:150',
+            'status'      => 'required|in:active,inactive',
+        ]);
+
+        $lecturer->update($request->all());
+
+        return redirect()->route('lecturers.index')
+            ->with('success', 'Data dosen berhasil diperbarui.');
+    }
+
     public function destroy($id)
     {
-        $lecturer = DB::table('lecturers')->where('id', $id)->first();
-
-        if (!$lecturer) {
-            abort(404);
-        }
-
-        DB::table('lecturers')->where('id', $id)->delete();
+        $lecturer = Lecturer::findOrFail($id);
+        $lecturer->delete();
 
         return redirect()->route('lecturers.index')
             ->with('success', 'Data dosen berhasil dihapus.');
