@@ -1,10 +1,7 @@
 <?php
-
 namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
 class MasterDataSeeder extends Seeder
 {
     public function run(): void
@@ -14,7 +11,6 @@ class MasterDataSeeder extends Seeder
         DB::table('lecturers')->truncate();
         DB::table('students')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
         // 1. Lecturers
         DB::table('lecturers')->insert([
             [
@@ -42,7 +38,6 @@ class MasterDataSeeder extends Seeder
                 'updated_at'  => now(),
             ],
         ]);
-
         // 2. Students
         DB::table('students')->insert([
             [
