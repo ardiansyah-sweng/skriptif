@@ -16,4 +16,11 @@ Route::prefix('mahasiswa')
         Route::view('/dashboard', 'mahasiswa.dashboard')
             ->name('dashboard');
 
+        Route::prefix('skripsi')
+            ->name('skripsi.')
+            ->group(function () {
+                Route::view('/create', 'mahasiswa.skripsi.create')
+                    ->name('create');
+
+            });
     });
