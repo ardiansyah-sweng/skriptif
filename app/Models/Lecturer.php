@@ -24,6 +24,7 @@ class Lecturer extends Model
         'name',
         'email',
         'expertise',
+        'status'
     ];
 
     /**
