@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StudentImportTest extends TestCase
 {
+    use RefreshDatabase;
+    
     /** @test */
     public function test_import_berhasil()
     {
