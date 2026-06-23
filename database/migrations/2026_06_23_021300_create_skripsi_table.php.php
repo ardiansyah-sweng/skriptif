@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('supervisor_id')->nullable()->constrained('lecturers')->nullOnDelete();
+            $table->json('suggestion_supervisor')->nullable()->constrained('lecturers')->nullOnDelete();
             $table->string('title');
             $table->text('description');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
