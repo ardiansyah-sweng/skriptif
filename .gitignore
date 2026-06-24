@@ -63,6 +63,7 @@ Thumbs.db
 /coverage/
 .phpunit.cache/
 junit.xml
+
 # Docker
 .docker/
 docker-compose.override.yml
