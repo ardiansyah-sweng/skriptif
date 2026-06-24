@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\EvaluationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,6 +14,7 @@ Route::get('/', function () {
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
+Route::resource('evaluations', EvaluationController::class);
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
@@ -20,3 +22,4 @@ Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.stor
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+

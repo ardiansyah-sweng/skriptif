@@ -39,4 +39,9 @@ class Lecturer extends Model
      * Timestamps
      */
     public $timestamps = true;
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'evaluator_id');
+    }
 }

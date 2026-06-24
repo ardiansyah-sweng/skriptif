@@ -38,4 +38,9 @@ class Skripsi extends Model
     {
         return $this->belongsTo(Lecturer::class, 'supervisor_id');
     }
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'skripsi_id');
+    }
 }
