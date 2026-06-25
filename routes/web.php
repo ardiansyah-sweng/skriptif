@@ -22,16 +22,19 @@ Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStat
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 
-// BARIS INI YANG DIUBAH: prefix 'mahasiswa/skripsi' diganti menjadi 'student/skripsi'
+// Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
     Route::get('/', [StudentSkripsiController::class, 'index'])          
         ->name('student.skripsi.index');
+        
+    // TETAP CREATE: Tidak jadi diubah
     Route::get('/create', [StudentSkripsiController::class, 'create'])
         ->name('student.skripsi.create');
 
     Route::post('/', [StudentSkripsiController::class, 'store'])
         ->name('student.skripsi.store');
 
-    Route::get('/history', [StudentSkripsiController::class, 'history'])
+    // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
+    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
