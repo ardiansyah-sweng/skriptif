@@ -14,12 +14,31 @@ Route::get('/', function () {
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
+Route::view('/login', 'students.auth.login')
+    ->name('login');
+
+Route::prefix('mahasiswa')
+    ->name('mahasiswa.')
+    ->group(function () {
+
+        Route::view('/dashboard', 'mahasiswa.dashboard')
+            ->name('dashboard');
+
+        Route::prefix('skripsi')
+            ->name('skripsi.')
+            ->group(function () {
+                Route::view('/create', 'students.skripsi.create')
+                ->name('create');
+
+            });
+    });
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
+
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 
 // Group rute untuk student/skripsi
@@ -38,3 +57,13 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
+
+Route::get(
+    '/skripsi/{id}/edit',
+    [SkripsiController::class, 'edit']
+)->name('skripsi.edit');
+
+Route::put(
+    '/skripsi/{id}',
+    [SkripsiController::class, 'update']
+)->name('skripsi.update');

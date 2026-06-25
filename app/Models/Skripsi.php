@@ -12,16 +12,17 @@ class Skripsi extends Model
     protected $table = 'skripsi';
 
     protected $fillable = [
-        'student_id',
-        'supervisor_id',
-        'title',
-        'description',
-        'status',
-        'rejection_note',
-        'submission_date',
-        'approval_date',
-        'elective_courses',
-    ];
+    'student_id',
+    'supervisor_id',
+    'suggestion_supervisor',
+    'title',
+    'description',
+    'status',
+    'rejection_note',
+    'submission_date',
+    'approval_date',
+    'elective_courses',
+];
 
     protected $casts = [
         'elective_courses' => 'array',
@@ -37,5 +38,13 @@ class Skripsi extends Model
     public function supervisor()
     {
         return $this->belongsTo(Lecturer::class, 'supervisor_id');
+    }
+
+    public function suggestionSupervisor()
+    {
+        return $this->belongsTo(
+            Lecturer::class,
+            'suggestion_supervisor'
+        );
     }
 }

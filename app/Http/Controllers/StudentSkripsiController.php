@@ -40,15 +40,14 @@ class StudentSkripsiController extends Controller
 
     try {
         $skripsi = Skripsi::create([
-            'student_id'            => $student->id,
-            'supervisor_id'         => $request->supervisor_id,
-            'title'                 => $request->title,
-            'description'           => $request->description,
-            'suggestion_supervisor' => $request->suggestion_supervisor,
-            'elective_courses'      => $electiveData,
-            'status'                => 'pending',
-            'submission_date'       => now(),
-        ]);
+        'student_id'            => $student->id,
+        'suggestion_supervisor' => $request->suggestion_supervisor,
+        'title'                 => $request->title,
+        'description'           => $request->description,
+        'elective_courses'      => $electiveData,
+        'status'                => 'pending',
+        'submission_date'       => now(),
+    ]);
 
         return redirect()
             ->route('student.skripsi.history')
