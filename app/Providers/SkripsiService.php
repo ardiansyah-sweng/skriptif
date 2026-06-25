@@ -23,6 +23,34 @@ class SkripsiService
         ]);
     }
 
+    public function getSkripsiById($id)
+    {
+    return Skripsi::with([
+        'student',
+        'supervisor',
+        'suggestionSupervisor'
+    ])->findOrFail($id);
+    }
+
+    public function updateSkripsi($id, array $data)
+    {
+        $skripsi = Skripsi::findOrFail($id);
+
+        $updateData = [
+            'supervisor_id' => $data['supervisor_id'],
+            'status' => $data['status'],
+            'rejection_note' => $data['rejection_note'] ?? null,
+        ];
+
+        if ($data['status'] === 'approved') {
+            $updateData['approval_date'] = now()->toDateString();
+        }
+
+        $skripsi->update($updateData);
+
+        return $skripsi;
+    }
+
     public function updateStatus($id, array $data)
     {
         $skripsi = Skripsi::findOrFail($id);

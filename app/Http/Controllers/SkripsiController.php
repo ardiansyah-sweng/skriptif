@@ -68,4 +68,37 @@ class SkripsiController extends Controller
 
         return redirect()->route('skripsi.index')->with('success', 'Status skripsi berhasil diperbarui!');
     }
+
+    public function edit($id)
+    {
+        $skripsi = $this->skripsiService->getSkripsiById($id);
+
+        $lecturers = Lecturer::all();
+
+        return view('skripsi.edit', compact(
+            'skripsi',
+            'lecturers'
+        ));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'supervisor_id' => 'nullable|exists:lecturers,id',
+            'status' => 'required|in:pending,approved,rejected',
+            'rejection_note' => 'nullable|string'
+        ]);
+
+        $this->skripsiService->updateSkripsi(
+            $id,
+            $validated
+        );
+
+        return redirect()
+            ->route('skripsi.index')
+            ->with(
+                'success',
+                'Data skripsi berhasil diperbarui.'
+            );
+    }
 }
