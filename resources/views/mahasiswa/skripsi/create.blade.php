@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajukan Skripsi — Sistem Skripsi</title>
+    <title>Submit Thesis Proposal — Thesis System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,6 +27,14 @@
         .btn-primary:hover { background: #0C447C; }
         .btn-secondary { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; background: transparent; color: #1a1a2e; border: 0.5px solid #e5e7eb; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 500; text-decoration: none; }
         .btn-secondary:hover { background: #f9fafb; }
+        
+        /* Bagian header label kolom mata kuliah */
+        .course-header { display: flex; gap: 8px; margin-bottom: 6px; }
+        .course-header span { font-size: 13px; font-weight: 500; }
+        .course-header .col-course { flex: 2; }
+        .course-header .col-grade { flex: 1; }
+        .course-header .col-spacer { width: 34px; flex-shrink: 0; }
+
         .course-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
         .course-row select { flex: 2; }
         .course-row select.grade { flex: 1; }
@@ -41,12 +49,12 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Beranda</span>
+                    <span>Home</span>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
-                    <span>Ajukan Skripsi</span>
+                    <span>Submit Thesis</span>
                 </div>
-                <h1>Ajukan Skripsi</h1>
-                <p>Isi form berikut untuk mengajukan skripsi</p>
+                <h1>Submit Thesis Proposal</h1>
+                <p>Fill out the form below to submit your thesis proposal</p>
             </div>
         </div>
 
@@ -54,22 +62,22 @@
             @csrf
 
             <div class="card">
-                <div class="card-title">Informasi Skripsi</div>
+                <div class="card-title">Thesis Information</div>
 
                 <div class="form-group">
-                    <label for="title">Judul Skripsi</label>
-                    <input type="text" id="title" name="title" placeholder="Contoh: Sistem rekomendasi pembimbing berbasis kemiripan topik" required>
+                    <label for="title">Thesis Title</label>
+                    <input type="text" id="title" name="title" placeholder="Example: Advisor recommendation system based on topic similarity" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Deskripsi Singkat</label>
-                    <textarea id="description" name="description" rows="4" placeholder="Jelaskan latar belakang dan tujuan skripsi secara singkat..." required></textarea>
+                    <label for="description">Short Description</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Briefly explain the background and objectives of the thesis..." required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="supervisor_id">Dosen Pembimbing yang Diinginkan</label>
+                    <label for="supervisor_id">Preferred Advisor</label>
                     <select id="supervisor_id" name="supervisor_id">
-                        <option value="">-- Pilih Dosen Pembimbing --</option>
+                        <option value="">-- Select Advisor --</option>
                         @foreach($lecturers as $lecturer)
                             <option value="{{ $lecturer->id }}">{{ $lecturer->name }}</option>
                         @endforeach
@@ -77,20 +85,25 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="suggestion_supervisor">Usulan Dosen Lainnya (Opsional)</label>
+                    <label for="suggestion_supervisor">Other Proposed Advisors (Optional)</label>
                     <input type="text" id="suggestion_supervisor" name="suggestion_supervisor">
-                    <span class="form-hint">Ini hanya usulan. Keputusan akhir ada di tangan prodi.</span>
+                    <span class="form-hint">This is only a proposal. The final decision rests with the department.</span>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">Riwayat Mata Kuliah Pilihan</div>
+                <div class="card-title">Elective Course History</div>
+
+                <div class="course-header">
+                    <span class="col-course">Course Name</span>
+                    <span class="col-grade">Grade</span>
+                    <div class="col-spacer"></div>
+                </div>
 
                 <div id="courses-wrap">
-                    <!-- Baris pertama default -->
                     <div class="course-row">
                         <select name="elective_courses[0][id]" required>
-                            <option value="">Pilih mata kuliah</option>
+                            <option value="">Select course</option>
                             @foreach($electiveCourses as $course)
                                 <option value="{{ $course->id }}">{{ $course->courses }}</option>
                             @endforeach
@@ -107,14 +120,14 @@
                 </div>
 
                 <button type="button" class="btn-secondary" style="margin-top:4px;font-size:13px;padding:7px 14px;" onclick="addRow()">
-                    <i class="ti ti-plus" style="font-size:14px"></i> Tambah mata kuliah
+                    <i class="ti ti-plus" style="font-size:14px"></i> Add Course
                 </button>
             </div>
 
             <div style="display:flex;gap:8px; margin-top: 20px;">
-                <a href="/mahasiswa/dashboard" class="btn-secondary">Batal</a>
+                <a href="/mahasiswa/dashboard" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary">
-                    <i class="ti ti-send"></i> Ajukan Skripsi
+                    <i class="ti ti-send"></i> Submit Proposal
                 </button>
             </div>
         </form>
@@ -129,7 +142,7 @@
             div.className = 'course-row';
             div.innerHTML = `
                 <select name="elective_courses[${rowCount}][id]" required>
-                    <option value="">Pilih mata kuliah</option>
+                    <option value="">Select course</option>
                     @foreach($electiveCourses as $course)
                         <option value="{{ $course->id }}">{{ $course->courses }}</option>
                     @endforeach

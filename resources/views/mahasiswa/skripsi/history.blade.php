@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Pengajuan Skripsi — Sistem Skripsi</title>
+    <title>Thesis Submission History — Thesis System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,37 +38,37 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Beranda</span>
+                    <span>Home</span>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
-                    <span>Riwayat Skripsi</span>
+                    <span>Thesis History</span>
                 </div>
-                <h1>Riwayat Pengajuan Skripsi</h1>
-                <p>Daftar semua pengajuan skripsi yang telah kamu ajukan</p>
+                <h1>Thesis Submission History</h1>
+                <p>List of all thesis proposals you have submitted</p>
             </div>
             <a href="{{ route('student.skripsi.create') }}" class="btn-primary">
-                <i class="ti ti-plus"></i> Ajukan Skripsi Baru
+                <i class="ti ti-plus"></i> Submit New Proposal
             </a>
         </div>
 
         <div class="card">
-            <div class="card-title">Daftar Pengajuan</div>
+            <div class="card-title">Submission List</div>
 
             @if(session('success'))
                 <div style="background:#d1fae5; color:#065f46; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:13px;">
-                    {{ session('success') }}
+                    {{ session('success') == 'Pengajuan berhasil!' ? 'Submission successful!' : session('success') }}
                 </div>
             @endif
 
             @if($skripsis->isEmpty())
-                <p style="text-align:center; padding:40px; color:#6b7280;">Belum ada pengajuan skripsi.</p>
+                <p style="text-align:center; padding:40px; color:#6b7280;">No thesis submissions found.</p>
             @else
                 <table>
                     <thead>
                         <tr>
-                            <th>Judul Skripsi</th>
-                            <th>Dosen Pembimbing</th>
+                            <th>Thesis Title</th>
+                            <th>Advisor</th>
                             <th>Status</th>
-                            <th>Tanggal Pengajuan</th>
+                            <th>Submission Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,7 +79,7 @@
                                 @if($skripsi->supervisor)
                                     {{ $skripsi->supervisor->name }}
                                 @else
-                                    <span style="color:#9ca3af;">Belum ditentukan</span>
+                                    <span style="color:#9ca3af;">Not determined yet</span>
                                 @endif
                             </td>
                             <td>
