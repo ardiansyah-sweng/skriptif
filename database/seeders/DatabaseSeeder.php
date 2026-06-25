@@ -18,16 +18,16 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call([
             MasterDataSeeder::class,
+            LecturerSeeder::class,
+            StudentSeeder::class,
+            ElectiveCourseSeeder::class,
             SkripsiSeeder::class,
         ]);
-        
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-        $this->call(ElectiveCourseSeeder::class);
-        $this->call(LecturerSeeder::class);
     }
     
 }

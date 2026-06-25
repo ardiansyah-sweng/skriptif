@@ -4,83 +4,79 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Requests\ImportStudentRequest;
 use App\Services\StudentService;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of all students.
-     */
     public function index()
     {
-        $students = Student::all();
+        $students = Student::query()->latest()->get();
+
         return view('students.index', compact('students'));
     }
 
-    /**
-     * Show the form for creating a new student.
-     */
     public function create()
     {
         return view('students.create');
     }
 
-    /**
-     * Store a newly created student in database.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'student_id'    => 'required|unique:students|string|max:20',
-            'name'          => 'required|string|max:255',
-            'email'         => 'required|email|unique:students|max:255',
-            'year_entrance' => 'required|integer|min:2000|max:2099',
-            'status'        => 'required|in:active,inactive',
+        $validated = $request->validate([
+            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:students,email'],
+            'year_entrance' => ['required', 'integer', 'digits:4'],
+            'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
-        Student::create($request->all());
-        
-        return redirect()->route('students.index')
-                         ->with('success', 'Mahasiswa berhasil ditambahkan.');
+        Student::create($validated);
+
+        return redirect()->route('students.index');
     }
 
-    /**
-     * Show the form for editing the specified student.
-     */
+    public function show(Student $student)
+    {
+        return view('students.show', compact('student'));
+    }
+
     public function edit(Student $student)
     {
         return view('students.edit', compact('student'));
     }
 
-    /**
-     * Update the specified student in database.
-     */
     public function update(Request $request, Student $student)
     {
-        $request->validate([
-            'student_id'    => 'required|string|max:20|unique:students,student_id,' . $student->id,
-            'name'          => 'required|string|max:255',
-            'email'         => 'required|email|max:255|unique:students,email,' . $student->id,
-            'year_entrance' => 'required|integer|min:2000|max:2099',
-            'status'        => 'required|in:active,inactive',
+        $validated = $request->validate([
+            'student_id' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('students', 'student_id')->ignore($student->id),
+            ],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('students', 'email')->ignore($student->id),
+            ],
+            'year_entrance' => ['required', 'integer', 'digits:4'],
+            'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
-        $student->update($request->all());
-        
-        return redirect()->route('students.index')
-                         ->with('success', 'Mahasiswa berhasil diperbarui.');
+        $student->update($validated);
+
+        return redirect()->route('students.index');
     }
 
-    /**
-     * Remove the specified student from database.
-     */
     public function destroy(Student $student)
     {
         $student->delete();
-        
-        return redirect()->route('students.index')
-                         ->with('success', 'Mahasiswa berhasil dihapus.');
+
+        return redirect()->route('students.index');
     }
 
     /**
