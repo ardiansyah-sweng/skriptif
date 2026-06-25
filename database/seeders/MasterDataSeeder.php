@@ -74,5 +74,4 @@ class MasterDataSeeder extends Seeder
             ],
         ]);
     }
-    
 }
