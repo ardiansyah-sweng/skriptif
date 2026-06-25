@@ -125,9 +125,9 @@
             </div>
 
             <div style="display:flex;gap:8px; margin-top: 20px;">
-                <a href="/mahasiswa/dashboard" class="btn-secondary">Cancel</a>
+                <a href="/student/dashboard" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary">
-                    <i class="ti ti-send"></i> Submit Proposal
+                    <i class="ti ti-send"></i> Submit
                 </button>
             </div>
         </form>
