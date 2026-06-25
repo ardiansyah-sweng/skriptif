@@ -66,6 +66,6 @@ class StudentSkripsiController extends Controller
             ? Skripsi::where('student_id', $student->id)->with('supervisor')->latest()->get()
             : collect();
 
-        return view('mahasiswa.skripsi.history', compact('skripsis'));
+        return view('mahasiswa.skripsi.submissions', compact('skripsis'));
     }
 }
