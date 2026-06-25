@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\StudentSkripsiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,3 +22,20 @@ Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStat
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 Route::resource('log-books', LogBookController::class);
+
+// Group rute untuk student/skripsi
+Route::prefix('student/skripsi')->group(function () {
+    Route::get('/', [StudentSkripsiController::class, 'index'])          
+        ->name('student.skripsi.index');
+        
+    // TETAP CREATE: Tidak jadi diubah
+    Route::get('/create', [StudentSkripsiController::class, 'create'])
+        ->name('student.skripsi.create');
+
+    Route::post('/', [StudentSkripsiController::class, 'store'])
+        ->name('student.skripsi.store');
+
+    // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
+    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
+        ->name('student.skripsi.history');
+});
