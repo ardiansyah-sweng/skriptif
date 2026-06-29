@@ -12,9 +12,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
@@ -31,9 +31,9 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
-    Route::get('/', [StudentSkripsiController::class, 'index'])          
+    Route::get('/', [StudentSkripsiController::class, 'index'])
         ->name('student.skripsi.index');
-        
+
     // TETAP CREATE: Tidak jadi diubah
     Route::get('/create', [StudentSkripsiController::class, 'create'])
         ->name('student.skripsi.create');
