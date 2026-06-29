@@ -69,6 +69,15 @@
         .search input {
             border: none; outline: none; font-size: 13px; width: 100%; background: transparent;
         }
+        .sort-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
+            text-decoration: none;
+        }
+        .sort-link:hover { text-decoration: underline; }
+        .sort-arrow { font-size: 11px; line-height: 1; }
         .count { color: #64748b; font-size: 13px; }
         .table-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 980px; }
@@ -151,7 +160,9 @@
 
         <div class="panel">
             <div class="toolbar">
-                <div class="count"><strong>{{ $students->count() }}</strong> records tersedia</div>
+                <div>
+                    <div class="count"><strong>{{ $students->count() }}</strong> records tersedia</div>
+                </div>
                 <div class="search">
                     <i class="ti ti-search" style="color:#94a3b8"></i>
                     <input type="text" id="studentSearch" placeholder="Cari nama, NIM, email..." oninput="filterStudents()">
@@ -159,6 +170,14 @@
             </div>
 
             <div class="table-wrap">
+                @php
+                    $sort = $sort ?? request('sort');
+                    $direction = $direction ?? request('direction', 'asc');
+                    $nameDirection = $sort === 'name' && $direction === 'asc' ? 'desc' : 'asc';
+                    $nimDirection = $sort === 'student_id' && $direction === 'asc' ? 'desc' : 'asc';
+                    $yearDirection = $sort === 'year_entrance' && $direction === 'asc' ? 'desc' : 'asc';
+                @endphp
+
                 @if($students->isEmpty())
                     <div class="empty">
                         <i class="ti ti-users-off"></i>
@@ -169,10 +188,31 @@
                         <thead>
                             <tr>
                                 <th style="width:72px">No</th>
-                                <th>Student</th>
-                                <th style="width:150px">NIM</th>
+                                <th>
+                                    <a href="{{ route('students.index', array_merge(request()->except(['sort', 'direction']), ['sort' => 'name', 'direction' => $nameDirection])) }}" class="sort-link">
+                                        Student
+                                        @if($sort === 'name')
+                                            <span class="sort-arrow">{{ $direction === 'asc' ? '▲' : '▼' }}</span>
+                                        @endif
+                                    </a>
+                                </th>
+                                <th style="width:150px">
+                                    <a href="{{ route('students.index', array_merge(request()->except(['sort', 'direction']), ['sort' => 'student_id', 'direction' => $nimDirection])) }}" class="sort-link">
+                                        NIM
+                                        @if($sort === 'student_id')
+                                            <span class="sort-arrow">{{ $direction === 'asc' ? '▲' : '▼' }}</span>
+                                        @endif
+                                    </a>
+                                </th>
                                 <th>Email</th>
-                                <th style="width:120px">Angkatan</th>
+                                <th style="width:120px">
+                                    <a href="{{ route('students.index', array_merge(request()->except(['sort', 'direction']), ['sort' => 'year_entrance', 'direction' => $yearDirection])) }}" class="sort-link">
+                                        Angkatan
+                                        @if($sort === 'year_entrance')
+                                            <span class="sort-arrow">{{ $direction === 'asc' ? '▲' : '▼' }}</span>
+                                        @endif
+                                    </a>
+                                </th>
                                 <th style="width:120px">Status</th>
                                 <th style="width:190px">Aksi</th>
                             </tr>
