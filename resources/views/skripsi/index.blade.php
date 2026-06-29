@@ -111,7 +111,7 @@
                             </td>
                             <td class="text-center">
                                 @if($skripsi->status == 'pending')
-                                    <div class="d-flex justify-content-center gap-2">
+                                    <div class="d-flex justify-content-center gap-2 flex-wrap">
                                         <button class="btn-approve" onclick="executeApprove('{{ $skripsi->id }}')">
                                             <i class="fa-solid fa-check"></i> Setujui
                                         </button>
@@ -125,6 +125,12 @@
                                         <i class="fa-solid fa-lock me-1"></i> Locked
                                     </span>
                                 @endif
+                                <div class="mt-2">
+                                    <a href="{{ route('bimbingan.index', $skripsi->id) }}"
+                                       class="dev-tag" style="text-decoration:none;">
+                                        <i class="fa-solid fa-book-open me-1"></i> Logbook
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @empty

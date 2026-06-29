@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\BimbinganController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,3 +39,8 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
+
+// Rute Bimbingan / Logbook Konsultasi Skripsi (sisi dosen)
+Route::get('/skripsi/{skripsi}/bimbingan', [BimbinganController::class, 'index'])->name('bimbingan.index');
+Route::post('/skripsi/{skripsi}/bimbingan', [BimbinganController::class, 'store'])->name('bimbingan.store');
+Route::delete('/bimbingan/{id}', [BimbinganController::class, 'destroy'])->name('bimbingan.destroy');
