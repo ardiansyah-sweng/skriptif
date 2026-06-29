@@ -38,3 +38,9 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
+
+use App\Http\Controllers\AnnouncementController;
+
+Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
