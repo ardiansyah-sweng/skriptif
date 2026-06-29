@@ -38,4 +38,9 @@ class Skripsi extends Model
     {
         return $this->belongsTo(Lecturer::class, 'supervisor_id');
     }
+
+    public function examSchedules()
+    {
+        return $this->hasMany(ExamSchedule::class)->latest('tanggal_sidang');
+    }
 }

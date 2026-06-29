@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\ExamScheduleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,3 +39,9 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
+
+// Rute Jadwal Sidang Skripsi (sisi admin)
+Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
+Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
