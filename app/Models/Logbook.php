@@ -5,25 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Evaluation extends Model
+class Logbook extends Model
 {
     use HasFactory;
 
-    protected $table = 'evaluations';
+    protected $table = 'logbooks';
 
     protected $fillable = [
         'skripsi_id',
         'evaluator_id',
-        'evaluation_type',
+        'logbook_type',
         'overall_score',
         'grade_letter',
         'revision_notes',
         'status',
-        'evaluation_date',
+        'logbook_date',
     ];
 
     protected $casts = [
-        'evaluation_date' => 'date',
+        'logbook_date' => 'date',
     ];
 
     public function skripsi()

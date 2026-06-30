@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evaluation;
+use App\Models\Logbook;
 use App\Models\Skripsi;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
 
-class EvaluationController extends Controller
+class LogbookController extends Controller
 {
     public function index()
     {
-        $evaluations = Evaluation::with(['skripsi', 'evaluator'])->get();
-        return view('evaluations.index', compact('evaluations'));
+        $logbooks = Logbook::with(['skripsi', 'evaluator'])->get();
+        return view('logbooks.index', compact('logbooks'));
     }
 
     public function create()
     {
         $skripsis = Skripsi::all();
         $lecturers = Lecturer::all();
-        return view('evaluations.create', compact('skripsis', 'lecturers'));
+        return view('logbooks.create', compact('skripsis', 'lecturers'));
     }
 
     public function store(Request $request)
@@ -27,17 +27,17 @@ class EvaluationController extends Controller
         $validated = $request->validate([
             'skripsi_id' => 'required|exists:skripsi,id',
             'evaluator_id' => 'required|exists:lecturers,id',
-            'evaluation_type' => 'required|string|max:255',
+            'logbook_type' => 'required|string|max:255',
             'overall_score' => 'required|integer|min:0|max:100',
             'grade_letter' => 'nullable|string|max:2',
             'revision_notes' => 'nullable|string',
             'status' => 'required|in:passed,needs_revision,failed',
-            'evaluation_date' => 'required|date',
+            'logbook_date' => 'required|date',
         ]);
 
-        Evaluation::create($validated);
+        Logbook::create($validated);
 
-        return redirect()->route('evaluations.index')->with('success', 'Evaluation added successfully!');
+        return redirect()->route('logbooks.index')->with('success', 'Logbook added successfully!');
     }
 
 }

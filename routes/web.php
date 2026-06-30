@@ -6,7 +6,7 @@ use App\Http\Controllers\StudentController;
 
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
-use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\StudentSkripsiController;
 
 Route::get('/', function () {
@@ -15,7 +15,7 @@ Route::get('/', function () {
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
-Route::resource('evaluations', EvaluationController::class);
+Route::resource('logbooks', LogbookController::class);
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
@@ -26,9 +26,9 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
-    Route::get('/', [StudentSkripsiController::class, 'index'])          
+    Route::get('/', [StudentSkripsiController::class, 'index'])
         ->name('student.skripsi.index');
-        
+
     // TETAP CREATE: Tidak jadi diubah
     Route::get('/create', [StudentSkripsiController::class, 'create'])
         ->name('student.skripsi.create');

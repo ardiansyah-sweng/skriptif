@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
-class EvaluationTest extends TestCase
+class LogbookTest extends TestCase
 {
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         Schema::disableForeignKeyConstraints();
     }
 
-    public function test_can_store_new_evaluation()
+    public function test_can_store_new_logbook()
     {
         $this->withoutExceptionHandling();
 
@@ -29,7 +29,7 @@ class EvaluationTest extends TestCase
         ]);
 
         $skripsiId = DB::table('skripsi')->insertGetId([
-            'student_id' => 99, 
+            'student_id' => 99,
             'title' => 'Sistem Analisis Sentimen',
             'description' => 'Deskripsi skripsi testing',
             'created_at' => now(),
@@ -39,27 +39,27 @@ class EvaluationTest extends TestCase
         $payload = [
             'skripsi_id' => $skripsiId,
             'evaluator_id' => $evaluatorId,
-            'evaluation_type' => 'Final Defense',
+            'logbook_type' => 'Final Defense',
             'overall_score' => 85,
             'grade_letter' => 'A',
             'revision_notes' => 'Sangat memuaskan, perbaiki sedikit typo.',
             'status' => 'passed',
-            'evaluation_date' => now()->toDateString(),
+            'logbook_date' => now()->toDateString(),
         ];
 
-        $response = $this->post(route('evaluations.store'), $payload);
+        $response = $this->post(route('logbooks.store'), $payload);
 
-        $response->assertStatus(302); 
-        $response->assertRedirect(route('evaluations.index'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('logbooks.index'));
 
-        $this->assertDatabaseHas('evaluations', [
+        $this->assertDatabaseHas('logbooks', [
             'skripsi_id' => $skripsiId,
             'evaluator_id' => $evaluatorId,
             'overall_score' => 85,
         ]);
     }
 
-    public function test_cannot_store_evaluation_with_score_above_100()
+    public function test_cannot_store_logbook_with_score_above_100()
     {
         $evaluatorId = DB::table('lecturers')->insertGetId([
             'lecturer_id' => 'L' . rand(1000, 9999),
@@ -70,7 +70,7 @@ class EvaluationTest extends TestCase
         ]);
 
         $skripsiId = DB::table('skripsi')->insertGetId([
-            'student_id' => 88, 
+            'student_id' => 88,
             'title' => 'Skripsi Testing Dua',
             'description' => 'Deskripsi skripsi',
             'created_at' => now(),
@@ -80,16 +80,16 @@ class EvaluationTest extends TestCase
         $payload = [
             'skripsi_id' => $skripsiId,
             'evaluator_id' => $evaluatorId,
-            'evaluation_type' => 'Seminar',
+            'logbook_type' => 'Seminar',
             'overall_score' => 150,
-            'evaluation_date' => now()->toDateString(),
+            'logbook_date' => now()->toDateString(),
         ];
 
-        $response = $this->post(route('evaluations.store'), $payload);
+        $response = $this->post(route('logbooks.store'), $payload);
 
         $response->assertSessionHasErrors('overall_score');
-        
-        $this->assertDatabaseMissing('evaluations', [
+
+        $this->assertDatabaseMissing('logbooks', [
             'overall_score' => 150,
         ]);
     }

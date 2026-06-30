@@ -33,15 +33,15 @@ class Lecturer extends Model
     protected $attributes = [
         'status' => 'active',
     ];
-    
+
 
     /**
      * Timestamps
      */
     public $timestamps = true;
 
-    public function evaluations()
+    public function logbooks()
     {
-        return $this->hasMany(Evaluation::class, 'evaluator_id');
+        return $this->hasMany(Logbook::class, 'evaluator_id');
     }
 }
