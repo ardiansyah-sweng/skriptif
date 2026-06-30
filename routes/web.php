@@ -7,10 +7,9 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
@@ -20,14 +19,17 @@ Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skrip
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::get('/skripsi/{id}', [SkripsiController::class, 'show'])->name('skripsi.show');
+Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
+Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
+Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
-    Route::get('/', [StudentSkripsiController::class, 'index'])          
+    Route::get('/', [StudentSkripsiController::class, 'index'])
         ->name('student.skripsi.index');
-        
+
     // TETAP CREATE: Tidak jadi diubah
     Route::get('/create', [StudentSkripsiController::class, 'create'])
         ->name('student.skripsi.create');
@@ -42,3 +44,16 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/{id}', [StudentSkripsiController::class, 'show'])
         ->name('student.skripsi.show');
 });
+
+});
+
+// =========================
+// Dashboard Mahasiswa
+// =========================
+Route::prefix('student')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('student.dashboard');
+
+});
+
