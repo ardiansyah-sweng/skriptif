@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ElectiveCourseController;
-use App\Http\Controllers\StudentController;
-
-use App\Http\Controllers\SkripsiController;
-use App\Http\Controllers\LecturerController;
-use App\Http\Controllers\StudentSkripsiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ElectiveCourseController;
+use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\LogBookController;
+use App\Http\Controllers\SkripsiController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentSkripsiController;
+use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'auth.login')->name('login');
 
@@ -24,6 +24,7 @@ Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('l
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+Route::resource('log-books', LogBookController::class);
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
@@ -55,4 +56,3 @@ Route::prefix('student')->group(function () {
         ->name('student.dashboard');
 
 });
-
