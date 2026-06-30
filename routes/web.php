@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\StudentSkripsiController;
 use App\Http\Controllers\DashboardController;
 
@@ -13,6 +14,7 @@ Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
+Route::resource('logbooks', LogbookController::class);
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');

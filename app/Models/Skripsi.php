@@ -25,8 +25,8 @@ class Skripsi extends Model
 
     protected $casts = [
         'elective_courses' => 'array',
-        'submission_date'  => 'date',
-        'approval_date'    => 'date',
+        'submission_date' => 'date',
+        'approval_date' => 'date',
     ];
 
     public function student()
@@ -37,5 +37,10 @@ class Skripsi extends Model
     public function supervisor()
     {
         return $this->belongsTo(Lecturer::class, 'supervisor_id');
+    }
+
+    public function logbooks()
+    {
+        return $this->hasMany(Logbook::class, 'skripsi_id');
     }
 }

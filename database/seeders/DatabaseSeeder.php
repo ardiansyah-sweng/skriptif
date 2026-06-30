@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             ElectiveCourseSeeder::class,
             SkripsiSeeder::class,
+            LogbookSeeder::class,
         ]);
 
         User::factory()->create([
@@ -29,5 +30,5 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
     }
-    
+
 }
