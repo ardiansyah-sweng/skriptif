@@ -17,6 +17,7 @@ class ImportStudentRequest extends FormRequest
     /**
      * Aturan validasi
      */
+    // trigger commit
     public function rules(): array
     {
         return [
