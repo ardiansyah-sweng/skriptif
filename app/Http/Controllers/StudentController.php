@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentController extends Controller
 {
@@ -75,5 +76,14 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()->route('students.index');
+    }
+
+    public function pdf()
+    {
+        $students = Student::orderBy('student_id')->get();
+
+        $pdf = Pdf::loadView('students.pdf', compact('students'));
+
+        return $pdf->stream('laporan-mahasiswa.pdf');
     }
 }

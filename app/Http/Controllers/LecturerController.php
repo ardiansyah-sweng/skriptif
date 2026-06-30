@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class LecturerController extends Controller
 {
+    
+
     public function store(Request $request)
     {
         $request->validate([
