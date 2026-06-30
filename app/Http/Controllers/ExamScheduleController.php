@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ExamSchedule;
 use App\Models\Skripsi;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ExamScheduleController extends Controller
 {
@@ -30,7 +31,13 @@ class ExamScheduleController extends Controller
     {
         $request->validate([
             'skripsi_id'     => 'required|exists:skripsi,id',
-            'jenis_sidang'   => 'required|in:proposal,hasil,pendadaran',
+            'jenis_sidang'   => [
+                'required',
+                'in:proposal,hasil,pendadaran',
+                Rule::unique('exam_schedules')->where(function ($query) use ($request) {
+                    return $query->where('skripsi_id', $request->skripsi_id);
+                }),
+            ],
             'tanggal_sidang' => 'required|date|after_or_equal:today',
             'jam_mulai'      => 'required|date_format:H:i',
             'jam_selesai'    => 'required|date_format:H:i|after:jam_mulai',
@@ -41,6 +48,7 @@ class ExamScheduleController extends Controller
             'skripsi_id.exists'            => 'Skripsi tidak valid.',
             'jenis_sidang.required'        => 'Jenis sidang wajib dipilih.',
             'jenis_sidang.in'              => 'Jenis sidang tidak valid.',
+            'jenis_sidang.unique'          => 'Mahasiswa sudah menjadwalkan sidang jenis ini.',
             'tanggal_sidang.required'      => 'Tanggal sidang wajib diisi.',
             'tanggal_sidang.after_or_equal'=> 'Tanggal sidang tidak boleh di masa lalu.',
             'jam_mulai.required'           => 'Jam mulai wajib diisi.',
