@@ -7,7 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
 
@@ -39,17 +39,10 @@ Route::prefix('student/skripsi')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
-
-
 });
 
-// =========================
-// Dashboard Mahasiswa
-// =========================
-Route::prefix('student')->group(function () {
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('student.dashboard');
-
-});
-
+// Rute Jadwal Sidang Skripsi (sisi admin)
+Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
+Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
