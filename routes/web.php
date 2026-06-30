@@ -43,7 +43,6 @@ Route::prefix('student/skripsi')->group(function () {
 
     Route::get('/{id}', [StudentSkripsiController::class, 'show'])
         ->name('student.skripsi.show');
-});
 
 });
 
