@@ -39,17 +39,10 @@ Route::prefix('student/skripsi')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
-
-
 });
 
-// =========================
-// Dashboard Mahasiswa
-// =========================
-Route::prefix('student')->group(function () {
+use App\Http\Controllers\AnnouncementController;
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('student.dashboard');
-
-});
-
+Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
