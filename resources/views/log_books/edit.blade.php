@@ -61,7 +61,7 @@
                     <select name="student_id" id="student_id" class="form-select @error('student_id') is-invalid @enderror" required>
                         <option value="" disabled>Pilih Mahasiswa...</option>
                         @foreach($students as $student)
-                            <option value="{{ $student->id }}" {{ old('student_id', $logBook->student_id) == $student->id ? 'selected' : '' }}>
+                            <option value="{{ $student->id }}" data-supervisor="{{ $student->skripsi?->supervisor_id }}" {{ old('student_id', $logBook->student_id) == $student->id ? 'selected' : '' }}>
                                 {{ $student->name }} (NIM. {{ $student->student_id }})
                             </option>
                         @endforeach
@@ -120,5 +120,51 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const studentSelect = document.getElementById('student_id');
+            const lecturerSelect = document.getElementById('lecturer_id');
+
+            function handleStudentChange(isInitialLoad = false) {
+                const selectedOption = studentSelect.options[studentSelect.selectedIndex];
+                if (!selectedOption) return;
+                
+                const supervisorId = selectedOption.getAttribute('data-supervisor');
+                
+                // Remove existing hidden input if any
+                const existingHidden = document.getElementById('hidden_lecturer_id');
+                if (existingHidden) {
+                    existingHidden.remove();
+                }
+
+                if (supervisorId) {
+                    lecturerSelect.value = supervisorId;
+                    lecturerSelect.setAttribute('disabled', 'true');
+                    
+                    // Create hidden input so the value is still submitted in the form
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'lecturer_id';
+                    hiddenInput.id = 'hidden_lecturer_id';
+                    hiddenInput.value = supervisorId;
+                    lecturerSelect.parentNode.appendChild(hiddenInput);
+                } else {
+                    lecturerSelect.removeAttribute('disabled');
+                    if (!isInitialLoad) {
+                        lecturerSelect.value = ""; // Reset to default placeholder option
+                    }
+                }
+            }
+
+            studentSelect.addEventListener('change', function () {
+                handleStudentChange(false);
+            });
+            
+            // Run on page load in case a student is already pre-selected
+            if (studentSelect.value) {
+                handleStudentChange(true);
+            }
+        });
+    </script>
 </body>
 </html>
