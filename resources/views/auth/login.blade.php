@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Sistem Skripsi</title>
+    <title>Login — Thesis Management System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -105,8 +105,8 @@
             <div class="logo-wrap">
                 <i class="ti ti-school"></i>
             </div>
-            <h1>Sistem Manajemen Skripsi</h1>
-            <p>Masuk menggunakan akun webmail UAD</p>
+            <h1>Thesis Management System</h1>
+            <p>Log in using your UAD webmail account</p>
         </div>
 
         @if ($errors->any())
@@ -128,7 +128,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="email">Email Webmail</label>
+                    <label for="email">Webmail Address</label>
                     <div class="input-wrap">
                         <i class="ti ti-mail"></i>
                         <input
@@ -159,12 +159,12 @@
                 </div>
 
                 <button type="submit" class="btn-primary">
-                    <i class="ti ti-login"></i> Masuk
+                    <i class="ti ti-login"></i> Log In
                 </button>
             </form>
         </div>
 
-        <p class="footer-note">Universitas Ahmad Dahlan &mdash; Sistem Akademik</p>
+        <p class="footer-note">Universitas Ahmad Dahlan &mdash; Academic System</p>
     </div>
 </body>
 </html>
