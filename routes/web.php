@@ -9,9 +9,7 @@ use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
 use App\Http\Controllers\ExamScheduleController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
