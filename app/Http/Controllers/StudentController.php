@@ -8,11 +8,23 @@ use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::query()->latest()->get();
+        $allowedSorts = ['name', 'student_id', 'year_entrance'];
+        $sort = $request->query('sort');
+        $direction = $request->query('direction', 'asc') === 'desc' ? 'desc' : 'asc';
 
-        return view('students.index', compact('students'));
+        $students = Student::query();
+
+        if (in_array($sort, $allowedSorts, true)) {
+            $students = $students->orderBy($sort, $direction);
+        } else {
+            $students = $students->latest();
+        }
+
+        $students = $students->get();
+
+        return view('students.index', compact('students', 'sort', 'direction'));
     }
 
     public function create()
