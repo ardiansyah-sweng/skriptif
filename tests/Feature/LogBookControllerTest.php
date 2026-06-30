@@ -40,6 +40,16 @@ class LogBookControllerTest extends TestCase
             'updated_at'  => now(),
         ]);
 
+        DB::table('skripsi')->insert([
+            'student_id'    => $studentId,
+            'supervisor_id' => $lecturerId,
+            'title'         => 'Test Skripsi',
+            'description'   => 'Test Description',
+            'status'        => 'approved',
+            'created_at'    => now(),
+            'updated_at'    => now(),
+        ]);
+
         $this->student = Student::find($studentId);
         $this->lecturer = Lecturer::find($lecturerId);
     }

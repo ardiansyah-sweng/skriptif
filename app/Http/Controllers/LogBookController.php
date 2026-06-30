@@ -34,7 +34,12 @@ class LogBookController extends Controller
      */
     public function create()
     {
-        $students = Student::where('status', 'active')->with('skripsi')->get();
+        $students = Student::where('status', 'active')
+            ->whereHas('skripsi', function ($query) {
+                $query->whereNotNull('supervisor_id');
+            })
+            ->with('skripsi')
+            ->get();
         $lecturers = Lecturer::all();
         
         return view('log_books.create', compact('students', 'lecturers'));
@@ -85,7 +90,15 @@ class LogBookController extends Controller
     public function edit($id)
     {
         $logBook = $this->logBookService->getLogBookById($id);
-        $students = Student::where('status', 'active')->with('skripsi')->get();
+        $students = Student::where(function ($query) {
+                $query->where('status', 'active')
+                    ->whereHas('skripsi', function ($q) {
+                        $q->whereNotNull('supervisor_id');
+                    });
+            })
+            ->orWhere('id', $logBook->student_id)
+            ->with('skripsi')
+            ->get();
         $lecturers = Lecturer::all();
 
         return view('log_books.edit', compact('logBook', 'students', 'lecturers'));
