@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ElectiveCourseController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\SkripsiController;
-use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
-use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'auth.login')->name('login');
 
@@ -42,9 +42,6 @@ Route::prefix('student/skripsi')->group(function () {
         ->name('student.skripsi.history');
 });
 
-
-});
-
 // =========================
 // Dashboard Mahasiswa
 // =========================
@@ -54,4 +51,3 @@ Route::prefix('student')->group(function () {
         ->name('student.dashboard');
 
 });
-
