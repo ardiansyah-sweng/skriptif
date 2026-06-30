@@ -8,9 +8,7 @@ use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
@@ -38,4 +36,4 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
-    Route::view('/login', 'auth.login')->name('login');
+    
