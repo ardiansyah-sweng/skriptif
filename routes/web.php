@@ -38,3 +38,4 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
+    Route::view('/login', 'auth.login')->name('login');
