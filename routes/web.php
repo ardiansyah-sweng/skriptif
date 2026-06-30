@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,4 +38,16 @@ Route::prefix('student/skripsi')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
+
+
+});
+
+// =========================
+// Dashboard Mahasiswa
+// =========================
+Route::prefix('student')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('student.dashboard');
+
 });
