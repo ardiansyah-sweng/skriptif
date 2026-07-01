@@ -13,6 +13,7 @@ Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
+Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');

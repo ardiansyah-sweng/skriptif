@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\ImportStudentRequest;
+use App\Services\StudentService;
 
 class StudentController extends Controller
 {
@@ -75,5 +77,16 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()->route('students.index');
+    }
+
+    /**
+     * Import students from csv file.
+     */
+    public function import(ImportStudentRequest $request, StudentService $service)
+    {
+        $service->importCsv($request->file('file'));
+        
+        return redirect()->route('students.index')
+                         ->with('success', 'Mahasiswa berhasil diimpor.');
     }
 }
