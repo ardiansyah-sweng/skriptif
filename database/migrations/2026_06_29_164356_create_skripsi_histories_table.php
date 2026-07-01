@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('skripsi_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('skripsi_id')->constrained('skripsi')->cascadeOnDelete();
-            $table->string('status_before')->nullable();
-            $table->string('status_after');
+            $table->string('status');
             $table->foreignId('handler_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('note')->nullable();
             $table->timestamps();

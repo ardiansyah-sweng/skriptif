@@ -76,8 +76,7 @@ class StudentSkripsiController extends Controller
             return redirect()->back()->with('error', 'Tidak ada data mahasiswa.');
         }
 
-        $skripsi = Skripsi::where('student_id', $student->id)
-            ->with(['supervisor', 'histories.handler'])
+        $skripsi = Skripsi::with(['supervisor', 'histories.handler'])
             ->findOrFail($id);
 
         $courses = \App\Models\ElectiveCourse::all()->pluck('courses', 'id');

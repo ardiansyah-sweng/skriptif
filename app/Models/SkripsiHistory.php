@@ -13,8 +13,7 @@ class SkripsiHistory extends Model
 
     protected $fillable = [
         'skripsi_id',
-        'status_before',
-        'status_after',
+        'status',
         'handler_id',
         'note',
     ];

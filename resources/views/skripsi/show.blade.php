@@ -239,8 +239,9 @@
                                     </thead>
                                     <tbody>
                                         @foreach($skripsi->elective_courses as $item)
+                                            @php $courseId = $item['id'] ?? $item['course_id'] ?? null; @endphp
                                             <tr>
-                                                <td>{{ $courses[$item['id']] ?? 'Mata Kuliah #'.$item['id'] }}</td>
+                                                <td>{{ $courseId ? ($courses[$courseId] ?? 'Mata Kuliah #'.$courseId) : '-' }}</td>
                                                 <td class="text-center fw-bold text-primary">{{ $item['grade'] ?? '-' }}</td>
                                             </tr>
                                         @endforeach
@@ -287,10 +288,10 @@
                                         @php
                                             $markerClass = 'marker-pending';
                                             $markerIcon = 'fa-paper-plane';
-                                            if ($history->status_after === 'approved') {
+                                            if ($history->status === 'approved') {
                                                 $markerClass = 'marker-approved';
                                                 $markerIcon = 'fa-check';
-                                            } elseif ($history->status_after === 'rejected') {
+                                            } elseif ($history->status === 'rejected') {
                                                 $markerClass = 'marker-rejected';
                                                 $markerIcon = 'fa-xmark';
                                             }
@@ -303,11 +304,11 @@
                                         <div class="timeline-content">
                                             <div class="timeline-header">
                                                 <span class="timeline-title">
-                                                    @if(is_null($history->status_before))
+                                                    @if($history->status === 'pending')
                                                         Pengajuan Awal
-                                                    @elseif($history->status_after === 'approved')
+                                                    @elseif($history->status === 'approved')
                                                         Disetujui
-                                                    @elseif($history->status_after === 'rejected')
+                                                    @elseif($history->status === 'rejected')
                                                         Ditolak
                                                     @else
                                                         Status Diperbarui
@@ -318,16 +319,11 @@
                                             
                                             <!-- Note Box -->
                                             @if($history->note)
-                                                <div class="timeline-note {{ $history->status_after === 'approved' ? 'timeline-note-approved' : ($history->status_after === 'rejected' ? 'timeline-note-rejected' : '') }}">
+                                                <div class="timeline-note {{ $history->status === 'approved' ? 'timeline-note-approved' : ($history->status === 'rejected' ? 'timeline-note-rejected' : '') }}">
                                                     {{ $history->note }}
                                                 </div>
                                             @endif
 
-                                            @if($history->handler)
-                                                <div class="timeline-actor">
-                                                    <i class="fa-solid fa-user-shield"></i> Oleh: {{ $history->handler->name }}
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
                                 @endforeach

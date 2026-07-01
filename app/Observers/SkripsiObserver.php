@@ -14,10 +14,9 @@ class SkripsiObserver
     {
         SkripsiHistory::create([
             'skripsi_id' => $skripsi->id,
-            'status_before' => null,
-            'status_after' => 'pending',
+            'status'     => 'pending',
             'handler_id' => auth()->id(),
-            'note' => 'Pengajuan skripsi awal dikirim oleh mahasiswa.',
+            'note'       => 'Pengajuan skripsi awal dikirim oleh mahasiswa.',
         ]);
     }
 
@@ -27,24 +26,22 @@ class SkripsiObserver
     public function updated(Skripsi $skripsi): void
     {
         if ($skripsi->isDirty('status')) {
-            $statusBefore = $skripsi->getOriginal('status');
-            $statusAfter = $skripsi->status;
+            $status = $skripsi->status;
 
             $note = null;
-            if ($statusAfter === 'rejected') {
+            if ($status === 'rejected') {
                 $note = $skripsi->rejection_note ?? 'Pengajuan ditolak oleh Admin.';
-            } elseif ($statusAfter === 'approved') {
+            } elseif ($status === 'approved') {
                 $note = 'Pengajuan disetujui oleh Admin.';
-            } elseif ($statusAfter === 'pending') {
+            } elseif ($status === 'pending') {
                 $note = 'Pengajuan diajukan kembali.';
             }
 
             SkripsiHistory::create([
                 'skripsi_id' => $skripsi->id,
-                'status_before' => $statusBefore,
-                'status_after' => $statusAfter,
+                'status'     => $status,
                 'handler_id' => auth()->id(),
-                'note' => $note,
+                'note'       => $note,
             ]);
         }
     }
