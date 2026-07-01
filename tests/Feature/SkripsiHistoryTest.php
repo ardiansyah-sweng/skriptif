@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -36,14 +35,6 @@ class SkripsiHistoryTest extends TestCase
         ], $override));
     }
 
-    private function createElectiveCourse(): int
-    {
-        return DB::table('elective_courses')->insertGetId([
-            'courses'   => 'Pemrograman Web',
-            'timestamp' => now(),
-        ]);
-    }
-
     /**
      * Saat skripsi baru dibuat, history harus tercatat dengan status 'pending'.
      */
@@ -51,9 +42,7 @@ class SkripsiHistoryTest extends TestCase
     {
         $studentId  = $this->createStudent();
         $lecturerId = $this->createLecturer();
-        $user       = User::factory()->create();
 
-        // Buat skripsi langsung di DB
         $skripsiId = DB::table('skripsi')->insertGetId([
             'student_id'      => $studentId,
             'supervisor_id'   => $lecturerId,
@@ -65,15 +54,13 @@ class SkripsiHistoryTest extends TestCase
             'updated_at'      => now(),
         ]);
 
-        // Simulasikan Observer: catat history dengan kolom 'status' tunggal
+        // Simulasikan Observer: catat history tanpa handler_id
         \App\Models\SkripsiHistory::create([
             'skripsi_id' => $skripsiId,
             'status'     => 'pending',
-            'handler_id' => $user->id,
             'note'       => 'Pengajuan skripsi awal dikirim oleh mahasiswa.',
         ]);
 
-        // Pastikan kolom 'status' tunggal tersimpan dengan benar
         $this->assertDatabaseHas('skripsi_histories', [
             'skripsi_id' => $skripsiId,
             'status'     => 'pending',
@@ -85,9 +72,9 @@ class SkripsiHistoryTest extends TestCase
 
         $this->assertNotNull($history);
         $this->assertEquals('pending', $history->status);
-        // Pastikan kolom lama status_before dan status_after sudah tidak ada
         $this->assertFalse(property_exists($history, 'status_before'), 'Kolom status_before seharusnya sudah dihapus');
         $this->assertFalse(property_exists($history, 'status_after'), 'Kolom status_after seharusnya sudah dihapus');
+        $this->assertFalse(property_exists($history, 'handler_id'), 'Kolom handler_id seharusnya sudah dihapus');
     }
 
     /**
@@ -109,21 +96,9 @@ class SkripsiHistoryTest extends TestCase
             'updated_at'      => now(),
         ]);
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        // Update status ke approved
-        DB::table('skripsi')->where('id', $skripsiId)->update([
-            'status'     => 'approved',
-            'updated_at' => now(),
-        ]);
-
-        // Trigger observer secara manual
-        $skripsi = \App\Models\Skripsi::find($skripsiId);
         \App\Models\SkripsiHistory::create([
-            'skripsi_id' => $skripsi->id,
+            'skripsi_id' => $skripsiId,
             'status'     => 'approved',
-            'handler_id' => $user->id,
             'note'       => 'Pengajuan disetujui oleh Admin.',
         ]);
 
@@ -161,13 +136,9 @@ class SkripsiHistoryTest extends TestCase
             'updated_at'      => now(),
         ]);
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         \App\Models\SkripsiHistory::create([
             'skripsi_id' => $skripsiId,
             'status'     => 'rejected',
-            'handler_id' => $user->id,
             'note'       => 'Judul tidak sesuai standar.',
         ]);
 
@@ -197,29 +168,21 @@ class SkripsiHistoryTest extends TestCase
             'updated_at'      => now(),
         ]);
 
-        $user = User::factory()->create();
-
-        // Entry 1: pending (pengajuan awal)
         \App\Models\SkripsiHistory::create([
             'skripsi_id' => $skripsiId,
             'status'     => 'pending',
-            'handler_id' => $user->id,
             'note'       => 'Pengajuan skripsi awal dikirim oleh mahasiswa.',
         ]);
 
-        // Entry 2: rejected
         \App\Models\SkripsiHistory::create([
             'skripsi_id' => $skripsiId,
             'status'     => 'rejected',
-            'handler_id' => $user->id,
             'note'       => 'Revisi diperlukan.',
         ]);
 
-        // Entry 3: approved
         \App\Models\SkripsiHistory::create([
             'skripsi_id' => $skripsiId,
             'status'     => 'approved',
-            'handler_id' => $user->id,
             'note'       => 'Pengajuan disetujui.',
         ]);
 

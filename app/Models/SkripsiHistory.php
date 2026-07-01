@@ -14,7 +14,6 @@ class SkripsiHistory extends Model
     protected $fillable = [
         'skripsi_id',
         'status',
-        'handler_id',
         'note',
     ];
 
@@ -23,8 +22,4 @@ class SkripsiHistory extends Model
         return $this->belongsTo(Skripsi::class, 'skripsi_id');
     }
 
-    public function handler()
-    {
-        return $this->belongsTo(User::class, 'handler_id');
-    }
 }

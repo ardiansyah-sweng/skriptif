@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('skripsi_id')->constrained('skripsi')->cascadeOnDelete();
             $table->string('status');
-            $table->foreignId('handler_id')->nullable()->constrained('users')->nullOnDelete();
+
             $table->text('note')->nullable();
             $table->timestamps();
         });

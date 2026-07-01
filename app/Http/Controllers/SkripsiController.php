@@ -72,7 +72,7 @@ class SkripsiController extends Controller
     // Halaman detail skripsi & timeline untuk admin
     public function show($id)
     {
-        $skripsi = \App\Models\Skripsi::with(['student', 'supervisor', 'histories.handler'])->findOrFail($id);
+        $skripsi = \App\Models\Skripsi::with(['student', 'supervisor', 'histories'])->findOrFail($id);
         $courses = \App\Models\ElectiveCourse::all()->pluck('courses', 'id');
         return view('skripsi.show', compact('skripsi', 'courses'));
     }

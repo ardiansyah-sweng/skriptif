@@ -15,7 +15,6 @@ class SkripsiObserver
         SkripsiHistory::create([
             'skripsi_id' => $skripsi->id,
             'status'     => 'pending',
-            'handler_id' => auth()->id(),
             'note'       => 'Pengajuan skripsi awal dikirim oleh mahasiswa.',
         ]);
     }
@@ -40,7 +39,6 @@ class SkripsiObserver
             SkripsiHistory::create([
                 'skripsi_id' => $skripsi->id,
                 'status'     => $status,
-                'handler_id' => auth()->id(),
                 'note'       => $note,
             ]);
         }
