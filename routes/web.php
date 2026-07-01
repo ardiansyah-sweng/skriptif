@@ -19,7 +19,9 @@ Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skrip
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
+Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
+Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lecturers.show');
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
