@@ -103,6 +103,17 @@
                     <div class="form-hint">Bidang keahlian dosen (opsional)</div>
                 </div>
 
+                <div class="mb-4">
+                    <label for="status" class="form-label-custom">Status Dosen</label>
+                    <select id="status" name="status" class="form-select">
+                        @php $currentStatus = old('status', $lecturer->status ?? 'aktif'); @endphp
+                        <option value="aktif" @selected($currentStatus === 'aktif')>Aktif</option>
+                        <option value="cuti" @selected($currentStatus === 'cuti')>Cuti</option>
+                        <option value="pensiun" @selected($currentStatus === 'pensiun')>Pensiun</option>
+                    </select>
+                    <div class="form-hint">Status keaktifan dosen saat ini</div>
+                </div>
+
                 <hr class="my-4">
 
                 <div class="d-flex justify-content-end gap-2">

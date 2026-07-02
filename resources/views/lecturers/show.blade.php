@@ -20,6 +20,10 @@
         .btn-back-custom:hover { background-color: #f1f5f9; color: #334155; }
         .btn-edit-action { background-color: #3b82f6; color: white; font-size: 14px; font-weight: 500; border-radius: 8px; padding: 10px 24px; border: none; text-decoration: none; }
         .btn-edit-action:hover { background-color: #2563eb; color: white; }
+        .status-badge { display: inline-block; font-size: 13px; font-weight: 600; border-radius: 999px; padding: 4px 14px; }
+        .status-aktif { background-color: #dcfce7; color: #16a34a; }
+        .status-cuti { background-color: #fef3c7; color: #d97706; }
+        .status-pensiun { background-color: #e2e8f0; color: #64748b; }
     </style>
 </head>
 <body>
@@ -54,6 +58,12 @@
             <div class="detail-row">
                 <div class="detail-label">Keahlian</div>
                 <div class="detail-value">{{ $lecturer->expertise ?? '-' }}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Status</div>
+                @php $status = $lecturer->status ?? 'aktif'; @endphp
+                <span class="status-badge status-{{ $status }}">{{ ucfirst($status) }}</span>
             </div>
 
             <div class="detail-row">

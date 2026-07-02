@@ -34,7 +34,7 @@ class LecturerModelTest extends TestCase
         $attributes = $lecturer->getAttributes();
 
         $this->assertArrayHasKey('status', $attributes);
-        $this->assertEquals('active', $attributes['status']);
+        $this->assertEquals('aktif', $attributes['status']);
     }
 
     public function test_it_uses_timestamps()

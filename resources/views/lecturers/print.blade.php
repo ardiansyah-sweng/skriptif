@@ -40,10 +40,11 @@
         <thead>
             <tr>
                 <th style="width: 5%">No</th>
-                <th style="width: 15%">ID Dosen</th>
-                <th style="width: 25%">Nama</th>
-                <th style="width: 25%">Email</th>
-                <th style="width: 30%">Keahlian</th>
+                <th style="width: 13%">ID Dosen</th>
+                <th style="width: 22%">Nama</th>
+                <th style="width: 22%">Email</th>
+                <th style="width: 26%">Keahlian</th>
+                <th style="width: 12%">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -54,10 +55,11 @@
                 <td>{{ $lecturer->name }}</td>
                 <td>{{ $lecturer->email }}</td>
                 <td>{{ $lecturer->expertise ?? '-' }}</td>
+                <td>{{ ucfirst($lecturer->status ?? 'aktif') }}</td>
             </tr>
             @empty
             <tr>
-                <td colspan="5" style="text-align:center;">Tidak ada data dosen.</td>
+                <td colspan="6" style="text-align:center;">Tidak ada data dosen.</td>
             </tr>
             @endforelse
         </tbody>

@@ -31,7 +31,7 @@ class Lecturer extends Model
      * Default values
      */
     protected $attributes = [
-        'status' => 'active',
+        'status' => 'aktif',
     ];
     
 
