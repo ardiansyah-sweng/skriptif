@@ -38,4 +38,9 @@ class Skripsi extends Model
     {
         return $this->belongsTo(Lecturer::class, 'supervisor_id');
     }
+
+    public function histories()
+    {
+        return $this->hasMany(SkripsiHistory::class, 'skripsi_id')->orderBy('created_at', 'asc');
+    }
 }

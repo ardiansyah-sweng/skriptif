@@ -18,6 +18,7 @@ Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
+Route::get('/skripsi/{id}', [SkripsiController::class, 'show'])->name('skripsi.show');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
@@ -42,6 +43,10 @@ Route::prefix('student/skripsi')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
+
+    Route::get('/{id}', [StudentSkripsiController::class, 'show'])
+        ->name('student.skripsi.show');
+
 });
 
 // =========================

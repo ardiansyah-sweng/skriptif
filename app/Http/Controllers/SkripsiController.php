@@ -68,4 +68,12 @@ class SkripsiController extends Controller
 
         return redirect()->route('skripsi.index')->with('success', 'Status skripsi berhasil diperbarui!');
     }
+
+    // Halaman detail skripsi & timeline untuk admin
+    public function show($id)
+    {
+        $skripsi = \App\Models\Skripsi::with(['student', 'supervisor', 'histories'])->findOrFail($id);
+        $courses = \App\Models\ElectiveCourse::all()->pluck('courses', 'id');
+        return view('skripsi.show', compact('skripsi', 'courses'));
+    }
 }

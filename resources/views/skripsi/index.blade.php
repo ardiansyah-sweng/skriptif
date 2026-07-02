@@ -112,18 +112,23 @@
                             <td class="text-center">
                                 @if($skripsi->status == 'pending')
                                     <div class="d-flex justify-content-center gap-2">
-                                        <button class="btn-approve" onclick="executeApprove('{{ $skripsi->id }}')">
+                                        <button class="btn-approve" onclick="executeApprove('{{ $skripsi->id }}')" id="btn-approve-{{ $skripsi->id }}">
                                             <i class="fa-solid fa-check"></i> Setujui
                                         </button>
                                         <button class="btn-reject" data-bs-toggle="modal" data-bs-target="#rejectModal"
-                                                onclick="setupReject('{{ $skripsi->id }}')">
+                                                onclick="setupReject('{{ $skripsi->id }}')" id="btn-reject-{{ $skripsi->id }}">
                                             <i class="fa-solid fa-xmark"></i> Tolak
                                         </button>
+                                        <a href="{{ route('skripsi.show', $skripsi->id) }}" class="btn btn-sm btn-light border" title="Lihat Detail & Timeline" id="btn-view-{{ $skripsi->id }}">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
                                     </div>
                                 @else
-                                    <span class="text-muted meta-text">
-                                        <i class="fa-solid fa-lock me-1"></i> Locked
-                                    </span>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('skripsi.show', $skripsi->id) }}" class="btn btn-sm btn-outline-primary" id="btn-timeline-{{ $skripsi->id }}">
+                                            <i class="fa-solid fa-clock-rotate-left me-1"></i> Detail & Timeline
+                                        </a>
+                                    </div>
                                 @endif
                             </td>
                         </tr>

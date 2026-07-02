@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thesis Submission History — Thesis System</title>
+    <title>Riwayat Pengajuan Skripsi — Sistem Skripsi</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,37 +38,38 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Home</span>
+                    <span>Beranda</span>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
-                    <span>Thesis History</span>
+                    <span>Riwayat Skripsi</span>
                 </div>
-                <h1>Thesis Submission History</h1>
-                <p>List of all thesis proposals you have submitted</p>
+                <h1>Riwayat Pengajuan Skripsi</h1>
+                <p>Daftar semua usulan proposal skripsi yang telah Anda ajukan</p>
             </div>
             <a href="{{ route('student.skripsi.create') }}" class="btn-primary">
-                <i class="ti ti-plus"></i> Submit New Proposal
+                <i class="ti ti-plus"></i> Ajukan Proposal Baru
             </a>
         </div>
 
         <div class="card">
-            <div class="card-title">Submission List</div>
+            <div class="card-title">Daftar Pengajuan</div>
 
             @if(session('success'))
                 <div style="background:#d1fae5; color:#065f46; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:13px;">
-                    {{ session('success') == 'Pengajuan berhasil!' ? 'Submission successful!' : session('success') }}
+                    {{ session('success') == 'Pengajuan berhasil!' ? 'Pengajuan berhasil!' : session('success') }}
                 </div>
             @endif
 
             @if($skripsis->isEmpty())
-                <p style="text-align:center; padding:40px; color:#6b7280;">No thesis submissions found.</p>
+                <p style="text-align:center; padding:40px; color:#6b7280;">Tidak ada data pengajuan skripsi.</p>
             @else
-                <table>
+                 <table>
                     <thead>
                         <tr>
-                            <th>Thesis Title</th>
-                            <th>Advisor</th>
+                            <th>Judul Skripsi</th>
+                            <th>Dosen Pembimbing</th>
                             <th>Status</th>
-                            <th>Submission Date</th>
+                            <th>Tanggal Pengajuan</th>
+                            <th style="text-align: center; width: 15%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,7 +80,7 @@
                                 @if($skripsi->supervisor)
                                     {{ $skripsi->supervisor->name }}
                                 @else
-                                    <span style="color:#9ca3af;">Not determined yet</span>
+                                    <span style="color:#9ca3af;">Belum ditentukan</span>
                                 @endif
                             </td>
                             <td>
@@ -91,9 +92,14 @@
                                         default => ''
                                     };
                                 @endphp
-                                <span class="{{ $statusClass }}">{{ ucfirst($skripsi->status) }}</span>
+                                <span class="{{ $statusClass }}">{{ $skripsi->status == 'pending' ? 'Pending' : ($skripsi->status == 'approved' ? 'Approved' : 'Rejected') }}</span>
                             </td>
                             <td>{{ $skripsi->submission_date ? $skripsi->submission_date->format('d M Y') : '-' }}</td>
+                            <td style="text-align: center;">
+                                <a href="{{ route('student.skripsi.show', $skripsi->id) }}" class="btn-primary" style="padding: 5px 10px; font-size: 11.5px; border-radius: 6px; gap: 4px;" id="btn-show-{{ $skripsi->id }}">
+                                    <i class="ti ti-eye" style="font-size: 11px"></i> Lihat Detail
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

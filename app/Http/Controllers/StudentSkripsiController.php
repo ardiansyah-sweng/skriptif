@@ -68,4 +68,19 @@ class StudentSkripsiController extends Controller
 
         return view('mahasiswa.skripsi.submissions', compact('skripsis'));
     }
+
+    public function show($id)
+    {
+        $student = Student::first();
+        if (!$student) {
+            return redirect()->back()->with('error', 'Tidak ada data mahasiswa.');
+        }
+
+        $skripsi = Skripsi::with(['supervisor', 'histories'])
+            ->findOrFail($id);
+
+        $courses = \App\Models\ElectiveCourse::all()->pluck('courses', 'id');
+
+        return view('mahasiswa.skripsi.show', compact('skripsi', 'courses'));
+    }
 }
