@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('lecturers', function (Blueprint $table) {
-            //
+            $table->enum('status', ['aktif', 'cuti', 'pensiun'])->default('aktif')->after('expertise');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('lecturers', function (Blueprint $table) {
-            //
+            $table->dropColumn('status');
         });
     }
 };
