@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('expertise')->nullable();
+            $table->enum('status', ['aktif', 'cuti', 'pensiun'])->default('aktif')->after('expertise');
             $table->timestamps();
         });
     }

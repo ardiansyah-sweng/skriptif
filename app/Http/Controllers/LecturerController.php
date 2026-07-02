@@ -38,6 +38,7 @@ class LecturerController extends Controller
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:lecturers,email,' . $id,
             'expertise'   => 'nullable|string|max:255',
+            'status'      => 'nullable|in:aktif,cuti,pensiun',
         ]);
 
         DB::table('lecturers')->where('id', $id)->update([
@@ -45,6 +46,7 @@ class LecturerController extends Controller
             'name'        => $request->name,
             'email'       => $request->email,
             'expertise'   => $request->expertise,
+            'status'      => $request->status ?? 'aktif',
             'updated_at'  => now(),
         ]);
 
@@ -58,6 +60,7 @@ class LecturerController extends Controller
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:lecturers,email',
             'expertise'   => 'nullable|string|max:255',
+            'status'      => 'nullable|in:aktif,cuti,pensiun',
         ]);
 
         DB::table('lecturers')->insert([
@@ -65,6 +68,7 @@ class LecturerController extends Controller
             'name'        => $request->name,
             'email'       => $request->email,
             'expertise'   => $request->expertise,
+            'status'      => $request->status ?? 'aktif',
             'created_at'  => now(),
             'updated_at'  => now(),
         ]);

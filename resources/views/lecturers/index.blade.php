@@ -33,6 +33,10 @@
         .page-btn.active { background-color: #3b82f6; border-color: #3b82f6; color: #fff; }
         .btn-print-action { background-color: #ef4444; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; text-decoration: none; }
         .btn-print-action:hover { background-color: #dc2626; color: white; }
+        .status-badge { display: inline-block; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 4px 12px; }
+        .status-aktif { background-color: #dcfce7; color: #16a34a; }
+        .status-cuti { background-color: #fef3c7; color: #d97706; }
+        .status-pensiun { background-color: #e2e8f0; color: #64748b; }
     </style>
 </head>
 <body>
@@ -93,10 +97,11 @@
                     <thead>
                         <tr>
                             <th style="width: 5%">No</th>
-                            <th style="width: 22%">Dosen / ID</th>
-                            <th style="width: 18%">Email</th>
-                            <th style="width: 25%">Keahlian</th>
-                            <th style="width: 30%" class="text-center">Aksi</th>
+                            <th style="width: 20%">Dosen / ID</th>
+                            <th style="width: 16%">Email</th>
+                            <th style="width: 20%">Keahlian</th>
+                            <th style="width: 10%">Status</th>
+                            <th style="width: 29%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -114,6 +119,10 @@
                             </td>
                             <td>
                                 <div class="meta-text">{{ $lecturer->expertise ?? '-' }}</div>
+                            </td>
+                            <td>
+                                @php $status = $lecturer->status ?? 'aktif'; @endphp
+                                <span class="status-badge status-{{ $status }}">{{ ucfirst($status) }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
@@ -135,7 +144,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
+                            <td colspan="6" class="text-center py-5 text-muted">
                                 <i class="fa-regular fa-folder-open d-block mb-2" style="font-size: 24px;"></i>
                                 Tidak ada data dosen.
                             </td>
