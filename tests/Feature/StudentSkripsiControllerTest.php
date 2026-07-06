@@ -30,6 +30,7 @@ class StudentSkripsiControllerTest extends TestCase
             'name'        => 'Dr. Ahmad Fauzi',
             'email'       => 'ahmad.fauzi@uad.ac.id',
             'expertise'   => 'Rekayasa Perangkat Lunak',
+            'max_supervisors' => 3,
             'created_at'  => now(),
             'updated_at'  => now(),
         ], $override));
@@ -45,13 +46,14 @@ class StudentSkripsiControllerTest extends TestCase
 
     public function test_halaman_create_menampilkan_view_dengan_data_dosen_dan_matkul_pilihan()
     {
+        $studentId  = $this->createStudent();
         $lecturerId = $this->createLecturer();
         $courseId   = $this->createElectiveCourse();
 
-        $response = $this->get('/mahasiswa/skripsi/create');
+        $response = $this->get('/student/skripsi/create');
 
         $response->assertViewIs('mahasiswa.skripsi.create');
-        $response->assertViewHas('lecturers');
+        $response->assertViewHas('lecturersWithCapacity');
         $response->assertViewHas('electiveCourses');
     }
 
@@ -61,7 +63,7 @@ class StudentSkripsiControllerTest extends TestCase
         $lecturerId  = $this->createLecturer();
         $courseId    = $this->createElectiveCourse();
 
-        $response = $this->post('/mahasiswa/skripsi', [
+        $response = $this->post('/student/skripsi', [
             'title'             => 'Sistem Informasi Skripsi',
             'description'       => 'Membangun sistem informasi untuk manajemen skripsi.',
             'supervisor_id'     => $lecturerId,
@@ -87,7 +89,7 @@ class StudentSkripsiControllerTest extends TestCase
         $lecturerId = $this->createLecturer();
         $courseId   = $this->createElectiveCourse();
 
-        $response = $this->from('/mahasiswa/skripsi/create')->post('/mahasiswa/skripsi', [
+        $response = $this->from('/student/skripsi/create')->post('/student/skripsi', [
             'title'             => 'Sistem Informasi Skripsi',
             'description'       => 'Membangun sistem informasi untuk manajemen skripsi.',
             'supervisor_id'     => $lecturerId,
@@ -96,15 +98,16 @@ class StudentSkripsiControllerTest extends TestCase
             ],
         ]);
 
-        $response->assertRedirect('/mahasiswa/skripsi/create');
+        $response->assertRedirect('/student/skripsi/create');
         $response->assertSessionHas('error', 'Tidak ada data mahasiswa.');
     }
 
     public function test_store_skripsi_gagal_saat_validasi_gagal()
     {
-        $response = $this->post('/mahasiswa/skripsi', []);
+        $this->createStudent();
+        $response = $this->post('/student/skripsi', []);
 
-        $response->assertSessionHasErrors(['title', 'description', 'supervisor_id', 'elective_courses']);
+        $response->assertSessionHasErrors(['title', 'description', 'supervisor_id']);
     }
 
     public function test_store_skripsi_berhasil_meskipun_tanpa_nilai_matkul_pilihan()
@@ -113,7 +116,7 @@ class StudentSkripsiControllerTest extends TestCase
         $lecturerId  = $this->createLecturer();
         $courseId    = $this->createElectiveCourse();
 
-        $response = $this->post('/mahasiswa/skripsi', [
+        $response = $this->post('/student/skripsi', [
             'title'             => 'Sistem Informasi Skripsi',
             'description'       => 'Membangun sistem informasi untuk manajemen skripsi.',
             'supervisor_id'     => $lecturerId,
@@ -128,6 +131,35 @@ class StudentSkripsiControllerTest extends TestCase
             'student_id'    => $studentId,
             'title'         => 'Sistem Informasi Skripsi',
         ]);
+    }
+
+    public function test_store_skripsi_gagal_ketika_dosen_sudah_mencapai_batas_kapasitas()
+    {
+        $studentId = $this->createStudent(['year_entrance' => 2022]);
+        $lecturerId = $this->createLecturer(['max_supervisors' => 1]);
+        $courseId = $this->createElectiveCourse();
+
+        DB::table('skripsi')->insert([
+            'student_id' => $studentId,
+            'supervisor_id' => $lecturerId,
+            'title' => 'Skripsi lama',
+            'description' => 'Deskripsi lama',
+            'status' => 'approved',
+            'submission_date' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $response = $this->post('/student/skripsi', [
+            'title' => 'Skripsi baru',
+            'description' => 'Deskripsi baru',
+            'supervisor_id' => $lecturerId,
+            'elective_courses' => [
+                ['id' => $courseId, 'grade' => 'A'],
+            ],
+        ]);
+
+        $response->assertSessionHasErrors('supervisor_id');
     }
 
     public function test_halaman_history_menampilkan_view_dengan_data_skripsi()
@@ -146,17 +178,17 @@ class StudentSkripsiControllerTest extends TestCase
             'updated_at'      => now(),
         ]);
 
-        $response = $this->get('/mahasiswa/skripsi/history');
+        $response = $this->get('/student/skripsi/submissions');
 
-        $response->assertViewIs('mahasiswa.skripsi.history');
+        $response->assertViewIs('mahasiswa.skripsi.submissions');
         $response->assertViewHas('skripsis');
     }
 
     public function test_halaman_history_mengembalikan_koleksi_kosong_saat_tidak_ada_mahasiswa()
     {
-        $response = $this->get('/mahasiswa/skripsi/history');
+        $response = $this->get('/student/skripsi/submissions');
 
-        $response->assertViewIs('mahasiswa.skripsi.history');
+        $response->assertViewIs('mahasiswa.skripsi.submissions');
         $response->assertViewHas('skripsis');
 
         $skripsis = $response->viewData('skripsis');
