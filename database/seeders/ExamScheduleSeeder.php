@@ -34,7 +34,7 @@ class ExamScheduleSeeder extends Seeder
             ],
             [
                 'skripsi_id'     => $skripsiApproved->id,
-                'jenis_sidang'   => 'hasil',
+                'jenis_sidang'   => 'pendadaran',
                 'tanggal_sidang' => now()->addWeeks(2)->toDateString(),
                 'jam_mulai'      => '10:00:00',
                 'jam_selesai'    => '11:00:00',

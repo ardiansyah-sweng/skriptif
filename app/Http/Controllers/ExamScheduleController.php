@@ -21,6 +21,12 @@ class ExamScheduleController extends Controller
     public function create()
     {
         $approvedSkripsi = Skripsi::where('status', 'approved')
+            ->whereHas('student', function ($query) {
+                $query->where('is_lulus', false);
+            })
+            ->whereDoesntHave('examSchedules', function ($query) {
+                $query->where('jenis_sidang', 'pendadaran');
+            })
             ->with('student')
             ->get();
 
@@ -33,7 +39,7 @@ class ExamScheduleController extends Controller
             'skripsi_id'     => 'required|exists:skripsi,id',
             'jenis_sidang'   => [
                 'required',
-                'in:proposal,hasil,pendadaran',
+                'in:proposal,pendadaran',
                 Rule::unique('exam_schedules')->where(function ($query) use ($request) {
                     return $query->where('skripsi_id', $request->skripsi_id);
                 }),
@@ -58,9 +64,30 @@ class ExamScheduleController extends Controller
         ]);
 
         // Defense in depth: cek ulang status skripsi di controller
-        $skripsi = Skripsi::findOrFail($request->skripsi_id);
+        $skripsi = Skripsi::with('student')->findOrFail($request->skripsi_id);
         if ($skripsi->status !== 'approved') {
             return back()->withErrors(['skripsi_id' => 'Hanya skripsi yang sudah disetujui yang dapat dijadwalkan.']);
+        }
+
+        if ($skripsi->student && $skripsi->student->is_lulus) {
+            return back()->withErrors(['skripsi_id' => 'Mahasiswa ini sudah lulus dan tidak dapat dijadwalkan lagi.']);
+        }
+
+        if (ExamSchedule::where('skripsi_id', $skripsi->id)->where('jenis_sidang', 'pendadaran')->exists()) {
+            return back()->withErrors(['skripsi_id' => 'Mahasiswa ini sudah memiliki jadwal sidang pendadaran.']);
+        }
+
+        // Cek bentrok ruangan pada hari dan jam yang sama
+        $overlapCount = ExamSchedule::where('ruang', $request->ruang)
+            ->where('tanggal_sidang', $request->tanggal_sidang)
+            ->where(function ($query) use ($request) {
+                $query->where('jam_mulai', '<', $request->jam_selesai)
+                      ->where('jam_selesai', '>', $request->jam_mulai);
+            })
+            ->count();
+
+        if ($overlapCount > 0) {
+            return back()->withErrors(['ruang' => 'Ruangan sudah terpakai pada waktu tersebut.'])->withInput();
         }
 
         ExamSchedule::create($request->only([

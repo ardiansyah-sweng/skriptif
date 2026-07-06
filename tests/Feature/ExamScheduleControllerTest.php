@@ -137,15 +137,15 @@ class ExamScheduleControllerTest extends TestCase
             'updated_at'     => now(),
         ]);
 
-        // Tambahkan jadwal sidang hasil (jenis sidang berbeda)
+        // Tambahkan jadwal sidang pendadaran (jenis sidang berbeda)
         $response = $this->post('/exam-schedules', [
             'skripsi_id'     => $skripsiId,
-            'jenis_sidang'   => 'hasil',
+            'jenis_sidang'   => 'pendadaran',
             'tanggal_sidang' => now()->addDays(14)->format('Y-m-d'),
             'jam_mulai'      => '13:00',
             'jam_selesai'    => '14:00',
             'ruang'          => 'Ruang 302',
-            'catatan'        => 'Jadwal sidang hasil.',
+            'catatan'        => 'Jadwal sidang pendadaran.',
         ]);
 
         $response->assertRedirect(route('exam-schedules.index'));
@@ -153,7 +153,93 @@ class ExamScheduleControllerTest extends TestCase
 
         $this->assertDatabaseHas('exam_schedules', [
             'skripsi_id'   => $skripsiId,
-            'jenis_sidang' => 'hasil',
+            'jenis_sidang' => 'pendadaran',
         ]);
+    }
+
+    public function test_store_jadwal_sidang_gagal_jika_ada_bentrok_ruangan()
+    {
+        $studentId1 = $this->createStudent(['student_id' => 'STU001', 'email' => 'budi1@uad.ac.id']);
+        $studentId2 = $this->createStudent(['student_id' => 'STU002', 'email' => 'budi2@uad.ac.id']);
+        $lecturerId = $this->createLecturer();
+        
+        $skripsiId1 = $this->createApprovedSkripsi($studentId1, $lecturerId);
+        $skripsiId2 = $this->createApprovedSkripsi($studentId2, $lecturerId);
+
+        // Tambahkan jadwal sidang skripsi pertama di Ruang 301, jam 09:00 - 10:00
+        DB::table('exam_schedules')->insert([
+            'skripsi_id'     => $skripsiId1,
+            'jenis_sidang'   => 'proposal',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:00:00',
+            'jam_selesai'    => '10:00:00',
+            'ruang'          => 'Ruang 301',
+            'status'         => 'terjadwal',
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
+
+        // Coba tambahkan jadwal sidang skripsi kedua di Ruang 301, jam 09:30 - 10:30 (bentrok!)
+        $response = $this->post('/exam-schedules', [
+            'skripsi_id'     => $skripsiId2,
+            'jenis_sidang'   => 'proposal',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:30',
+            'jam_selesai'    => '10:30',
+            'ruang'          => 'Ruang 301',
+            'catatan'        => 'Uji coba bentrok ruangan.',
+        ]);
+
+        $response->assertSessionHasErrors(['ruang']);
+    }
+
+    public function test_store_jadwal_sidang_gagal_jika_mahasiswa_sudah_lulus()
+    {
+        $studentId = $this->createStudent(['is_lulus' => true]);
+        $lecturerId = $this->createLecturer();
+        $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
+
+        $response = $this->post('/exam-schedules', [
+            'skripsi_id'     => $skripsiId,
+            'jenis_sidang'   => 'proposal',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:00',
+            'jam_selesai'    => '10:00',
+            'ruang'          => 'Ruang 301',
+        ]);
+
+        $response->assertSessionHasErrors(['skripsi_id']);
+    }
+
+    public function test_store_jadwal_sidang_gagal_jika_mahasiswa_sudah_ada_jadwal_pendadaran()
+    {
+        $studentId = $this->createStudent();
+        $lecturerId = $this->createLecturer();
+        $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
+
+        // Tambahkan jadwal sidang pendadaran
+        DB::table('exam_schedules')->insert([
+            'skripsi_id'     => $skripsiId,
+            'jenis_sidang'   => 'pendadaran',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:00:00',
+            'jam_selesai'    => '10:00:00',
+            'ruang'          => 'Ruang 301',
+            'status'         => 'terjadwal',
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
+
+        // Coba tambahkan jadwal sidang proposal (seharusnya ditolak karena sudah ada pendadaran)
+        $response = $this->post('/exam-schedules', [
+            'skripsi_id'     => $skripsiId,
+            'jenis_sidang'   => 'proposal',
+            'tanggal_sidang' => now()->addDays(14)->format('Y-m-d'),
+            'jam_mulai'      => '11:00',
+            'jam_selesai'    => '12:00',
+            'ruang'          => 'Ruang 302',
+        ]);
+
+        $response->assertSessionHasErrors(['skripsi_id']);
     }
 }

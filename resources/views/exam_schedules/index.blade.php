@@ -54,7 +54,7 @@
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <h1 class="main-title">Jadwal Sidang Skripsi</h1>
-                <p class="sub-title">Kelola penjadwalan sidang proposal, hasil, dan pendadaran.</p>
+                <p class="sub-title">Kelola penjadwalan sidang proposal dan pendadaran.</p>
             </div>
             <a href="{{ route('exam-schedules.create') }}" class="btn-add">
                 <i class="fa-solid fa-plus me-1"></i> Tambah Jadwal
@@ -98,8 +98,6 @@
                             <td class="text-center">
                                 @if($schedule->jenis_sidang === 'proposal')
                                     <span class="badge-status badge-proposal"><i class="fa-solid fa-file-lines"></i> Proposal</span>
-                                @elseif($schedule->jenis_sidang === 'hasil')
-                                    <span class="badge-status badge-hasil"><i class="fa-solid fa-flask"></i> Hasil</span>
                                 @else
                                     <span class="badge-status badge-pendadaran"><i class="fa-solid fa-graduation-cap"></i> Pendadaran</span>
                                 @endif

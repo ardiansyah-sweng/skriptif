@@ -69,7 +69,6 @@
                         <select name="jenis_sidang" id="jenis_sidang" class="form-select @error('jenis_sidang') is-invalid @enderror">
                             <option value="">— Pilih Jenis Sidang —</option>
                             <option value="proposal" {{ old('jenis_sidang') == 'proposal' ? 'selected' : '' }}>Proposal</option>
-                            <option value="hasil" {{ old('jenis_sidang') == 'hasil' ? 'selected' : '' }}>Hasil</option>
                             <option value="pendadaran" {{ old('jenis_sidang') == 'pendadaran' ? 'selected' : '' }}>Pendadaran</option>
                         </select>
                         @error('jenis_sidang')

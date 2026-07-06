@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('exam_schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('skripsi_id')->constrained('skripsi')->cascadeOnDelete();
-            $table->enum('jenis_sidang', ['proposal', 'hasil', 'pendadaran']);
+            $table->enum('jenis_sidang', ['proposal', 'pendadaran']);
             $table->date('tanggal_sidang');
             $table->time('jam_mulai');
             $table->time('jam_selesai');
