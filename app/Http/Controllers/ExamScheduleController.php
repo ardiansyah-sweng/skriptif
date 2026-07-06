@@ -63,7 +63,6 @@ class ExamScheduleController extends Controller
             'ruang.required'               => 'Ruang sidang wajib diisi.',
         ]);
 
-        // Defense in depth: cek ulang status skripsi di controller
         $skripsi = Skripsi::with('student')->findOrFail($request->skripsi_id);
         if ($skripsi->status !== 'approved') {
             return back()->withErrors(['skripsi_id' => 'Hanya skripsi yang sudah disetujui yang dapat dijadwalkan.']);
@@ -91,7 +90,6 @@ class ExamScheduleController extends Controller
             }
         }
 
-        // Cek bentrok ruangan pada hari dan jam yang sama
         $overlapCount = ExamSchedule::where('ruang', $request->ruang)
             ->where('tanggal_sidang', $request->tanggal_sidang)
             ->where(function ($query) use ($request) {
