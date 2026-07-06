@@ -81,7 +81,6 @@ class ExamScheduleControllerTest extends TestCase
         $lecturerId = $this->createLecturer();
         $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
 
-        // Tambahkan jadwal sidang proposal pertama
         DB::table('exam_schedules')->insert([
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'proposal',
@@ -94,7 +93,6 @@ class ExamScheduleControllerTest extends TestCase
             'updated_at'     => now(),
         ]);
 
-        // Coba tambahkan jadwal sidang proposal kedua untuk mahasiswa / skripsi yang sama
         $response = $this->from('/exam-schedules/create')->post('/exam-schedules', [
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'proposal',
@@ -108,7 +106,6 @@ class ExamScheduleControllerTest extends TestCase
         $response->assertRedirect('/exam-schedules/create');
         $response->assertSessionHasErrors(['jenis_sidang']);
 
-        // Pastikan record di database tidak bertambah untuk jenis sidang proposal
         $this->assertEquals(
             1,
             DB::table('exam_schedules')
@@ -124,7 +121,6 @@ class ExamScheduleControllerTest extends TestCase
         $lecturerId = $this->createLecturer();
         $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
 
-        // Tambahkan jadwal sidang proposal pertama
         DB::table('exam_schedules')->insert([
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'proposal',
@@ -137,7 +133,6 @@ class ExamScheduleControllerTest extends TestCase
             'updated_at'     => now(),
         ]);
 
-        // Tambahkan jadwal sidang pendadaran (jenis sidang berbeda)
         $response = $this->post('/exam-schedules', [
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'pendadaran',
@@ -166,7 +161,6 @@ class ExamScheduleControllerTest extends TestCase
         $skripsiId1 = $this->createApprovedSkripsi($studentId1, $lecturerId);
         $skripsiId2 = $this->createApprovedSkripsi($studentId2, $lecturerId);
 
-        // Tambahkan jadwal sidang skripsi pertama di Ruang 301, jam 09:00 - 10:00
         DB::table('exam_schedules')->insert([
             'skripsi_id'     => $skripsiId1,
             'jenis_sidang'   => 'proposal',
@@ -179,7 +173,6 @@ class ExamScheduleControllerTest extends TestCase
             'updated_at'     => now(),
         ]);
 
-        // Coba tambahkan jadwal sidang skripsi kedua di Ruang 301, jam 09:30 - 10:30 (bentrok!)
         $response = $this->post('/exam-schedules', [
             'skripsi_id'     => $skripsiId2,
             'jenis_sidang'   => 'proposal',
@@ -217,7 +210,6 @@ class ExamScheduleControllerTest extends TestCase
         $lecturerId = $this->createLecturer();
         $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
 
-        // Tambahkan jadwal sidang pendadaran
         DB::table('exam_schedules')->insert([
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'pendadaran',
@@ -248,7 +240,6 @@ class ExamScheduleControllerTest extends TestCase
         $lecturerId = $this->createLecturer();
         $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
 
-        // Coba tambahkan jadwal sidang pendadaran tanpa adanya jadwal proposal sebelumnya
         $response = $this->post('/exam-schedules', [
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'pendadaran',
