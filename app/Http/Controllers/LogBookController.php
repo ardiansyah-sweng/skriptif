@@ -21,12 +21,39 @@ class LogBookController extends Controller
      */
     public function index(Request $request)
     {
+        // Mengambil filter pencarian, status, dan mahasiswa dari URL query
         $search = $request->query('q');
         $status = $request->query('status');
+        $studentId = $request->query('student_id');
         
-        $logBooks = $this->logBookService->getAllLogBooks($search, $status);
+        // Memanggil service untuk mendapatkan data log book bimbingan
+        $logBooks = $this->logBookService->getAllLogBooks($search, $status, $studentId);
+        // Mengambil daftar mahasiswa aktif untuk filter dropdown di halaman utama
+        $students = Student::where('status', 'active')->orderBy('name', 'asc')->get();
         
-        return view('log_books.index', compact('logBooks', 'search', 'status'));
+        return view('log_books.index', compact('logBooks', 'search', 'status', 'studentId', 'students'));
+    }
+
+    /**
+     * Display a print layout of the resource.
+     */
+    public function printAll(Request $request)
+    {
+        // Mengambil student_id dari parameter query URL
+        $studentId = $request->query('student_id');
+        
+        // Membatalkan akses cetak jika student_id tidak disertakan (karena cetak umum seluruh mahasiswa sudah dihapus)
+        if (!$studentId) {
+            return redirect()->route('log-books.index')->with('error', 'Silakan tentukan mahasiswa terlebih dahulu untuk mencetak log book.');
+        }
+        
+        // Mengambil data log book bimbingan khusus mahasiswa ini saja
+        $logBooks = $this->logBookService->getAllLogBooks(null, null, $studentId);
+        
+        // Mengambil profil mahasiswa beserta judul skripsi dan dosen pembimbingnya
+        $student = Student::with(['skripsi.supervisor'])->findOrFail($studentId);
+        
+        return view('log_books.print', compact('logBooks', 'studentId', 'student'));
     }
 
     /**
@@ -57,6 +84,7 @@ class LogBookController extends Controller
             'activity'    => 'required|string|min:5',
             'feedback'    => 'nullable|string',
             'status'      => 'required|in:pending,approved,rejected',
+            'attachment'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'student_id.required'  => 'Mahasiswa wajib dipilih.',
             'student_id.exists'    => 'Mahasiswa tidak valid.',
@@ -68,7 +96,17 @@ class LogBookController extends Controller
             'activity.min'         => 'Laporan aktivitas bimbingan minimal 5 karakter.',
             'status.required'      => 'Status bimbingan wajib dipilih.',
             'status.in'            => 'Status tidak valid.',
+            'attachment.image'    => 'File harus berupa gambar.',
+            'attachment.mimes'    => 'Format gambar harus jpeg, png, atau jpg.',
+            'attachment.max'      => 'Ukuran gambar maksimal 2MB.',
         ]);
+
+        // Mengunggah file gambar lampiran jika ada berkas yang dipilih oleh pengguna
+        if ($request->hasFile('attachment')) {
+            // Simpan gambar di folder storage/app/public/attachments secara otomatis
+            $path = $request->file('attachment')->store('attachments', 'public');
+            $validated['attachment'] = $path;
+        }
 
         $this->logBookService->storeLogBook($validated);
 
@@ -116,6 +154,7 @@ class LogBookController extends Controller
             'activity'    => 'required|string|min:5',
             'feedback'    => 'nullable|string',
             'status'      => 'required|in:pending,approved,rejected',
+            'attachment'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'student_id.required'  => 'Mahasiswa wajib dipilih.',
             'student_id.exists'    => 'Mahasiswa tidak valid.',
@@ -127,7 +166,23 @@ class LogBookController extends Controller
             'activity.min'         => 'Laporan aktivitas bimbingan minimal 5 karakter.',
             'status.required'      => 'Status bimbingan wajib dipilih.',
             'status.in'            => 'Status tidak valid.',
+            'attachment.image'    => 'File harus berupa gambar.',
+            'attachment.mimes'    => 'Format gambar harus jpeg, png, atau jpg.',
+            'attachment.max'      => 'Ukuran gambar maksimal 2MB.',
         ]);
+
+        $logBook = $this->logBookService->getLogBookById($id);
+
+        // Mengunggah file gambar baru jika ada berkas baru yang dipilih
+        if ($request->hasFile('attachment')) {
+            // Hapus file gambar lama dari folder penyimpanan jika sebelumnya sudah ada lampiran
+            if ($logBook->attachment) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($logBook->attachment);
+            }
+            // Simpan file gambar yang baru diunggah ke storage
+            $path = $request->file('attachment')->store('attachments', 'public');
+            $validated['attachment'] = $path;
+        }
 
         $this->logBookService->updateLogBook($id, $validated);
 

@@ -52,7 +52,8 @@
             </div>
         @endif
         <div class="form-card">
-            <form action="{{ route('log-books.update', $logBook->id) }}" method="POST">
+            <!-- enctype="multipart/form-data" ditambahkan agar form ini mendukung unggah berkas (file upload) -->
+            <form action="{{ route('log-books.update', $logBook->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <!-- Student Select -->
@@ -108,6 +109,19 @@
                         <option value="rejected" {{ old('status', $logBook->status) == 'rejected' ? 'selected' : '' }}>Rejected (Ditolak / Perlu Pengajuan Ulang)</option>
                     </select>
                     <div class="hint">Status default bimbingan adalah 'Pending' sampai disetujui oleh dosen pembimbing.</div>
+                </div>
+                <!-- Input file untuk memperbarui gambar lampiran bimbingan (menampilkan gambar saat ini jika ada) -->
+                <!-- Guidance Attachment (Optional) -->
+                <div class="mb-4">
+                    <label for="attachment" class="form-label">Lampiran Gambar (Opsional)</label>
+                    @if($logBook->attachment)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $logBook->attachment) }}" alt="Lampiran Bimbingan" class="img-thumbnail" style="max-height: 200px;">
+                            <div class="hint mt-1">Gambar saat ini. Unggah gambar baru jika ingin menggantinya.</div>
+                        </div>
+                    @endif
+                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*">
+                    <div class="hint">Format: JPEG, PNG, JPG. Maksimal 2MB.</div>
                 </div>
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-4">

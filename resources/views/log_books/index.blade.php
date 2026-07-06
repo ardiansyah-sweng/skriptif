@@ -59,16 +59,25 @@
                 <h1 class="main-title">Log Book Bimbingan Mahasiswa</h1>
                 <p class="sub-title">Daftar rekapan konsultasi bimbingan tugas akhir / skripsi mahasiswa dengan dosen pembimbing.</p>
             </div>
-            <a href="{{ route('log-books.create') }}" class="btn-add">
-                <i class="fa-solid fa-plus"></i> Tambah Log Book
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('log-books.create') }}" class="btn-add">
+                    <i class="fa-solid fa-plus"></i> Tambah Log Book
+                </a>
+            </div>
         </div>
         <!-- Filter & Search Bar -->
         <div class="mb-4">
             <form action="{{ route('log-books.index') }}" method="GET" class="d-flex align-items-center">
                 <div class="input-group" style="max-width: 600px;">
                     <input type="text" name="q" class="form-control search-input" placeholder="Cari nama/NIM mahasiswa, dosen, atau aktivitas..." value="{{ request('q') }}">
-                    <select name="status" class="form-select filter-select">
+                    <!-- Dropdown pilihan mahasiswa untuk memfilter daftar log book -->
+                    <select name="student_id" class="form-select filter-select" style="width: 170px; border-left: none;">
+                        <option value="">Semua Mahasiswa</option>
+                        @foreach($students as $stud)
+                            <option value="{{ $stud->id }}" {{ request('student_id') == $stud->id ? 'selected' : '' }}>{{ $stud->name }}</option>
+                        @endforeach
+                    </select>
+                    <select name="status" class="form-select filter-select" style="border-left: none;">
                         <option value="">Semua Status</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -78,7 +87,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i> Cari
                     </button>
                 </div>
-                @if(request('q') || request('status'))
+                @if(request('q') || request('status') || request('student_id'))
                     <a href="{{ route('log-books.index') }}" class="reset-btn">
                         <i class="fa-solid fa-arrows-rotate me-1"></i> Reset
                     </a>
@@ -111,6 +120,12 @@
                             <td>
                                 <div class="fw-bold text-dark">{{ $log->student->name ?? '-' }}</div>
                                 <div class="meta-text">NIM. {{ $log->student->student_id ?? '-' }}</div>
+                                <!-- Tombol cetak PDF khusus untuk Log Book bimbingan mahasiswa ini saja -->
+                                <div class="mt-1">
+                                    <a href="{{ route('log-books.print', ['student_id' => $log->student_id]) }}" target="_blank" class="text-decoration-none text-danger fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 11px;">
+                                        <i class="fa-solid fa-file-pdf"></i> Cetak Logbook
+                                    </a>
+                                </div>
                             </td>
                             <td>
                                 <div class="fw-semibold text-dark">{{ $log->lecturer->name ?? '-' }}</div>
@@ -121,6 +136,14 @@
                             </td>
                             <td>
                                 <div class="fw-medium text-dark" style="white-space: pre-line;">{{ Str::limit($log->activity, 150) }}</div>
+                                <!-- Tautan link untuk membuka gambar bukti bimbingan jika ada -->
+                                @if($log->attachment)
+                                    <div class="mt-2">
+                                        <a href="{{ asset('storage/' . $log->attachment) }}" target="_blank" class="text-decoration-none d-inline-flex align-items-center gap-1 text-primary fw-medium" style="font-size: 13px;">
+                                            <i class="fa-solid fa-image"></i> Lihat Lampiran Gambar
+                                        </a>
+                                    </div>
+                                @endif
                                 @if($log->feedback)
                                     <div class="mt-2 p-2 rounded bg-light border-start border-primary" style="font-size: 13px;">
                                         <span class="fw-bold text-primary d-block" style="font-size: 11px;"><i class="fa-solid fa-comment-dots me-1"></i>Feedback Dosen:</span>
