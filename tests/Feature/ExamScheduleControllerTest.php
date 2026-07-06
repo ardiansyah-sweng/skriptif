@@ -230,7 +230,6 @@ class ExamScheduleControllerTest extends TestCase
             'updated_at'     => now(),
         ]);
 
-        // Coba tambahkan jadwal sidang proposal (seharusnya ditolak karena sudah ada pendadaran)
         $response = $this->post('/exam-schedules', [
             'skripsi_id'     => $skripsiId,
             'jenis_sidang'   => 'proposal',
