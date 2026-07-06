@@ -242,4 +242,23 @@ class ExamScheduleControllerTest extends TestCase
 
         $response->assertSessionHasErrors(['skripsi_id']);
     }
+
+    public function test_store_jadwal_sidang_gagal_jika_belum_ada_proposal()
+    {
+        $studentId = $this->createStudent();
+        $lecturerId = $this->createLecturer();
+        $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
+
+        // Coba tambahkan jadwal sidang pendadaran tanpa adanya jadwal proposal sebelumnya
+        $response = $this->post('/exam-schedules', [
+            'skripsi_id'     => $skripsiId,
+            'jenis_sidang'   => 'pendadaran',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:00',
+            'jam_selesai'    => '10:00',
+            'ruang'          => 'Ruang 301',
+        ]);
+
+        $response->assertSessionHasErrors(['jenis_sidang' => 'Mahasiswa harus menyelesaikan sidang proposal terlebih dahulu sebelum dapat dijadwalkan untuk pendadaran.']);
+    }
 }

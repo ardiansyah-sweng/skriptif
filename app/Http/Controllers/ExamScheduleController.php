@@ -77,6 +77,16 @@ class ExamScheduleController extends Controller
             return back()->withErrors(['skripsi_id' => 'Mahasiswa ini sudah memiliki jadwal sidang pendadaran.']);
         }
 
+        if ($request->jenis_sidang === 'pendadaran') {
+            $hasProposal = ExamSchedule::where('skripsi_id', $skripsi->id)
+                ->where('jenis_sidang', 'proposal')
+                ->exists();
+
+            if (!$hasProposal) {
+                return back()->withErrors(['jenis_sidang' => 'Mahasiswa harus menyelesaikan sidang proposal terlebih dahulu sebelum dapat dijadwalkan untuk pendadaran.'])->withInput();
+            }
+        }
+
         // Cek bentrok ruangan pada hari dan jam yang sama
         $overlapCount = ExamSchedule::where('ruang', $request->ruang)
             ->where('tanggal_sidang', $request->tanggal_sidang)
