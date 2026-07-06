@@ -78,12 +78,16 @@ class ExamScheduleController extends Controller
         }
 
         if ($request->jenis_sidang === 'pendadaran') {
-            $hasProposal = ExamSchedule::where('skripsi_id', $skripsi->id)
+            $proposalExam = ExamSchedule::where('skripsi_id', $skripsi->id)
                 ->where('jenis_sidang', 'proposal')
-                ->exists();
+                ->first();
 
-            if (!$hasProposal) {
+            if (!$proposalExam) {
                 return back()->withErrors(['jenis_sidang' => 'Mahasiswa harus menyelesaikan sidang proposal terlebih dahulu sebelum dapat dijadwalkan untuk pendadaran.'])->withInput();
+            }
+
+            if (strtotime($request->tanggal_sidang) < strtotime($proposalExam->tanggal_sidang)) {
+                return back()->withErrors(['tanggal_sidang' => 'Tanggal sidang pendadaran tidak boleh mendahului tanggal sidang proposal (' . \Carbon\Carbon::parse($proposalExam->tanggal_sidang)->format('d-m-Y') . ').'])->withInput();
             }
         }
 
@@ -117,6 +121,17 @@ class ExamScheduleController extends Controller
     public function destroy($id)
     {
         $schedule = ExamSchedule::findOrFail($id);
+
+        if ($schedule->jenis_sidang === 'proposal') {
+            $hasPendadaran = ExamSchedule::where('skripsi_id', $schedule->skripsi_id)
+                ->where('jenis_sidang', 'pendadaran')
+                ->exists();
+
+            if ($hasPendadaran) {
+                return redirect()->back()->withErrors(['error' => 'Tidak dapat menghapus jadwal proposal karena mahasiswa sudah memiliki jadwal pendadaran. Hapus jadwal pendadaran terlebih dahulu.']);
+            }
+        }
+
         $schedule->delete();
 
         return redirect()->back()
