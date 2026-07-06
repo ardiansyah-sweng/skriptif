@@ -37,4 +37,9 @@ class Student extends Model
     protected $attributes = [
         'status' => 'active',
     ];
+
+    public function skripsi()
+    {
+        return $this->hasOne(Skripsi::class, 'student_id');
+    }
 }

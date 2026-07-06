@@ -13,6 +13,18 @@ class LecturerController extends Controller
         return view('lecturers.index', compact('lecturers'));
     }
 
+    public function printAll()
+    {
+        $lecturers = DB::table('lecturers')->get();
+        return view('lecturers.print', compact('lecturers'));
+    }
+
+    public function show($id)
+    {
+        $lecturer = DB::table('lecturers')->where('id', $id)->first();
+        return view('lecturers.show', compact('lecturer'));
+    }
+
     public function edit($id)
     {
         $lecturer = DB::table('lecturers')->where('id', $id)->first();
