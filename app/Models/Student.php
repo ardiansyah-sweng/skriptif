@@ -23,12 +23,14 @@ class Student extends Model
         'email',
         'year_entrance',
         'status',
+        'is_lulus',
     ];
     /**
      * Attribute casting
      */
     protected $casts = [
         'year_entrance' => 'integer',
+        'is_lulus'      => 'boolean',
     ];
     public $timestamps = true;
     /**

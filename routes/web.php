@@ -8,6 +8,7 @@ use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
 

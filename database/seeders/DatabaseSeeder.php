@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             ElectiveCourseSeeder::class,
             SkripsiSeeder::class,
-            LogBookSeeder::class,
+            ExamScheduleSeeder::class,
         ]);
 
         User::factory()->create([

@@ -24,6 +24,7 @@ class ModelStudentTest extends TestCase
             'email',
             'year_entrance',
             'status',
+            'is_lulus',
         ], $student->getFillable());
     }
 
