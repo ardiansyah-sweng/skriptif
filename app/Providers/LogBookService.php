@@ -6,7 +6,7 @@ class LogBookService
     /**
      * Get all log books with optional search and status filter.
      */
-    public function getAllLogBooks($search = null, $status = null)
+    public function getAllLogBooks($search = null, $status = null, $studentId = null)
     {
         $query = LogBook::with(['student', 'lecturer']);
         if ($search) {
@@ -22,6 +22,13 @@ class LogBookService
         if ($status && in_array($status, ['pending', 'approved', 'rejected'])) {
             $query->where('status', $status);
         }
+        // Filter log book berdasarkan student_id (mahasiswa tertentu)
+        if ($studentId) {
+            $query->where('student_id', $studentId);
+            // Urutkan dari tanggal bimbingan terlama ke terbaru (kronologis) agar urut bimbingan 1, 2, dst.
+            return $query->orderBy('date', 'asc')->get();
+        }
+        // Urutkan dari bimbingan terbaru untuk daftar umum
         return $query->orderBy('date', 'desc')->get();
     }
     /**
@@ -43,6 +50,8 @@ class LogBookService
             'activity'    => $data['activity'],
             'feedback'    => $data['feedback'] ?? null,
             'status'      => $data['status'] ?? 'pending',
+            // Simpan nama file lampiran gambar ke kolom database
+            'attachment'  => $data['attachment'] ?? null,
         ]);
     }
     /**
@@ -51,14 +60,21 @@ class LogBookService
     public function updateLogBook($id, array $data)
     {
         $logBook = LogBook::findOrFail($id);
-        $logBook->update([
+        $updateData = [
             'student_id'  => $data['student_id'],
             'lecturer_id' => $data['lecturer_id'],
             'date'        => $data['date'],
             'activity'    => $data['activity'],
             'feedback'    => $data['feedback'] ?? null,
             'status'      => $data['status'] ?? 'pending',
-        ]);
+        ];
+
+        // Perbarui lampiran jika data attachment dikirim (ada file baru yang diunggah)
+        if (array_key_exists('attachment', $data)) {
+            $updateData['attachment'] = $data['attachment'];
+        }
+
+        $logBook->update($updateData);
         return $logBook;
     }
     /**
@@ -67,6 +83,10 @@ class LogBookService
     public function deleteLogBook($id)
     {
         $logBook = LogBook::findOrFail($id);
+        // Hapus berkas gambar secara permanen dari folder storage jika log book dihapus
+        if ($logBook->attachment) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($logBook->attachment);
+        }
         return $logBook->delete();
     }
 }

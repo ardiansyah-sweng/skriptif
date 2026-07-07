@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('activity');
             $table->text('feedback')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->string('attachment')->nullable();
             $table->timestamps();
         });
     }

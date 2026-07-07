@@ -13,6 +13,7 @@ class LogBook extends Model
         'activity',
         'feedback',
         'status',
+        'attachment',
     ];
     protected $casts = [
         'date' => 'date',
