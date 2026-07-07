@@ -39,4 +39,32 @@ class SkripsiService
         $skripsi->update($updateData);
         return $skripsi;
     }
+    public function getLecturerQuotaStats()
+    {
+        // Ambil semua data dosen
+        $lecturers = \App\Models\Lecturer::all();
+
+        return $lecturers->map(function ($lecturer) {
+            $current = $lecturer->active_bimbingan_count;
+            $max = $lecturer->max_quota ?? 5;
+            
+            $persentase = $max > 0 ? ($current / $max) * 100 : 0;
+
+            // Logika penentuan warna progress bar Bootstrap
+            $color = 'bg-success'; 
+            if ($persentase >= 100) {
+                $color = 'bg-danger'; 
+            } elseif ($persentase >= 60) {
+                $color = 'bg-warning'; 
+            }
+
+            return [
+                'name' => $lecturer->name,
+                'current' => $current,
+                'max' => $max,
+                'persentase' => $persentase,
+                'color' => $color
+            ];
+        });
+    }
 }

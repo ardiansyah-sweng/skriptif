@@ -42,6 +42,8 @@ Route::prefix('student/skripsi')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
+        
+    Route::get('/quota', [StudentSkripsiController::class, 'quotaList'])->name('student.skripsi.quota');
 });
 
 // =========================

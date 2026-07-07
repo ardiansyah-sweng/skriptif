@@ -7,9 +7,22 @@ use App\Models\Lecturer;
 use App\Models\Skripsi;
 use App\Models\ElectiveCourse;
 use App\Models\Student;
+use App\Providers\SkripsiService;
 
 class StudentSkripsiController extends Controller
 {
+    protected $skripsiService;
+    public function __construct(SkripsiService $skripsiService)
+    {
+        $this->skripsiService = $skripsiService;
+    }
+    public function quotaList()
+    {
+        $quotaStats = $this->skripsiService->getLecturerQuotaStats();
+        
+        return view('students.quota', compact('quotaStats'));
+    }
+
     public function create()
     {
        $lecturers = Lecturer::all();
