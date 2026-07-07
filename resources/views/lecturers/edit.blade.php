@@ -103,6 +103,20 @@
                     <div class="form-hint">Bidang keahlian dosen (opsional)</div>
                 </div>
 
+                <div class="mb-4">
+                    <label for="max_supervisors" class="form-label-custom">Maks. Mahasiswa Bimbingan per Angkatan</label>
+                    <input
+                        type="number"
+                        id="max_supervisors"
+                        name="max_supervisors"
+                        class="form-control"
+                        value="{{ old('max_supervisors', $lecturer->max_supervisors ?? 3) }}"
+                        min="1"
+                        placeholder="Contoh: 3"
+                    >
+                    <div class="form-hint">Jumlah maksimal mahasiswa yang dapat dibimbing per angkatan</div>
+                </div>
+
                 <hr class="my-4">
 
                 <div class="d-flex justify-content-end gap-2">

@@ -38,6 +38,11 @@ class LecturerController extends Controller
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:lecturers,email,' . $id,
             'expertise'   => 'nullable|string|max:255',
+            'max_supervisors' => 'required|integer|min:1',
+        ], [
+            'max_supervisors.required' => 'Batas dosen pembimbing wajib diisi.',
+            'max_supervisors.integer' => 'Batas dosen pembimbing harus angka.',
+            'max_supervisors.min' => 'Batas dosen pembimbing minimal 1.',
         ]);
 
         DB::table('lecturers')->where('id', $id)->update([
@@ -45,6 +50,7 @@ class LecturerController extends Controller
             'name'        => $request->name,
             'email'       => $request->email,
             'expertise'   => $request->expertise,
+            'max_supervisors' => (int) $request->max_supervisors,
             'updated_at'  => now(),
         ]);
 
@@ -58,6 +64,11 @@ class LecturerController extends Controller
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:lecturers,email',
             'expertise'   => 'nullable|string|max:255',
+            'max_supervisors' => 'required|integer|min:1',
+        ], [
+            'max_supervisors.required' => 'Batas dosen pembimbing wajib diisi.',
+            'max_supervisors.integer' => 'Batas dosen pembimbing harus angka.',
+            'max_supervisors.min' => 'Batas dosen pembimbing minimal 1.',
         ]);
 
         DB::table('lecturers')->insert([
@@ -65,6 +76,7 @@ class LecturerController extends Controller
             'name'        => $request->name,
             'email'       => $request->email,
             'expertise'   => $request->expertise,
+            'max_supervisors' => (int) $request->max_supervisors,
             'created_at'  => now(),
             'updated_at'  => now(),
         ]);

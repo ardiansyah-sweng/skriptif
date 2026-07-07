@@ -23,6 +23,7 @@ class LecturerModelTest extends TestCase
             'name',
             'email',
             'expertise',
+            'max_supervisors',
             'status',
         ], $lecturer->getFillable());
     }
