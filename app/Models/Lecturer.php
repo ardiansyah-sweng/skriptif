@@ -33,6 +33,11 @@ class Lecturer extends Model
     protected $attributes = [
         'status' => 'active',
     ];
+    public function skripsis()
+    {
+        // Relasi ke tabel skripsi menggunakan foreign key 'supervisor_id'
+        return $this->hasMany(Skripsi::class, 'supervisor_id');
+    }
     
 
     /**

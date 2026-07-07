@@ -20,7 +20,10 @@ class SkripsiController extends Controller
     public function index()
     {
         $allSkripsi = $this->skripsiService->getAllSkripsi();
-        return view('skripsi.index', compact('allSkripsi'));
+        // Ambil semua data dosen aktif dari database untuk dipassing ke dropdown di view
+        $lecturers = Lecturer::all(); 
+        // Tambahkan variabel $lecturers ke dalam compact()
+        return view('skripsi.index', compact('allSkripsi', 'lecturers'));
     }
 
     // Halaman mahasiswa: form pengajuan
@@ -53,19 +56,42 @@ class SkripsiController extends Controller
         return redirect()->route('skripsi.index')->with('success', 'Pengajuan skripsi berhasil dikirim! Menunggu persetujuan admin.');
     }
 
-    // Proses approve/reject dari admin
     public function updateStatus(Request $request, $id)
     {
         $validated = $request->validate([
             'status'         => 'required|in:approved,rejected',
             'rejection_note' => 'required_if:status,rejected|nullable|string',
+            'supervisor_id'  => 'required_if:status,approved|nullable|exists:lecturers,id',
         ], [
-            'status.required'            => 'Status wajib dipilih.',
-            'rejection_note.required_if' => 'Catatan penolakan wajib diisi jika skripsi ditolak.',
+            'status.required'            => 'Status wajib ditentukan.',
+            'rejection_note.required_if' => 'Alasan penolakan wajib diisi jika judul ditolak.',
+            'supervisor_id.required_if'  => 'Dosen pembimbing wajib ditentukan saat menyetujui.',
         ]);
 
+        // ALUR EVALUASI JIKA DISETUJUI (Kondisi Judul Layak)
+        if ($request->status === 'approved') {
+            $lecturerId = $request->supervisor_id;
+
+            $lecturer = \App\Models\Lecturer::findOrFail($lecturerId);
+            $maxQuota = $lecturer->max_quota;
+
+            $activeBimbinganCount = \App\Models\Skripsi::where('supervisor_id', $lecturerId)
+                ->where('status', 'approved')
+                ->count();
+
+            if ($activeBimbinganCount >= $maxQuota) {
+                // Ambil data skripsi yang sedang dievaluasi saat ini
+                $currentSkripsi = \App\Models\Skripsi::with('supervisor')->findOrFail($id);
+                $requestedDosenName = $currentSkripsi->supervisor->name ?? 'Dosen Pilihan';
+
+                // Mengembalikan pesan instruksi ke Admin untuk memindahkan alokasi dosen pembimbing
+                return redirect()->back()->with('error', "Gagal ACC! Slot bimbingan untuk {$requestedDosenName} sudah penuh (Maksimal {$maxQuota} mahasiswa). Judul ini layak diterima, silakan alihkan ke Dosen Pembimbing lain yang slotnya masih tersedia pada dropdown modal.");
+            }
+        }
+
+        // Jika lolos pengecekan slot bimbingan, simpan ke database via service
         $this->skripsiService->updateStatus($id, $validated);
 
-        return redirect()->route('skripsi.index')->with('success', 'Status skripsi berhasil diperbarui!');
+        return redirect()->route('skripsi.index')->with('success', 'Evaluasi berhasil disimpan dan alokasi dosen diperbarui!');
     }
 }

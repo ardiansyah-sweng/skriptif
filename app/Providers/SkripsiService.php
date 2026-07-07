@@ -34,6 +34,10 @@ class SkripsiService
 
         if ($data['status'] === 'approved') {
             $updateData['approval_date'] = now()->toDateString();
+            
+            if (isset($data['supervisor_id'])) {
+                $updateData['supervisor_id'] = $data['supervisor_id'];
+            }
         }
 
         $skripsi->update($updateData);

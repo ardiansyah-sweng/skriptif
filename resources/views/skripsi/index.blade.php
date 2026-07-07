@@ -16,7 +16,7 @@
         .table-custom th { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; }
         .table-custom td { font-size: 14px; color: #334155; padding: 16px 20px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
         .badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; }
-        .status-pending  { background-color: #fef3c7; color: #d97706; }
+        .status-pending   { background-color: #fef3c7; color: #d97706; }
         .status-approved { background-color: #dcfce7; color: #15803d; }
         .status-rejected { background-color: #fee2e2; color: #b91c1c; }
         .btn-approve { background-color: #10b981; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; }
@@ -37,6 +37,13 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show mb-4">
+                <i class="fa-solid fa-circle-xmark me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show mb-4">
                 <i class="fa-solid fa-circle-xmark me-2"></i> <strong>Gagal memperbarui:</strong>
@@ -52,7 +59,7 @@
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <h1 class="main-title">Persetujuan Pengajuan Skripsi</h1>
-                <p class="sub-title">Evaluasi usulan judul mahasiswa. Dosen pembimbing sudah dipilih oleh mahasiswa.</p>
+                <p class="sub-title">Evaluasi usulan judul mahasiswa. Admin/Prodi dapat mengalihkan dosen jika kuota penuh.</p>
             </div>
             
         </div>
@@ -85,9 +92,16 @@
                                 <div class="fw-medium text-dark">{{ $skripsi->title }}</div>
                                 @if($skripsi->supervisor)
                                     <div class="meta-text mt-1 text-primary">
-                                        <i class="fa-solid fa-user-tie me-1"></i> Pembimbing: {{ $skripsi->supervisor->name }}
+                                        <i class="fa-solid fa-user-tie me-1"></i> Utama: {{ $skripsi->supervisor->name }}
                                     </div>
                                 @endif
+                                
+                                @if($skripsi->suggestion_supervisor)
+                                    <div class="meta-text text-muted">
+                                        <i class="fa-regular fa-lightbulb me-1"></i> Cadangan: {{ \App\Models\Lecturer::find($skripsi->suggestion_supervisor)->name ?? '-' }}
+                                    </div>
+                                @endif
+
                                 @if($skripsi->rejection_note)
                                     <div class="meta-text mt-1 text-danger">
                                         <i class="fa-solid fa-circle-exclamation me-1"></i> {{ $skripsi->rejection_note }}
@@ -112,7 +126,8 @@
                             <td class="text-center">
                                 @if($skripsi->status == 'pending')
                                     <div class="d-flex justify-content-center gap-2">
-                                        <button class="btn-approve" onclick="executeApprove('{{ $skripsi->id }}')">
+                                        <button class="btn-approve" data-bs-toggle="modal" data-bs-target="#approveModal"
+                                                onclick="setupApprove('{{ $skripsi->id }}', '{{ $skripsi->supervisor_id }}')">
                                             <i class="fa-solid fa-check"></i> Setujui
                                         </button>
                                         <button class="btn-reject" data-bs-toggle="modal" data-bs-target="#rejectModal"
@@ -146,8 +161,53 @@
         @csrf
         @method('PUT')
         <input type="hidden" name="status" id="formStatus">
+        <input type="hidden" name="supervisor_id" id="formSupervisorId">
         <input type="hidden" name="rejection_note" id="formRejectionNote">
     </form>
+
+    {{-- Modal Approve / Alokasi Dosen --}}
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px;">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-success">Setujui & Alokasi Dosen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small">Judul mahasiswa dinilai layak. Silakan konfirmasi atau sesuaikan alokasi Dosen Pembimbing Utama di bawah ini.</p>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Dosen Pembimbing</label>
+                        <select class="form-select" id="modalSupervisorId">
+                            @foreach($lecturers ?? [] as $lecturer)
+                                @php
+                                    // Hitung total bimbingan yang sudah aktif (approved) untuk dosen ini
+                                    $currentBimbingan = \App\Models\Skripsi::where('supervisor_id', $lecturer->id)
+                                        ->where('status', 'approved')
+                                        ->count();
+                                        
+                                    // Hitung sisa slot berdasarkan kuota maksimal
+                                    $maxQuota = $lecturer->max_quota ?? 5;
+                                    $sisaSlot = $maxQuota - $currentBimbingan;
+                                @endphp
+                                
+                                <option value="{{ $lecturer->id }}" 
+                                        {{ $sisaSlot <= 0 ? 'disabled' : '' }} 
+                                        class="{{ $sisaSlot <= 0 ? 'text-danger fw-bold' : '' }}">
+                                    {{ $lecturer->name }} (Sisa Slot: {{ $sisaSlot }} / {{ $maxQuota }}) {{ $sisaSlot <= 0 ? '[PENUH]' : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-sm btn-success" onclick="submitApprove()">
+                        Konfirmasi & ACC
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Modal Reject --}}
     <div class="modal fade" id="rejectModal" tabindex="-1" aria-hidden="true">
@@ -180,14 +240,27 @@
     <script>
         let currentSkripsiId = null;
 
-        function executeApprove(id) {
-            if (confirm('Setujui pengajuan skripsi ini?')) {
-                const form = document.getElementById('updateStatusForm');
-                form.action = `/skripsi/${id}/update-status`;
-                document.getElementById('formStatus').value = 'approved';
-                document.getElementById('formRejectionNote').value = '';
-                form.submit();
+        function setupApprove(id, currentSupervisorId) {
+            currentSkripsiId = id;
+            const selectDosen = document.getElementById('modalSupervisorId');
+            
+            if (currentSupervisorId && currentSupervisorId !== '') {
+                selectDosen.value = currentSupervisorId;
+            } else {
+                selectDosen.selectedIndex = 0;
             }
+        }
+
+        function submitApprove() {
+            const selectedDosen = document.getElementById('modalSupervisorId').value;
+            const form = document.getElementById('updateStatusForm');
+            
+            form.action = `/skripsi/${currentSkripsiId}/update-status`;
+            document.getElementById('formStatus').value = 'approved';
+            document.getElementById('formSupervisorId').value = selectedDosen;
+            document.getElementById('formRejectionNote').value = '';
+            
+            form.submit();
         }
 
         function setupReject(id) {
@@ -204,6 +277,7 @@
             const form = document.getElementById('updateStatusForm');
             form.action = `/skripsi/${currentSkripsiId}/update-status`;
             document.getElementById('formStatus').value = 'rejected';
+            document.getElementById('formSupervisorId').value = '';
             document.getElementById('formRejectionNote').value = note;
             form.submit();
         }
