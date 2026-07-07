@@ -12,20 +12,34 @@
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
         th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; vertical-align: top; }
         th { background-color: #f1f5f9; font-weight: 700; text-transform: uppercase; font-size: 11px; }
-        .no-print { text-align: right; margin-bottom: 16px; }
+        .no-print { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
         .btn-print { background-color: #ef4444; color: #fff; border: none; border-radius: 6px; padding: 8px 18px; font-size: 14px; cursor: pointer; }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            text-decoration: none;
+            border-radius: 6px;
+            padding: 8px 18px;
+            font-size: 14px;
+        }
         @media print {
             .no-print { display: none; }
             body { margin: 0; }
         }
     </style>
-</head>
-<body>
-    <div class="no-print">
-        <button type="button" class="btn-print" onclick="window.print()">
-            Cetak / Simpan sebagai PDF
-        </button>
-    </div>
+
+    <body>
+        <div class="no-print">
+            <a href="{{ route('students.index') }}" class="btn-back">
+                ← Kembali ke Data Student
+            </a>
+            <button type="button" class="btn-print" onclick="window.print()">
+                Cetak / Simpan sebagai PDF
+            </button>
+        </div>
 
     <div class="print-header">
         <div>
@@ -69,5 +83,5 @@
             window.print();
         };
     </script>
-</body>
+    </body>
 </html>
