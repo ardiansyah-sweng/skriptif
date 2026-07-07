@@ -4,6 +4,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ElectiveCourseController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LogBookController;
+use App\Http\Controllers\LecturerTopicController;
+use App\Http\Controllers\TopicApplicationController;
+use App\Http\Controllers\TopicBoardController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
@@ -26,6 +29,15 @@ Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lect
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 Route::resource('log-books', LogBookController::class);
+
+Route::resource('lecturer-topics', LecturerTopicController::class);
+Route::get('topic-board', [TopicBoardController::class, 'index'])->name('topic-board.index');
+Route::get('topic-board/{id}', [TopicBoardController::class, 'show'])->name('topic-board.show');
+Route::post('topic-board/{id}/apply', [TopicApplicationController::class, 'store'])->name('topic-board.apply');
+Route::get('topic-applications', [TopicApplicationController::class, 'index'])->name('topic-applications.index');
+Route::post('topic-applications/{id}/approve', [TopicApplicationController::class, 'approve'])->name('topic-applications.approve');
+Route::post('topic-applications/{id}/reject', [TopicApplicationController::class, 'reject'])->name('topic-applications.reject');
+Route::delete('topic-applications/{id}', [TopicApplicationController::class, 'destroy'])->name('topic-applications.destroy');
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
