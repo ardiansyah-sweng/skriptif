@@ -21,17 +21,14 @@ class LogBookController extends Controller
      */
     public function index(Request $request)
     {
-        // Mengambil filter pencarian, status, dan mahasiswa dari URL query
+        // Mengambil filter pencarian dan status dari URL query
         $search = $request->query('q');
         $status = $request->query('status');
-        $studentId = $request->query('student_id');
         
         // Memanggil service untuk mendapatkan data log book bimbingan
-        $logBooks = $this->logBookService->getAllLogBooks($search, $status, $studentId);
-        // Mengambil daftar mahasiswa aktif untuk filter dropdown di halaman utama
-        $students = Student::where('status', 'active')->orderBy('name', 'asc')->get();
+        $logBooks = $this->logBookService->getAllLogBooks($search, $status);
         
-        return view('log_books.index', compact('logBooks', 'search', 'status', 'studentId', 'students'));
+        return view('log_books.index', compact('logBooks', 'search', 'status'));
     }
 
     /**

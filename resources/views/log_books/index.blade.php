@@ -70,14 +70,7 @@
             <form action="{{ route('log-books.index') }}" method="GET" class="d-flex align-items-center">
                 <div class="input-group" style="max-width: 600px;">
                     <input type="text" name="q" class="form-control search-input" placeholder="Cari nama/NIM mahasiswa, dosen, atau aktivitas..." value="{{ request('q') }}">
-                    <!-- Dropdown pilihan mahasiswa untuk memfilter daftar log book -->
-                    <select name="student_id" class="form-select filter-select" style="width: 170px; border-left: none;">
-                        <option value="">Semua Mahasiswa</option>
-                        @foreach($students as $stud)
-                            <option value="{{ $stud->id }}" {{ request('student_id') == $stud->id ? 'selected' : '' }}>{{ $stud->name }}</option>
-                        @endforeach
-                    </select>
-                    <select name="status" class="form-select filter-select" style="border-left: none;">
+                    <select name="status" class="form-select filter-select">
                         <option value="">Semua Status</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -87,7 +80,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i> Cari
                     </button>
                 </div>
-                @if(request('q') || request('status') || request('student_id'))
+                @if(request('q') || request('status'))
                     <a href="{{ route('log-books.index') }}" class="reset-btn">
                         <i class="fa-solid fa-arrows-rotate me-1"></i> Reset
                     </a>
