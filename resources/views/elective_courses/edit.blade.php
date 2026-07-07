@@ -140,7 +140,7 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Beranda</span>
+                    <a href="{{ route('dashboard') }}" style="color:#9ca3af;text-decoration:none">Beranda</a>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
                     <a href="{{ route('elective-courses.index') }}" style="color:#9ca3af;text-decoration:none">Mata Kuliah Pilihan</a>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
@@ -149,9 +149,14 @@
                 <h1>Edit Mata Kuliah</h1>
                 <p>Ubah nama mata kuliah pilihan</p>
             </div>
-            <a href="{{ route('elective-courses.index') }}" class="btn-back">
-                <i class="ti ti-arrow-left"></i> Kembali
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="btn-back">
+                    <i class="ti ti-arrow-left"></i> Dashboard
+                </a>
+                <a href="{{ route('elective-courses.index') }}" class="btn-back">
+                    <i class="ti ti-arrow-left"></i> Kembali
+                </a>
+            </div>
         </div>
 
         <div class="card">

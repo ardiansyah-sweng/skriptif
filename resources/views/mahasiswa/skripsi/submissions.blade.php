@@ -38,16 +38,21 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Home</span>
+                    <a href="{{ route('dashboard') }}" style="color:#9ca3af;text-decoration:none">Home</a>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
                     <span>Thesis History</span>
                 </div>
                 <h1>Thesis Submission History</h1>
                 <p>List of all thesis proposals you have submitted</p>
             </div>
-            <a href="{{ route('student.skripsi.create') }}" class="btn-primary">
-                <i class="ti ti-plus"></i> Submit New Proposal
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:transparent;color:#6b7280;border:0.5px solid #e5e7eb;border-radius:8px;font-size:13px;text-decoration:none">
+                    <i class="ti ti-arrow-left"></i> Dashboard
+                </a>
+                <a href="{{ route('student.skripsi.create') }}" class="btn-primary">
+                    <i class="ti ti-plus"></i> Submit New Proposal
+                </a>
+            </div>
         </div>
 
         <div class="card">

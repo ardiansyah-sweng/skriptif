@@ -38,6 +38,13 @@
 <body>
     <div class="container py-5" style="max-width: 1200px;">
 
+        <div class="crumb mb-3">
+            <i class="fa-solid fa-house"></i>
+            <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Dashboard</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:8px"></i>
+            <span class="fw-semibold" style="color:#0f172a;">Data Dosen</span>
+        </div>
+
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-4">
                 <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
@@ -62,7 +69,10 @@
                 <h1 class="main-title">Data Dosen</h1>
                 <p class="sub-title">Kelola data dosen yang terdaftar dalam sistem.</p>
             </div>
-            <div>
+            <div class="d-flex gap-2 align-items-center">
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style="font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;text-decoration:none">
+                    <i class="fa-solid fa-arrow-left"></i> Dashboard
+                </a>
                 <input type="text" id="q" class="search-input" placeholder="Cari nama dosen..." oninput="filterTable()">
             </div>
         </div>

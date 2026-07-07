@@ -71,7 +71,7 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home"></i>
-                    <span>Beranda</span>
+                    <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Beranda</a>
                     <i class="ti ti-chevron-right"></i>
                     <a href="{{ route('students.index') }}" style="color:#64748b;text-decoration:none">Students</a>
                     <i class="ti ti-chevron-right"></i>
@@ -80,7 +80,10 @@
                 <h1>Edit Student</h1>
                 <p class="sub">Perbarui data mahasiswa yang sudah tersimpan.</p>
             </div>
-            <a href="{{ route('students.index') }}" class="back"><i class="ti ti-arrow-left"></i> Kembali</a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="back"><i class="ti ti-arrow-left"></i> Dashboard</a>
+                <a href="{{ route('students.index') }}" class="back"><i class="ti ti-arrow-left"></i> Kembali</a>
+            </div>
         </div>
 
         <div class="card">

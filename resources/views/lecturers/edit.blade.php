@@ -35,14 +35,28 @@
             </div>
         @endif
 
+        <div class="crumb mb-3">
+            <i class="fa-solid fa-house"></i>
+            <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Dashboard</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:8px"></i>
+            <a href="{{ route('lecturers.index') }}" style="color:#64748b;text-decoration:none">Data Dosen</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:8px"></i>
+            <span class="fw-semibold" style="color:#0f172a;">Edit</span>
+        </div>
+
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <h1 class="main-title">Edit Data Dosen</h1>
                 <p class="sub-title">Perbarui informasi dosen yang terdaftar.</p>
             </div>
-            <a href="{{ route('lecturers.index') }}" class="btn-back-custom">
-                <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="btn-back-custom">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+                </a>
+                <a href="{{ route('lecturers.index') }}" class="btn-back-custom">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+                </a>
+            </div>
         </div>
 
         <div class="content-card">

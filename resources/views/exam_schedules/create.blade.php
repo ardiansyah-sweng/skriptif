@@ -23,15 +23,23 @@
 <body>
     <div class="container py-5" style="max-width: 800px;">
 
-        <div class="mb-4">
-            <a href="{{ route('exam-schedules.index') }}" class="btn-back">
-                <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Daftar Jadwal
-            </a>
+        <div class="crumb mb-3">
+            <i class="fa-solid fa-house"></i>
+            <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Dashboard</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:8px"></i>
+            <a href="{{ route('exam-schedules.index') }}" style="color:#64748b;text-decoration:none">Jadwal Sidang</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:8px"></i>
+            <span class="fw-semibold" style="color:#0f172a;">Tambah</span>
         </div>
 
-        <div class="mb-4">
-            <h1 class="main-title">Tambah Jadwal Sidang</h1>
-            <p class="sub-title">Buat jadwal sidang baru untuk skripsi yang sudah disetujui.</p>
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h1 class="main-title">Tambah Jadwal Sidang</h1>
+                <p class="sub-title">Buat jadwal sidang baru untuk skripsi yang sudah disetujui.</p>
+            </div>
+            <a href="{{ route('dashboard') }}" class="btn-back">
+                <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+            </a>
         </div>
 
         <div class="content-card">

@@ -49,12 +49,21 @@
             </div>
         @endif
 
+        <div class="crumb mb-3">
+            <i class="fa-solid fa-house"></i>
+            <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Dashboard</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:8px"></i>
+            <span class="fw-semibold" style="color:#0f172a;">Persetujuan Skripsi</span>
+        </div>
+
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <h1 class="main-title">Persetujuan Pengajuan Skripsi</h1>
                 <p class="sub-title">Evaluasi usulan judul mahasiswa. Dosen pembimbing sudah dipilih oleh mahasiswa.</p>
             </div>
-            
+            <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style="font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;text-decoration:none">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
         </div>
 
         <div class="content-card">

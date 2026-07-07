@@ -30,7 +30,7 @@
     <div class="container py-5" style="max-width: 800px;">
         <div class="crumb">
             <i class="fa-solid fa-house"></i>
-            <a href="/">Beranda</a>
+            <a href="{{ route('dashboard') }}">Dashboard</a>
             <i class="fa-solid fa-chevron-right" style="font-size: 8px;"></i>
             <a href="{{ route('log-books.index') }}">Log Book Bimbingan</a>
             <i class="fa-solid fa-chevron-right" style="font-size: 8px;"></i>
@@ -109,11 +109,16 @@
                     <div class="hint">Status default bimbingan adalah 'Pending' sampai disetujui oleh dosen pembimbing.</div>
                 </div>
                 <!-- Actions -->
-                <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-4">
-                    <a href="{{ route('log-books.index') }}" class="btn-cancel">Batal</a>
-                    <button type="submit" class="btn-submit">
-                        <i class="fa-solid fa-circle-check"></i> Simpan Catatan
-                    </button>
+                <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+                    <a href="{{ route('dashboard') }}" class="btn-cancel">
+                        <i class="fa-solid fa-arrow-left"></i> Dashboard
+                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('log-books.index') }}" class="btn-cancel">Batal</a>
+                        <button type="submit" class="btn-submit">
+                            <i class="fa-solid fa-circle-check"></i> Simpan Catatan
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

@@ -49,13 +49,16 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Home</span>
+                    <a href="{{ route('dashboard') }}" style="color:#9ca3af;text-decoration:none">Home</a>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
                     <span>Submit Thesis</span>
                 </div>
                 <h1>Submit Thesis Proposal</h1>
                 <p>Fill out the form below to submit your thesis proposal</p>
             </div>
+            <a href="{{ route('dashboard') }}" class="btn-primary" style="background:transparent;color:#6b7280;border:0.5px solid #e5e7eb">
+                <i class="ti ti-arrow-left"></i> Dashboard
+            </a>
         </div>
 
         <form action="{{ route('student.skripsi.store') }}" method="POST">
@@ -133,7 +136,7 @@
             </div>
 
             <div style="display:flex;gap:8px; margin-top: 20px;">
-                <a href="/student/dashboard" class="btn-secondary">Cancel</a>
+                <a href="{{ route('dashboard') }}" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary">
                     <i class="ti ti-send"></i> Submit
                 </button>

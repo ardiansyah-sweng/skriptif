@@ -122,16 +122,21 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home"></i>
-                    <span>Beranda</span>
+                    <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Beranda</a>
                     <i class="ti ti-chevron-right"></i>
                     <span>Students</span>
                 </div>
                 <h1>Data Students</h1>
                 <p class="sub">Kelola data mahasiswa dengan nomor induk, nama, email, angkatan, dan status aktif/inaktif.</p>
             </div>
-            <a href="{{ route('students.create') }}" class="primary">
-                <i class="ti ti-plus"></i> Tambah Student
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="back">
+                    <i class="ti ti-arrow-left"></i> Dashboard
+                </a>
+                <a href="{{ route('students.create') }}" class="primary">
+                    <i class="ti ti-plus"></i> Tambah Student
+                </a>
+            </div>
         </div>
 
         <div class="stats">

@@ -185,16 +185,21 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home" style="font-size:11px"></i>
-                    <span>Beranda</span>
+                    <a href="{{ route('dashboard') }}" style="color:#9ca3af;text-decoration:none">Beranda</a>
                     <i class="ti ti-chevron-right" style="font-size:11px"></i>
                     <span>Mata Kuliah Pilihan</span>
                 </div>
                 <h1>Mata Kuliah Pilihan</h1>
                 <p>Daftar mata kuliah pilihan yang tersedia</p>
             </div>
-            <a href="{{ route('elective-courses.create') }}" class="btn-primary">
-                <i class="ti ti-plus"></i> Tambah Mata Kuliah
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="btn-back" style="padding:9px 18px">
+                    <i class="ti ti-arrow-left"></i> Dashboard
+                </a>
+                <a href="{{ route('elective-courses.create') }}" class="btn-primary">
+                    <i class="ti ti-plus"></i> Tambah Mata Kuliah
+                </a>
+            </div>
         </div>
 
         <div class="toolbar">

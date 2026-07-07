@@ -50,7 +50,7 @@
         @endif
         <div class="crumb">
             <i class="fa-solid fa-house"></i>
-            <a href="/">Beranda</a>
+            <a href="{{ route('dashboard') }}">Dashboard</a>
             <i class="fa-solid fa-chevron-right" style="font-size: 8px;"></i>
             <span class="fw-semibold" style="color: #0f172a;">Log Book Bimbingan</span>
         </div>
@@ -59,9 +59,14 @@
                 <h1 class="main-title">Log Book Bimbingan Mahasiswa</h1>
                 <p class="sub-title">Daftar rekapan konsultasi bimbingan tugas akhir / skripsi mahasiswa dengan dosen pembimbing.</p>
             </div>
-            <a href="{{ route('log-books.create') }}" class="btn-add">
-                <i class="fa-solid fa-plus"></i> Tambah Log Book
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style="font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;text-decoration:none;color:#64748b;border:1px solid #cbd5e1">
+                    <i class="fa-solid fa-arrow-left"></i> Dashboard
+                </a>
+                <a href="{{ route('log-books.create') }}" class="btn-add">
+                    <i class="fa-solid fa-plus"></i> Tambah Log Book
+                </a>
+            </div>
         </div>
         <!-- Filter & Search Bar -->
         <div class="mb-4">
