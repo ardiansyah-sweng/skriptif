@@ -1,115 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Skripsi Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #1e293b; }
-        .sidebar {
-            width: 260px; height: 100vh; position: fixed; top: 0; left: 0;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            color: #fff; padding: 0; z-index: 1000;
-            display: flex; flex-direction: column;
-        }
-        .sidebar-brand {
-            padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .sidebar-brand h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
-        .sidebar-brand small { font-size: 12px; color: #94a3b8; }
-        .sidebar-nav { padding: 12px 0; flex: 1; overflow-y: auto; }
-        .sidebar-nav .nav-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; padding: 16px 20px 6px; font-weight: 600; }
-        .sidebar-nav a {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px 20px; color: #cbd5e1; text-decoration: none;
-            font-size: 14px; font-weight: 500; transition: all 0.2s;
-            border-left: 3px solid transparent;
-        }
-        .sidebar-nav a:hover { background: rgba(255,255,255,0.06); color: #fff; border-left-color: #3b82f6; }
-        .sidebar-nav a i { width: 20px; text-align: center; font-size: 16px; }
-        .sidebar-nav a.active { background: rgba(59,130,246,0.12); color: #60a5fa; border-left-color: #3b82f6; }
-        .main-content { margin-left: 260px; min-height: 100vh; }
-        .topbar {
-            background: #fff; padding: 16px 30px; display: flex; align-items: center;
-            justify-content: space-between; border-bottom: 1px solid #e2e8f0;
-            position: sticky; top: 0; z-index: 999;
-        }
-        .topbar h4 { font-size: 18px; font-weight: 700; margin: 0; }
-        .topbar .badge-date { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 6px; }
-        .content { padding: 24px 30px; }
-        .stat-card {
-            background: #fff; border-radius: 12px; padding: 20px 24px;
-            border: 1px solid #e2e8f0; transition: all 0.3s; height: 100%;
-        }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
-        .stat-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; margin-bottom: 12px;
-        }
-        .stat-value { font-size: 28px; font-weight: 800; line-height: 1.2; }
-        .stat-label { font-size: 13px; color: #64748b; font-weight: 500; margin-top: 2px; }
-        .card-custom {
-            background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;
-        }
-        .card-custom .card-header {
-            background: #fff; padding: 16px 20px; border-bottom: 1px solid #e2e8f0;
-            font-weight: 600; font-size: 15px;
-        }
-        .table-custom th {
-            font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
-            color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 12px 16px;
-        }
-        .table-custom td { font-size: 13px; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
-        .table-custom tr:last-child td { border-bottom: none; }
-        .badge-status { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-        .menu-item {
-            display: flex; align-items: center; gap: 12px; padding: 14px 16px;
-            background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
-            text-decoration: none; color: #334155; font-size: 14px; font-weight: 500;
-            transition: all 0.2s;
-        }
-        .menu-item:hover { background: #f8fafc; border-color: #94a3b8; color: #1e293b; transform: translateY(-1px); }
-        .menu-item i { width: 20px; text-align: center; }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
 
-<div class="sidebar">
-    <div class="sidebar-brand">
-        <h3>Skriptif</h3>
-        <small>Skripsi Management System</small>
-    </div>
-    <div class="sidebar-nav">
-        <div class="nav-label">Menu Utama</div>
-        <a href="{{ route('dashboard') }}" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
-        <a href="{{ route('students.index') }}"><i class="fa-solid fa-user-graduate"></i> Mahasiswa</a>
-        <a href="{{ route('lecturers.index') }}"><i class="fa-solid fa-chalkboard-user"></i> Dosen</a>
-        <a href="{{ route('skripsi.index') }}"><i class="fa-solid fa-book"></i> Skripsi</a>
-        <a href="{{ route('log-books.index') }}"><i class="fa-solid fa-clipboard-list"></i> Log Book</a>
-        <a href="{{ route('exam-schedules.index') }}"><i class="fa-solid fa-calendar-check"></i> Jadwal Sidang</a>
-        <a href="{{ route('elective-courses.index') }}"><i class="fa-solid fa-layer-group"></i> MK Pilihan</a>
+@section('title', 'Dashboard')
 
-        <div class="nav-label">Mahasiswa</div>
-        <a href="{{ route('student.skripsi.create') }}"><i class="fa-solid fa-file-circle-plus"></i> Ajukan Skripsi</a>
-        <a href="{{ route('student.skripsi.history') }}"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat</a>
-    </div>
-</div>
-
-<div class="main-content">
-    <div class="topbar">
-        <div>
-            <h4>Dashboard</h4>
-        </div>
-        <span class="badge-date"><i class="fa-regular fa-calendar me-1"></i> {{ now()->format('d F Y') }}</span>
-    </div>
-
-    <div class="content">
+@section('content')
         <div class="row g-4 mb-4">
             <div class="col-md-3">
                 <div class="stat-card">
@@ -205,9 +98,44 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+@endsection
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@push('styles')
+<style>
+    .stat-card {
+        background: #fff; border-radius: 12px; padding: 20px 24px;
+        border: 1px solid #e2e8f0; transition: all 0.3s; height: 100%;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+    .stat-icon {
+        width: 48px; height: 48px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px; margin-bottom: 12px;
+    }
+    .stat-value { font-size: 28px; font-weight: 800; line-height: 1.2; }
+    .stat-label { font-size: 13px; color: #64748b; font-weight: 500; margin-top: 2px; }
+    .card-custom {
+        background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;
+    }
+    .card-custom .card-header {
+        background: #fff; padding: 16px 20px; border-bottom: 1px solid #e2e8f0;
+        font-weight: 600; font-size: 15px;
+    }
+    .table-custom th {
+        font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 12px 16px;
+    }
+    .table-custom td { font-size: 13px; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+    .table-custom tr:last-child td { border-bottom: none; }
+    .badge-status { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .menu-item {
+        display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+        text-decoration: none; color: #334155; font-size: 14px; font-weight: 500;
+        transition: all 0.2s;
+    }
+    .menu-item:hover { background: #f8fafc; border-color: #94a3b8; color: #1e293b; transform: translateY(-1px); }
+    .menu-item i { width: 20px; text-align: center; }
+</style>
+@endpush
