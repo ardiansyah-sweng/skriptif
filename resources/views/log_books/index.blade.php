@@ -129,12 +129,18 @@
                             </td>
                             <td>
                                 <div class="fw-medium text-dark" style="white-space: pre-line;">{{ Str::limit($log->activity, 150) }}</div>
-                                <!-- Tautan link untuk membuka gambar bukti bimbingan jika ada -->
+                                <!-- Tautan link untuk membuka lampiran bimbingan jika ada -->
                                 @if($log->attachment)
                                     <div class="mt-2">
-                                        <a href="{{ asset('storage/' . $log->attachment) }}" target="_blank" class="text-decoration-none d-inline-flex align-items-center gap-1 text-primary fw-medium" style="font-size: 13px;">
-                                            <i class="fa-solid fa-image"></i> Lihat Lampiran Gambar
-                                        </a>
+                                        @if(Str::endsWith(strtolower($log->attachment), '.pdf'))
+                                            <a href="{{ asset('storage/' . $log->attachment) }}" target="_blank" class="text-decoration-none d-inline-flex align-items-center gap-1 text-danger fw-semibold" style="font-size: 13px;">
+                                                <i class="fa-solid fa-file-pdf"></i> Lihat Lampiran PDF
+                                            </a>
+                                        @else
+                                            <a href="{{ asset('storage/' . $log->attachment) }}" target="_blank" class="text-decoration-none d-inline-flex align-items-center gap-1 text-primary fw-medium" style="font-size: 13px;">
+                                                <i class="fa-solid fa-image"></i> Lihat Lampiran Gambar
+                                            </a>
+                                        @endif
                                     </div>
                                 @endif
                                 @if($log->feedback)

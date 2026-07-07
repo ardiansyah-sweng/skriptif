@@ -109,12 +109,12 @@
                     </select>
                     <div class="hint">Status default bimbingan adalah 'Pending' sampai disetujui oleh dosen pembimbing.</div>
                 </div>
-                <!-- Input file untuk mengunggah gambar lampiran bimbingan (bersifat opsional) -->
+                <!-- Input file untuk mengunggah lampiran bimbingan (bersifat opsional) -->
                 <!-- Guidance Attachment (Optional) -->
                 <div class="mb-4">
-                    <label for="attachment" class="form-label">Lampiran Gambar (Opsional)</label>
-                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*">
-                    <div class="hint">Format: JPEG, PNG, JPG. Maksimal 2MB.</div>
+                    <label for="attachment" class="form-label">Lampiran Dokumen / Gambar (Opsional)</label>
+                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*,application/pdf">
+                    <div class="hint">Format: JPEG, PNG, JPG, PDF. Maksimal 2MB.</div>
                 </div>
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-4">

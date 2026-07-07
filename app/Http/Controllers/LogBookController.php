@@ -81,7 +81,7 @@ class LogBookController extends Controller
             'activity'    => 'required|string|min:5',
             'feedback'    => 'nullable|string',
             'status'      => 'required|in:pending,approved,rejected',
-            'attachment'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'attachment'  => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
         ], [
             'student_id.required'  => 'Mahasiswa wajib dipilih.',
             'student_id.exists'    => 'Mahasiswa tidak valid.',
@@ -93,9 +93,9 @@ class LogBookController extends Controller
             'activity.min'         => 'Laporan aktivitas bimbingan minimal 5 karakter.',
             'status.required'      => 'Status bimbingan wajib dipilih.',
             'status.in'            => 'Status tidak valid.',
-            'attachment.image'    => 'File harus berupa gambar.',
-            'attachment.mimes'    => 'Format gambar harus jpeg, png, atau jpg.',
-            'attachment.max'      => 'Ukuran gambar maksimal 2MB.',
+            'attachment.file'      => 'File harus berupa berkas yang valid.',
+            'attachment.mimes'     => 'Format file harus jpeg, png, jpg, atau pdf.',
+            'attachment.max'       => 'Ukuran file maksimal 2MB.',
         ]);
 
         // Mengunggah file gambar lampiran jika ada berkas yang dipilih oleh pengguna
@@ -151,7 +151,7 @@ class LogBookController extends Controller
             'activity'    => 'required|string|min:5',
             'feedback'    => 'nullable|string',
             'status'      => 'required|in:pending,approved,rejected',
-            'attachment'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'attachment'  => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
         ], [
             'student_id.required'  => 'Mahasiswa wajib dipilih.',
             'student_id.exists'    => 'Mahasiswa tidak valid.',
@@ -163,9 +163,9 @@ class LogBookController extends Controller
             'activity.min'         => 'Laporan aktivitas bimbingan minimal 5 karakter.',
             'status.required'      => 'Status bimbingan wajib dipilih.',
             'status.in'            => 'Status tidak valid.',
-            'attachment.image'    => 'File harus berupa gambar.',
-            'attachment.mimes'    => 'Format gambar harus jpeg, png, atau jpg.',
-            'attachment.max'      => 'Ukuran gambar maksimal 2MB.',
+            'attachment.file'      => 'File harus berupa berkas yang valid.',
+            'attachment.mimes'     => 'Format file harus jpeg, png, jpg, atau pdf.',
+            'attachment.max'       => 'Ukuran file maksimal 2MB.',
         ]);
 
         $logBook = $this->logBookService->getLogBookById($id);

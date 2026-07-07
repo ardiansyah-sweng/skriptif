@@ -110,18 +110,30 @@
                     </select>
                     <div class="hint">Status default bimbingan adalah 'Pending' sampai disetujui oleh dosen pembimbing.</div>
                 </div>
-                <!-- Input file untuk memperbarui gambar lampiran bimbingan (menampilkan gambar saat ini jika ada) -->
+                <!-- Input file untuk memperbarui lampiran bimbingan (menampilkan file saat ini jika ada) -->
                 <!-- Guidance Attachment (Optional) -->
                 <div class="mb-4">
-                    <label for="attachment" class="form-label">Lampiran Gambar (Opsional)</label>
+                    <label for="attachment" class="form-label">Lampiran Dokumen / Gambar (Opsional)</label>
                     @if($logBook->attachment)
                         <div class="mb-2">
-                            <img src="{{ asset('storage/' . $logBook->attachment) }}" alt="Lampiran Bimbingan" class="img-thumbnail" style="max-height: 200px;">
-                            <div class="hint mt-1">Gambar saat ini. Unggah gambar baru jika ingin menggantinya.</div>
+                            @if(Str::endsWith(strtolower($logBook->attachment), '.pdf'))
+                                <div class="d-flex align-items-center gap-2 p-2 border rounded bg-light" style="max-width: 300px;">
+                                    <i class="fa-solid fa-file-pdf text-danger fs-3"></i>
+                                    <div class="overflow-hidden">
+                                        <a href="{{ asset('storage/' . $logBook->attachment) }}" target="_blank" class="text-decoration-none fw-semibold text-dark text-truncate d-block" style="font-size: 13px;">
+                                            Lihat Dokumen PDF
+                                        </a>
+                                        <span class="text-muted d-block" style="font-size: 11px;">Berkas Lampiran PDF</span>
+                                    </div>
+                                </div>
+                            @else
+                                <img src="{{ asset('storage/' . $logBook->attachment) }}" alt="Lampiran Bimbingan" class="img-thumbnail" style="max-height: 200px;">
+                            @endif
+                            <div class="hint mt-1">File saat ini. Unggah file baru jika ingin menggantinya.</div>
                         </div>
                     @endif
-                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*">
-                    <div class="hint">Format: JPEG, PNG, JPG. Maksimal 2MB.</div>
+                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*,application/pdf">
+                    <div class="hint">Format: JPEG, PNG, JPG, PDF. Maksimal 2MB.</div>
                 </div>
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-4">

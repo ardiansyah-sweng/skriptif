@@ -150,6 +150,29 @@ class LogBookControllerTest extends TestCase
         Storage::disk('public')->assertExists($logBook->attachment);
     }
 
+    public function test_store_log_book_with_pdf_attachment_success()
+    {
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->create('document.pdf', 500, 'application/pdf');
+
+        $response = $this->post('/log-books', [
+            'student_id'  => $this->student->id,
+            'lecturer_id' => $this->lecturer->id,
+            'date'        => '2026-06-23',
+            'activity'    => 'Melakukan asistensi bab 3 dan melampirkan file dokumen draft PDF.',
+            'status'      => 'pending',
+            'attachment'  => $file,
+        ]);
+
+        $response->assertRedirect('/log-books');
+        
+        $logBook = LogBook::orderBy('id', 'desc')->first();
+        $this->assertNotNull($logBook->attachment);
+        $this->assertTrue(str_ends_with(strtolower($logBook->attachment), '.pdf'));
+        Storage::disk('public')->assertExists($logBook->attachment);
+    }
+
     public function test_update_log_book_with_attachment_success()
     {
         Storage::fake('public');
