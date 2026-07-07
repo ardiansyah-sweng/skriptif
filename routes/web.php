@@ -29,7 +29,7 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
 
-// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada (misalnya di komputer dosen)
+// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada 
 Route::get('storage/attachments/{filename}', function ($filename) {
     $filename = basename($filename);
     $path = 'attachments/' . $filename;
