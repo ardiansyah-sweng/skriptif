@@ -223,4 +223,25 @@ class LogBookControllerTest extends TestCase
         $response->assertViewHas('logBooks');
         $response->assertViewHas('student');
     }
+
+    public function test_fallback_storage_route_returns_file_when_exists()
+    {
+        Storage::fake('public');
+        
+        $file = UploadedFile::fake()->create('test_doc.pdf', 100, 'application/pdf');
+        Storage::disk('public')->putFileAs('attachments', $file, 'test_doc.pdf');
+        
+        $response = $this->get('/storage/attachments/test_doc.pdf');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_fallback_storage_route_returns_404_when_missing()
+    {
+        Storage::fake('public');
+        
+        $response = $this->get('/storage/attachments/nonexistent.pdf');
+        
+        $response->assertStatus(404);
+    }
 }

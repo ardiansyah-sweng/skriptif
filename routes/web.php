@@ -29,6 +29,16 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
 
+// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada (misalnya di komputer dosen)
+Route::get('storage/attachments/{filename}', function ($filename) {
+    $filename = basename($filename);
+    $path = 'attachments/' . $filename;
+    if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    return response()->file(\Illuminate\Support\Facades\Storage::disk('public')->path($path));
+});
+
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
     Route::get('/', [StudentSkripsiController::class, 'index'])
