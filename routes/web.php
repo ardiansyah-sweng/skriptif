@@ -26,6 +26,7 @@ Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lect
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 Route::resource('log-books', LogBookController::class);
+Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {

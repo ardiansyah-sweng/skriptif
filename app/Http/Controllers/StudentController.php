@@ -76,4 +76,11 @@ class StudentController extends Controller
 
         return redirect()->route('students.index');
     }
+
+    public function printAll()
+    {
+        $students = Student::query()->latest()->get();
+
+        return view('students.print', compact('students'));
+    }
 }

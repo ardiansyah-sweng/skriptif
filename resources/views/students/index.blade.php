@@ -129,10 +129,14 @@
                 <h1>Data Students</h1>
                 <p class="sub">Kelola data mahasiswa dengan nomor induk, nama, email, angkatan, dan status aktif/inaktif.</p>
             </div>
-            <a href="{{ route('students.create') }}" class="primary">
-                <i class="ti ti-plus"></i> Tambah Student
-            </a>
-        </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="{{ route('students.print') }}" class="btn" style="background:#fff; border:1px solid #dbe3ee; color:#334155;">
+                    <i class="ti ti-printer"></i> Cetak Student
+                </a>
+                <a href="{{ route('students.create') }}" class="primary">
+                    <i class="ti ti-plus"></i> Tambah Student
+                </a>
+            </div>
 
         <div class="stats">
             <div class="stat">
