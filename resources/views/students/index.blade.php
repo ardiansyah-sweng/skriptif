@@ -137,6 +137,7 @@
                     <i class="ti ti-plus"></i> Tambah Student
                 </a>
             </div>
+        </div>
 
         <div class="stats">
             <div class="stat">
