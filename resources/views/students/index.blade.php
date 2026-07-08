@@ -13,7 +13,8 @@
                     <span>Students</span>
                 </div>
                 <h1>Data Students</h1>
-                <p class="sub">Kelola data mahasiswa dengan nomor induk, nama, email, angkatan, dan status aktif/inaktif.</p>
+                <p class="sub">Kelola data mahasiswa dengan nomor induk, nama, email, angkatan, dan status aktif/inaktif.
+                </p>
             </div>
             <div class="d-flex gap-2">
                 <a href="{{ route('dashboard') }}" class="back">
@@ -99,7 +100,8 @@
                                             <a href="{{ route('students.edit', $student->id) }}" class="btn-link">
                                                 <i class="ti ti-edit"></i> Edit
                                             </a>
-                                            <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Hapus data student ini?')">
+                                            <form action="{{ route('students.destroy', $student->id) }}" method="POST"
+                                                onsubmit="return confirm('Hapus data student ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn-danger">
@@ -119,120 +121,321 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<style>
-    * { box-sizing: border-box; }
-    .wrap { max-width: 1180px; }
-    .hero {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        align-items: flex-end;
-        margin-bottom: 22px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-    }
-    .crumb {
-        display: inline-flex;
-        gap: 6px;
-        align-items: center;
-        font-size: 12px;
-        color: #64748b;
-        margin-bottom: 10px;
-    }
-    h1 { margin: 0; font-size: 30px; letter-spacing: -0.03em; }
-    .sub { margin: 8px 0 0; color: #64748b; font-size: 14px; max-width: 620px; }
-    .primary {
-        display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-        background: #185FA5; color: #fff; border-radius: 12px; padding: 12px 16px;
-        font-weight: 600; box-shadow: 0 14px 30px rgba(24, 95, 165, 0.18);
-    }
-    .primary:hover { background: #0c447c; }
-    .stats {
-        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
-        margin-bottom: 18px;
-    }
-    .stat {
-        background: rgba(255,255,255,.78); backdrop-filter: blur(10px);
-        border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 18px; padding: 18px;
-    }
-    .stat .label { color: #64748b; font-size: 12px; margin-bottom: 8px; }
-    .stat .value { font-size: 28px; font-weight: 700; line-height: 1; }
-    .panel {
-        background: rgba(255,255,255,.88); backdrop-filter: blur(12px);
-        border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 20px;
-        overflow: hidden; box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
-    }
-    .toolbar {
-        display: flex; justify-content: space-between; gap: 14px; align-items: center;
-        padding: 16px 18px; border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-    }
-    .search {
-        display: flex; align-items: center; gap: 10px; background: #fff;
-        border: 1px solid #dbe3ee; border-radius: 12px; padding: 10px 12px; min-width: 280px;
-    }
-    .search input {
-        border: none; outline: none; font-size: 13px; width: 100%; background: transparent;
-    }
-    .count { color: #64748b; font-size: 13px; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 980px; }
-    thead th {
-        text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
-        color: #94a3b8; background: #f8fafc; padding: 14px 18px; border-bottom: 1px solid #e2e8f0;
-    }
-    tbody td { padding: 16px 18px; border-bottom: 1px solid #eef2f7; vertical-align: middle; }
-    tbody tr:hover { background: #fbfdff; }
-    .student-cell { display: flex; gap: 12px; align-items: center; }
-    .avatar {
-        width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center;
-        background: linear-gradient(135deg, #185FA5, #5ea1e3); color: #fff; flex-shrink: 0;
-    }
-    .student-name { font-weight: 700; }
-    .meta { color: #64748b; font-size: 12px; margin-top: 2px; }
-    .badge {
-        display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px;
-        font-size: 12px; font-weight: 700;
-    }
-    .badge.active { color: #166534; background: #dcfce7; }
-    .badge.inactive { color: #9a3412; background: #ffedd5; }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn, .btn-link, .btn-danger {
-        display: inline-flex; align-items: center; gap: 6px; border-radius: 10px; padding: 9px 12px;
-        font-size: 12px; text-decoration: none; border: 1px solid transparent; cursor: pointer;
-        font-weight: 600;
-    }
-    .btn-link { background: #e6f1fb; color: #0c447c; }
-    .btn-link:hover { background: #d8eaf8; }
-    .btn { background: #f8fafc; border-color: #dbe3ee; color: #334155; }
-    .btn:hover { background: #eef4fa; }
-    .btn-danger { background: #fff1f2; color: #b91c1c; border-color: #fecdd3; }
-    .btn-danger:hover { background: #ffe4e6; }
-    .empty {
-        text-align: center; padding: 72px 18px; color: #94a3b8;
-    }
-    .empty i { font-size: 42px; display: block; margin-bottom: 10px; }
-    @media (max-width: 860px) {
-        .hero { flex-direction: column; align-items: stretch; }
-        .stats { grid-template-columns: 1fr; }
-        .toolbar { flex-direction: column; align-items: stretch; }
-        .search { min-width: 0; width: 100%; }
-    }
-    .back {
-        display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #fff;
-        color: #334155; border: 1px solid #dbe3ee; border-radius: 12px; padding: 11px 14px; font-weight: 600;
-    }
-    .back:hover { background: #f8fafc; }
-</style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .wrap {
+            flex: 1;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-end;
+            margin-bottom: 22px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .crumb {
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+            letter-spacing: -0.03em;
+        }
+
+        .sub {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 14px;
+            max-width: 620px;
+        }
+
+        .primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #185FA5;
+            color: #fff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-weight: 600;
+            box-shadow: 0 14px 30px rgba(24, 95, 165, 0.18);
+        }
+
+        .primary:hover {
+            background: #0c447c;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, .78);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .stat .label {
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .stat .value {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, .88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: center;
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border: 1px solid #dbe3ee;
+            border-radius: 12px;
+            padding: 10px 12px;
+            min-width: 280px;
+        }
+
+        .search input {
+            border: none;
+            outline: none;
+            font-size: 13px;
+            width: 100%;
+            background: transparent;
+        }
+
+        .count {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #94a3b8;
+            background: #f8fafc;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tbody td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #eef2f7;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #fbfdff;
+        }
+
+        .student-cell {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #185FA5, #5ea1e3);
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .student-name {
+            font-weight: 700;
+        }
+
+        .meta {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .badge.active {
+            color: #166534;
+            background: #dcfce7;
+        }
+
+        .badge.inactive {
+            color: #9a3412;
+            background: #ffedd5;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn,
+        .btn-link,
+        .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 12px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-link {
+            background: #e6f1fb;
+            color: #0c447c;
+        }
+
+        .btn-link:hover {
+            background: #d8eaf8;
+        }
+
+        .btn {
+            background: #f8fafc;
+            border-color: #dbe3ee;
+            color: #334155;
+        }
+
+        .btn:hover {
+            background: #eef4fa;
+        }
+
+        .btn-danger {
+            background: #fff1f2;
+            color: #b91c1c;
+            border-color: #fecdd3;
+        }
+
+        .btn-danger:hover {
+            background: #ffe4e6;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 72px 18px;
+            color: #94a3b8;
+        }
+
+        .empty i {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 860px) {
+            .hero {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search {
+                min-width: 0;
+                width: 100%;
+            }
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #fff;
+            color: #334155;
+            border: 1px solid #dbe3ee;
+            border-radius: 12px;
+            padding: 11px 14px;
+            font-weight: 600;
+        }
+
+        .back:hover {
+            background: #f8fafc;
+        }
+    </style>
 @endpush
 
 @push('scripts')
-<script>
-    function filterStudents() {
-        const query = document.getElementById('studentSearch').value.toLowerCase();
-        document.querySelectorAll('#studentsTable tr').forEach((row) => {
-            row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
-        });
-    }
-</script>
+    <script>
+        function filterStudents() {
+            const query = document.getElementById('studentSearch').value.toLowerCase();
+            document.querySelectorAll('#studentsTable tr').forEach((row) => {
+                row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+    </script>
 @endpush

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Lecturer extends Model
 {
@@ -34,10 +35,15 @@ class Lecturer extends Model
     protected $attributes = [
         'status' => 'active',
     ];
-    
+
 
     /**
      * Timestamps
      */
     public $timestamps = true;
+
+    public function skripsi(): HasMany // <-- Sekarang ini bakal mendeteksi namespace yang benar
+    {
+        return $this->hasMany(Skripsi::class, 'supervisor_id');
+    }
 }

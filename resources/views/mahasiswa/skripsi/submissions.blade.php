@@ -16,7 +16,8 @@
                 <p>List of all thesis proposals you have submitted</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('dashboard') }}" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:transparent;color:#6b7280;border:0.5px solid #e5e7eb;border-radius:8px;font-size:13px;text-decoration:none">
+                <a href="{{ route('dashboard') }}"
+                    style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:transparent;color:#6b7280;border:0.5px solid #e5e7eb;border-radius:8px;font-size:13px;text-decoration:none">
                     <i class="ti ti-arrow-left"></i> Dashboard
                 </a>
                 <a href="{{ route('student.skripsi.create') }}" class="btn-primary">
@@ -29,7 +30,8 @@
             <div class="card-title">Submission List</div>
 
             @if(session('success'))
-                <div style="background:#d1fae5; color:#065f46; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:13px;">
+                <div
+                    style="background:#d1fae5; color:#065f46; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:13px;">
                     {{ session('success') == 'Pengajuan berhasil!' ? 'Submission successful!' : session('success') }}
                 </div>
             @endif
@@ -48,28 +50,28 @@
                     </thead>
                     <tbody>
                         @foreach($skripsis as $skripsi)
-                        <tr>
-                            <td>{{ $skripsi->title }}</td>
-                            <td>
-                                @if($skripsi->supervisor)
-                                    {{ $skripsi->supervisor->name }}
-                                @else
-                                    <span style="color:#9ca3af;">Not determined yet</span>
-                                @endif
-                            </td>
-                            <td>
-                                @php
-                                    $statusClass = match($skripsi->status) {
-                                        'pending' => 'status-pending',
-                                        'approved' => 'status-approved',
-                                        'rejected' => 'status-rejected',
-                                        default => ''
-                                    };
-                                @endphp
-                                <span class="{{ $statusClass }}">{{ ucfirst($skripsi->status) }}</span>
-                            </td>
-                            <td>{{ $skripsi->submission_date ? $skripsi->submission_date->format('d M Y') : '-' }}</td>
-                        </tr>
+                            <tr>
+                                <td>{{ $skripsi->title }}</td>
+                                <td>
+                                    @if($skripsi->supervisor)
+                                        {{ $skripsi->supervisor->name }}
+                                    @else
+                                        <span style="color:#9ca3af;">Not determined yet</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @php
+                                        $statusClass = match ($skripsi->status) {
+                                            'pending' => 'status-pending',
+                                            'approved' => 'status-approved',
+                                            'rejected' => 'status-rejected',
+                                            default => ''
+                                        };
+                                    @endphp
+                                    <span class="{{ $statusClass }}">{{ ucfirst($skripsi->status) }}</span>
+                                </td>
+                                <td>{{ $skripsi->submission_date ? $skripsi->submission_date->format('d M Y') : '-' }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -79,24 +81,128 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<style>
-    .wrap { max-width: 1000px; }
-    .page-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 0.5px solid #e5e7eb; }
-    .crumb { font-size: 11px; color: #9ca3af; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
-    .page-head h1 { font-size: 18px; font-weight: 500; }
-    .page-head p { font-size: 13px; color: #6b7280; margin-top: 3px; }
-    .card { background: #fff; border: 0.5px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-    .card-title { font-size: 13px; font-weight: 500; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 0.5px solid #e5e7eb; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 12px 14px; text-align: left; font-size: 13px; }
-    th { background-color: #f8fafc; font-weight: 500; color: #374151; border-bottom: 1px solid #e5e7eb; }
-    tr { border-bottom: 0.5px solid #e5e7eb; }
-    tr:hover { background-color: #f8fafc; }
-    .status-pending { background-color: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
-    .status-approved { background-color: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
-    .status-rejected { background-color: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
-    .btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; background: #185FA5; color: #fff; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 500; text-decoration: none; }
-    .btn-primary:hover { background: #0C447C; }
-</style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        .wrap {
+            flex: 1;
+        }
+
+        .page-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 0.5px solid #e5e7eb;
+        }
+
+        .crumb {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .page-head h1 {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .page-head p {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 3px;
+        }
+
+        .card {
+            background: #fff;
+            border: 0.5px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 500;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 0.5px solid #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 500;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr {
+            border-bottom: 0.5px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            background: #185FA5;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: #0C447C;
+        }
+    </style>
 @endpush
