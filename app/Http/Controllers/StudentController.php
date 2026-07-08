@@ -7,10 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
-{
+{   
+    private function getStudents()
+    {
+        return Student::query()->latest()->get();
+    }
+    
     public function index()
     {
-        $students = Student::query()->latest()->get();
+        $students = $this->getStudents();
 
         return view('students.index', compact('students'));
     }
@@ -79,7 +84,7 @@ class StudentController extends Controller
 
     public function printAll()
     {
-        $students = Student::query()->latest()->get();
+        $students = $this->getStudents();
 
         return view('students.print', compact('students'));
     }
