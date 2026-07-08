@@ -62,3 +62,12 @@ Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('e
 Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
 Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
 Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
+// =========================
+// Dashboard Mahasiswa
+// =========================
+Route::prefix('student')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('student.dashboard');
+
+});

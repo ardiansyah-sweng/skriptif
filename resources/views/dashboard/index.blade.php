@@ -248,6 +248,130 @@
 
             </div>
 
+            <div class="card mb-4">
+
+                <div class="card-header bg-info text-white">
+
+                    Ringkasan Logbook Bimbingan
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <h6 class="text-muted mb-2">Total Bimbingan</h6>
+
+                                <h3 class="mb-0">{{ $totalLogBooks ?? 0 }}</h3>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <h6 class="text-muted mb-2">Bimbingan Terakhir</h6>
+
+                                <p class="mb-0">
+
+                                    {{ $latestLogBook?->date?->format('d M Y') ?? '-' }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <h6 class="text-muted mb-2">Status Terakhir</h6>
+
+                                @if($latestLogBook)
+
+                                    @php
+                                        $logBookBadge = match($latestLogBook->status) {
+                                            'approved' => 'bg-success',
+                                            'rejected' => 'bg-danger',
+                                            default => 'bg-warning',
+                                        };
+                                    @endphp
+
+                                    <span class="badge {{ $logBookBadge }}">
+
+                                        {{ ucfirst($latestLogBook->status) }}
+
+                                    </span>
+
+                                @else
+
+                                    <span class="badge bg-secondary">
+
+                                        Belum Ada
+
+                                    </span>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    @if($latestLogBook)
+
+                        <div class="mb-3">
+
+                            <strong>Aktivitas Terakhir</strong>
+
+                            <p class="text-muted mb-0">
+
+                                {{ $latestLogBook->activity }}
+
+                            </p>
+
+                        </div>
+
+                    @else
+
+                        <div class="alert alert-info">
+
+                            Belum ada logbook bimbingan.
+
+                        </div>
+
+                    @endif
+
+                    <a href="{{ route('log-books.create') }}"
+                    class="btn btn-primary">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Tambah Logbook
+
+                    </a>
+
+                    <a href="{{ route('log-books.index') }}"
+                    class="btn btn-outline-secondary">
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                        Lihat Logbook
+
+                    </a>
+
+                </div>
+
+            </div>
+
             <div class="card">
 
                 <div class="card-header bg-success text-white">
