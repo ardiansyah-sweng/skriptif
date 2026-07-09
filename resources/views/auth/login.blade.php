@@ -137,7 +137,6 @@
                             name="email"
                             placeholder="nim@webmail.uad.ac.id"
                             value="{{ old('email') }}"
-                            required
                             autocomplete="email"
                         >
                     </div>
@@ -152,7 +151,6 @@
                             id="password"
                             name="password"
                             placeholder="••••••••"
-                            required
                             autocomplete="current-password"
                         >
                     </div>

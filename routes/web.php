@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use Illuminate\Http\Request;
 use App\Http\Controllers\ElectiveCourseController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LogBookController;
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
+
+// Login langsung tembus tanpa cek email/password, langsung ke menu utama (dashboard)
+Route::post('/', function (Request $request) {
+    return redirect()->route('dashboard');
+})->name('login.submit');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
