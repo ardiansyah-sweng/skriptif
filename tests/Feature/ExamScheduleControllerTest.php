@@ -251,4 +251,63 @@ class ExamScheduleControllerTest extends TestCase
 
         $response->assertSessionHasErrors(['jenis_sidang' => 'Mahasiswa harus menyelesaikan sidang proposal terlebih dahulu sebelum dapat dijadwalkan untuk pendadaran.']);
     }
+
+    public function test_show_jadwal_sidang_menampilkan_detail()
+    {
+        $studentId = $this->createStudent();
+        $lecturerId = $this->createLecturer();
+        $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
+
+        $scheduleId = DB::table('exam_schedules')->insertGetId([
+            'skripsi_id'     => $skripsiId,
+            'jenis_sidang'   => 'proposal',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:00:00',
+            'jam_selesai'    => '10:00:00',
+            'ruang'          => 'Ruang 301',
+            'status'         => 'terjadwal',
+            'catatan'        => 'Harap datang lebih awal.',
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
+
+        $response = $this->get(route('exam-schedules.show', $scheduleId));
+
+        $response->assertOk();
+        $response->assertSee('Detail Jadwal Sidang');
+        $response->assertSee('Budi Santoso');
+        $response->assertSee('Rancang Bangun Web Skripsi');
+        $response->assertSee('Ruang 301');
+    }
+
+    public function test_update_status_jadwal_sidang_berhasil()
+    {
+        $studentId = $this->createStudent();
+        $lecturerId = $this->createLecturer();
+        $skripsiId = $this->createApprovedSkripsi($studentId, $lecturerId);
+
+        $scheduleId = DB::table('exam_schedules')->insertGetId([
+            'skripsi_id'     => $skripsiId,
+            'jenis_sidang'   => 'proposal',
+            'tanggal_sidang' => now()->addDays(7)->format('Y-m-d'),
+            'jam_mulai'      => '09:00:00',
+            'jam_selesai'    => '10:00:00',
+            'ruang'          => 'Ruang 301',
+            'status'         => 'terjadwal',
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
+
+        $response = $this->patch(route('exam-schedules.update-status', $scheduleId), [
+            'status' => 'selesai',
+        ]);
+
+        $response->assertRedirect(route('exam-schedules.show', $scheduleId));
+        $response->assertSessionHas('success', 'Status jadwal sidang berhasil diperbarui.');
+
+        $this->assertDatabaseHas('exam_schedules', [
+            'id'     => $scheduleId,
+            'status' => 'selesai',
+        ]);
+    }
 }
