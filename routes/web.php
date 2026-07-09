@@ -9,8 +9,11 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
+use App\Http\Controllers\StatisticsController;
 
 Route::view('/', 'auth.login')->name('login');
+
+Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
