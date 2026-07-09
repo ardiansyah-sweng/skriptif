@@ -27,6 +27,8 @@
         .btn-add:hover { background-color: #1d4ed8; color: white; }
         .btn-delete { background-color: #ef4444; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; }
         .btn-delete:hover { background-color: #dc2626; color: white; }
+        .btn-detail { background-color: #0f172a; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; border: none; text-decoration: none; display: inline-flex; align-items: center; }
+        .btn-detail:hover { background-color: #334155; color: white; }
     </style>
 </head>
 <body>
@@ -76,7 +78,7 @@
                             <th style="width: 16%">Tanggal & Waktu</th>
                             <th style="width: 10%">Ruang</th>
                             <th style="width: 10%" class="text-center">Status</th>
-                            <th style="width: 8%" class="text-center">Aksi</th>
+                            <th style="width: 12%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,6 +119,9 @@
                                 @endif
                             </td>
                             <td class="text-center">
+                                <a href="{{ route('exam-schedules.show', $schedule->id) }}" class="btn-detail mb-1" title="Lihat detail">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
                                 <form action="{{ route('exam-schedules.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Hapus jadwal sidang ini?')">
                                     @csrf
                                     @method('DELETE')
