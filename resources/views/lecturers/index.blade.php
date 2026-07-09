@@ -33,6 +33,10 @@
         .page-btn.active { background-color: #3b82f6; border-color: #3b82f6; color: #fff; }
         .btn-print-action { background-color: #ef4444; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; text-decoration: none; }
         .btn-print-action:hover { background-color: #dc2626; color: white; }
+        .badge-status { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+        .status-aktif { background-color: #dcfce7; color: #15803d; }
+        .status-cuti { background-color: #fef3c7; color: #b45309; }
+        .status-pensiun { background-color: #f1f5f9; color: #64748b; }
     </style>
 </head>
 <body>
@@ -95,8 +99,9 @@
                             <th style="width: 5%">No</th>
                             <th style="width: 22%">Dosen / ID</th>
                             <th style="width: 18%">Email</th>
-                            <th style="width: 25%">Keahlian</th>
-                            <th style="width: 30%" class="text-center">Aksi</th>
+                            <th style="width: 20%">Keahlian</th>
+                            <th style="width: 10%">Status</th>
+                            <th style="width: 25%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -114,6 +119,11 @@
                             </td>
                             <td>
                                 <div class="meta-text">{{ $lecturer->expertise ?? '-' }}</div>
+                            </td>
+                            <td>
+                                <span class="badge-status status-{{ $lecturer->status ?? 'aktif' }}">
+                                    {{ ucfirst($lecturer->status ?? 'aktif') }}
+                                </span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
@@ -135,7 +145,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
+                            <td colspan="6" class="text-center py-5 text-muted">
                                 <i class="fa-regular fa-folder-open d-block mb-2" style="font-size: 24px;"></i>
                                 Tidak ada data dosen.
                             </td>

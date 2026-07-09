@@ -39,10 +39,13 @@ class LecturerController extends Controller
             'email'       => 'required|email|unique:lecturers,email,' . $id,
             'expertise'   => 'nullable|string|max:255',
             'max_supervisors' => 'required|integer|min:1',
+            'status'      => 'required|in:aktif,cuti,pensiun',
         ], [
             'max_supervisors.required' => 'Batas dosen pembimbing wajib diisi.',
             'max_supervisors.integer' => 'Batas dosen pembimbing harus angka.',
             'max_supervisors.min' => 'Batas dosen pembimbing minimal 1.',
+            'status.required' => 'Status dosen wajib diisi.',
+            'status.in' => 'Status dosen tidak valid.',
         ]);
 
         DB::table('lecturers')->where('id', $id)->update([
@@ -51,6 +54,7 @@ class LecturerController extends Controller
             'email'       => $request->email,
             'expertise'   => $request->expertise,
             'max_supervisors' => (int) $request->max_supervisors,
+            'status'      => $request->status,
             'updated_at'  => now(),
         ]);
 
@@ -65,10 +69,12 @@ class LecturerController extends Controller
             'email'       => 'required|email|unique:lecturers,email',
             'expertise'   => 'nullable|string|max:255',
             'max_supervisors' => 'required|integer|min:1',
+            'status'      => 'nullable|in:aktif,cuti,pensiun',
         ], [
             'max_supervisors.required' => 'Batas dosen pembimbing wajib diisi.',
             'max_supervisors.integer' => 'Batas dosen pembimbing harus angka.',
             'max_supervisors.min' => 'Batas dosen pembimbing minimal 1.',
+            'status.in' => 'Status dosen tidak valid.',
         ]);
 
         DB::table('lecturers')->insert([
@@ -77,6 +83,7 @@ class LecturerController extends Controller
             'email'       => $request->email,
             'expertise'   => $request->expertise,
             'max_supervisors' => (int) $request->max_supervisors,
+            'status'      => $request->status ?? 'aktif',
             'created_at'  => now(),
             'updated_at'  => now(),
         ]);

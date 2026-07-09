@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('expertise')->nullable();
             $table->unsignedInteger('max_supervisors')->default(12);
+            $table->enum('status', ['aktif', 'cuti', 'pensiun'])->default('aktif');
             $table->timestamps();
         });
     }

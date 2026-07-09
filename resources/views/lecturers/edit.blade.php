@@ -117,6 +117,18 @@
                     <div class="form-hint">Jumlah maksimal mahasiswa yang dapat dibimbing per angkatan</div>
                 </div>
 
+                <div class="mb-4">
+                    <label for="status" class="form-label-custom">Status</label>
+                    <select id="status" name="status" class="form-select">
+                        @foreach(['aktif' => 'Aktif', 'cuti' => 'Cuti', 'pensiun' => 'Pensiun'] as $value => $label)
+                            <option value="{{ $value }}" {{ old('status', $lecturer->status ?? 'aktif') == $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="form-hint">Status kepegawaian dosen saat ini</div>
+                </div>
+
                 <hr class="my-4">
 
                 <div class="d-flex justify-content-end gap-2">
