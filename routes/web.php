@@ -13,6 +13,9 @@ use App\Http\Controllers\ExamScheduleController;
 Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
+Route::get('student', [StudentController::class, 'index'])->name('student.index');
+Route::get('students/dashboard', [DashboardController::class, 'index'])->name('students.dashboard');
+Route::get('students/dashbord', [DashboardController::class, 'index'])->name('students.dashbord');
 Route::resource('students', StudentController::class);
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
@@ -64,3 +67,12 @@ Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('
 Route::get('/exam-schedules/{id}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
 Route::patch('/exam-schedules/{id}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
 Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
+// =========================
+// Dashboard Mahasiswa
+// =========================
+Route::prefix('student')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('student.dashboard');
+
+});
