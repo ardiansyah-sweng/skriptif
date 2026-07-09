@@ -13,6 +13,9 @@ use App\Http\Controllers\ExamScheduleController;
 Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
+Route::get('student', [StudentController::class, 'index'])->name('student.index');
+Route::get('students/dashboard', [DashboardController::class, 'index'])->name('students.dashboard');
+Route::get('students/dashbord', [DashboardController::class, 'index'])->name('students.dashbord');
 Route::resource('students', StudentController::class);
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
