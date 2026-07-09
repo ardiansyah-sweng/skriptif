@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thesis Submission History — Thesis System</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Thesis Submission History — Thesis System')
+
+@push('styles')
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; color: #1a1a2e; padding: 32px 24px; }
         .wrap { max-width: 1000px; margin: 0 auto; }
         .page-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 0.5px solid #e5e7eb; }
@@ -30,10 +28,12 @@
         .btn-primary:hover { background: #0C447C; }
         
         @media (max-width: 600px) { body { padding: 16px; } }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="page-head">
             <div>
                 <div class="crumb">
@@ -101,5 +101,5 @@
             @endif
         </div>
     </div>
-</body>
-</html>
+
+@endsection

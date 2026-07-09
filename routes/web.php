@@ -10,7 +10,14 @@ use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 Route::view('/', 'auth.login')->name('login');
+
+// Handler sementara untuk form login (belum ada auth beneran, langsung tembus ke dashboard)
+Route::post('/', function () {
+    return redirect()->route('dashboard');
+});
 
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);

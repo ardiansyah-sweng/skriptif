@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Thesis Proposal — Thesis System</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Submit Thesis Proposal — Thesis System')
+
+@push('styles')
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; color: #1a1a2e; padding: 32px 24px; }
         .wrap { max-width: 900px; margin: 0 auto; }
         .page-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 0.5px solid #e5e7eb; }
@@ -41,10 +39,12 @@
         .btn-del { width: 34px; height: 34px; padding: 0; display: flex; align-items: center; justify-content: center; background: transparent; border: 0.5px solid #e5e7eb; border-radius: 6px; cursor: pointer; color: #A32D2D; flex-shrink: 0; }
         .btn-del:hover { background: #FCEBEB; border-color: #F09595; }
         @media (max-width: 600px) { body { padding: 16px; } }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="page-head">
             <div>
                 <div class="crumb">
@@ -58,6 +58,23 @@
             </div>
         </div>
 
+        @if ($errors->any())
+            <div class="card" style="border-color:#F09595; background:#FCEBEB;">
+                <strong style="color:#791F1F; font-size:13px;">Periksa lagi form kamu:</strong>
+                <ul style="margin:8px 0 0 18px; padding:0; color:#791F1F; font-size:13px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="card" style="border-color:#F09595; background:#FCEBEB; color:#791F1F; font-size:13px;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <form action="{{ route('student.skripsi.store') }}" method="POST">
             @csrf
 
@@ -66,17 +83,17 @@
 
                 <div class="form-group">
                     <label for="title">Thesis Title</label>
-                    <input type="text" id="title" name="title" placeholder="Example: Advisor recommendation system based on topic similarity" required>
+                    <input type="text" id="title" name="title" value="{{ old('title') }}" placeholder="Example: Advisor recommendation system based on topic similarity" required>
                 </div>
 
                 <div class="form-group">
                     <label for="description">Short Description</label>
-                    <textarea id="description" name="description" rows="4" placeholder="Briefly explain the background and objectives of the thesis..." required></textarea>
+                    <textarea id="description" name="description" rows="4" placeholder="Briefly explain the background and objectives of the thesis..." required>{{ old('description') }}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="supervisor_id">Preferred Advisor</label>
-                    <select id="supervisor_id" name="supervisor_id">
+                    <select id="supervisor_id" name="supervisor_id" required>
                         <option value="">-- Select Advisor --</option>
                         @foreach($lecturersWithCapacity as $lecturer)
                             <option value="{{ $lecturer['id'] }}" 
@@ -94,7 +111,7 @@
 
                 <div class="form-group">
                     <label for="suggestion_supervisor">Other Proposed Advisors (Optional)</label>
-                    <input type="text" id="suggestion_supervisor" name="suggestion_supervisor">
+                    <input type="text" id="suggestion_supervisor" name="suggestion_supervisor" value="{{ old('suggestion_supervisor') }}">
                     <span class="form-hint">This is only a proposal. The final decision rests with the department.</span>
                 </div>
             </div>
@@ -133,7 +150,7 @@
             </div>
 
             <div style="display:flex;gap:8px; margin-top: 20px;">
-                <a href="/student/dashboard" class="btn-secondary">Cancel</a>
+                <a href="{{ route('dashboard') }}" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary">
                     <i class="ti ti-send"></i> Submit
                 </button>
@@ -175,5 +192,5 @@
             }
         }
     </script>
-</body>
-</html>
+
+@endsection

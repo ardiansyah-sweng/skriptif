@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Dosen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+@extends('layouts.app')
+
+@section('title', 'Data Dosen')
+
+@push('styles')
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
         .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
         .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
         .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
@@ -33,10 +29,12 @@
         .page-btn.active { background-color: #3b82f6; border-color: #3b82f6; color: #fff; }
         .btn-print-action { background-color: #ef4444; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; text-decoration: none; }
         .btn-print-action:hover { background-color: #dc2626; color: white; }
-    </style>
-</head>
-<body>
-    <div class="container py-5" style="max-width: 1200px;">
+</style>
+@endpush
+
+@section('content')
+
+<div class="container py-5" style="max-width: 1200px;">
 
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-4">
@@ -219,5 +217,5 @@
 
         renderTable();
     </script>
-</body>
-</html>
+
+@endsection

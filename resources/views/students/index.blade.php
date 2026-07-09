@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Students</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Data Students')
+
+@push('styles')
+<style>
+* { box-sizing: border-box; }
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -114,10 +112,12 @@
             .toolbar { flex-direction: column; align-items: stretch; }
             .search { min-width: 0; width: 100%; }
         }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="hero">
             <div>
                 <div class="crumb">
@@ -239,5 +239,5 @@
             });
         }
     </script>
-</body>
-</html>
+
+@endsection

@@ -17,6 +17,7 @@ class StoreStudentSkripsiRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'supervisor_id' => 'required|exists:lecturers,id',
+            'suggestion_supervisor' => 'nullable|string|max:255',
             'elective_courses' => 'required|array|min:1',
         ];
     }

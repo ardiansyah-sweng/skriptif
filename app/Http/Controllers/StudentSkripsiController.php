@@ -10,6 +10,11 @@ use App\Models\Student;
 
 class StudentSkripsiController extends Controller
 {
+    public function index()
+    {
+        return $this->history();
+    }
+
     public function create()
     {
         $student = Student::first();

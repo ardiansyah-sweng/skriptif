@@ -1,15 +1,10 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Log Book Bimbingan - Skriptif</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+@section('title', 'Tambah Log Book Bimbingan - Skriptif')
+
+@push('styles')
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
         .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
         .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
         .form-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); padding: 30px; }
@@ -24,10 +19,12 @@
         .crumb a { color: #64748b; text-decoration: none; }
         .crumb a:hover { color: #0f172a; }
         .hint { font-size: 12px; color: #94a3b8; margin-top: 4px; }
-    </style>
-</head>
-<body>
-    <div class="container py-5" style="max-width: 800px;">
+</style>
+@endpush
+
+@section('content')
+
+<div class="container py-5" style="max-width: 800px;">
         <div class="crumb">
             <i class="fa-solid fa-house"></i>
             <a href="/">Beranda</a>
@@ -173,5 +170,5 @@
             }
         });
     </script>
-</body>
-</html>
+
+@endsection
