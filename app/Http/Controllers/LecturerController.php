@@ -13,6 +13,11 @@ class LecturerController extends Controller
         return view('lecturers.index', compact('lecturers'));
     }
 
+    public function create()
+    {
+        return view('lecturers.create');
+    }
+
     public function printAll()
     {
         $lecturers = DB::table('lecturers')->get();
