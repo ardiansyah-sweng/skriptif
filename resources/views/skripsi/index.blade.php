@@ -57,8 +57,133 @@
             
         </div>
 
+        <div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <div class="content-card p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">Total Pengajuan</small>
+                    <h3 class="fw-bold mb-0">{{ $total }}</h3>
+                    <small class="text-muted">Semua Data</small>
+                </div>
+                <i class="fa-solid fa-folder-open text-primary fs-2"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="content-card p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">Pending</small>
+                    <h3 class="fw-bold mb-0">{{ $pending }}</h3>
+                    <small class="text-warning">Menunggu Review</small>
+                </div>
+                <i class="fa-solid fa-clock text-warning fs-2"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="content-card p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">Approved</small>
+                    <h3 class="fw-bold mb-0">{{ $approved }}</h3>
+                    <small class="text-success">Sudah Disetujui</small>
+                </div>
+                <i class="fa-solid fa-circle-check text-success fs-2"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="content-card p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">Rejected</small>
+                    <h3 class="fw-bold mb-0">{{ $rejected }}</h3>
+                    <small class="text-danger">Sudah Ditolak</small>
+                </div>
+                <i class="fa-solid fa-circle-xmark text-danger fs-2"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
         <div class="content-card">
             <div class="card-header-custom">
+            
+            <form method="GET" class="p-3 border-bottom">
+
+        <div class="row g-2">
+
+        <div class="col-md-6">
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari mahasiswa, NIM atau judul..."
+                value="{{ request('search') }}">
+        </div>
+
+        <div class="col-md-3">
+            <select
+                name="status"
+                class="form-select">
+
+                <option value="">Semua Status</option>
+
+                <option value="pending"
+                    {{ request('status') == 'pending' ? 'selected' : '' }}>
+                    Pending
+                </option>
+
+                <option value="approved"
+                    {{ request('status') == 'approved' ? 'selected' : '' }}>
+                    Approved
+                </option>
+
+                <option value="rejected"
+                    {{ request('status') == 'rejected' ? 'selected' : '' }}>
+                    Rejected
+                </option>
+
+            </select>
+        </div>
+
+        <div class="col-md-3">
+
+    <div class="d-flex gap-2">
+
+        <button
+            type="submit"
+            class="btn btn-primary flex-fill">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            Cari
+
+        </button>
+
+        <a
+            href="{{ route('skripsi.index') }}"
+            class="btn btn-outline-secondary">
+
+            <i class="fa-solid fa-rotate-left"></i>
+
+        </a>
+
+    </div>
+
+</div>
+
+    </div>
+
+</form>
+
                 <span class="fw-bold text-dark">Daftar Antrean Skripsi</span>
             </div>
 
