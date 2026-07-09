@@ -10,7 +10,10 @@ class StudentController extends Controller
 {   
     private function getStudents()
     {
-        return Student::query()->latest()->get();
+        return Student::query()
+            ->orderBy('year_entrance', 'desc')
+            ->orderBy('name', 'asc')
+            ->get();
     }
     
     public function index()
