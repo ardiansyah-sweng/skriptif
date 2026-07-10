@@ -21,13 +21,23 @@ class LecturerController extends Controller
 
     public function show($id)
     {
-        $lecturer = DB::table('lecturers')->where('id', $id)->first();
+        $lecturer = DB::table('lecturers')
+            ->where('id', $id)
+            ->first();
+
+        abort_if(!$lecturer, 404);
+
         return view('lecturers.show', compact('lecturer'));
     }
 
     public function edit($id)
     {
-        $lecturer = DB::table('lecturers')->where('id', $id)->first();
+        $lecturer = DB::table('lecturers')
+            ->where('id', $id)
+            ->first();
+
+        abort_if(!$lecturer, 404);
+
         return view('lecturers.edit', compact('lecturer'));
     }
 
