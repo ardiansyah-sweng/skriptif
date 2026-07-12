@@ -364,6 +364,13 @@
             border-radius: 6px;
             padding: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e1;
         }
 
         .recommendation-card h4 {
@@ -402,21 +409,21 @@
             const div = document.createElement('div');
             div.className = 'course-row';
             div.innerHTML = `
-                            <select name="elective_courses[${rowCount}][id]" required>
-                                <option value="">Select course</option>
-                                @foreach($electiveCourses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->courses }}</option>
-                                @endforeach
-                            </select>
-                            <select name="elective_courses[${rowCount}][grade]" class="grade" required>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
-                            <button type="button" class="btn-del" onclick="removeRow(this)"><i class="ti ti-x" style="font-size:14px"></i></button>
-                        `;
+                <select name="elective_courses[${rowCount}][id]" required>
+                    <option value="">Select course</option>
+                    @foreach($electiveCourses as $course)
+                        <option value="{{ $course->id }}">{{ $course->courses }}</option>
+                    @endforeach
+                </select>
+                <select name="elective_courses[${rowCount}][grade]" class="grade" required>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+                <button type="button" class="btn-del" onclick="removeRow(this)"><i class="ti ti-x" style="font-size:14px"></i></button>
+            `;
             wrap.appendChild(div);
             rowCount++;
         }
@@ -425,6 +432,14 @@
             const rows = document.querySelectorAll('.course-row');
             if (rows.length > 1) {
                 btn.closest('.course-row').remove();
+            }
+        }
+        function selectAdvisor(lecturerId) {
+            const selectElement = document.getElementById('supervisor_id');
+            if (selectElement) {
+                selectElement.value = lecturerId;
+            } else {
+                console.warn("Elemen select dengan ID 'supervisor_id' tidak ditemukan.");
             }
         }
         // ==========================================
@@ -459,7 +474,7 @@
                     wrapper.style.display = 'block';
                     data.forEach(lecturer => {
                         container.innerHTML += `
-                        <div class="recommendation-card">
+                        <div class="recommendation-card" style="cursor: pointer;" onclick="selectAdvisor('${lecturer.id}')">
                             <h4>${lecturer.name}</h4>
                             <p>Expertise: <code>${lecturer.expertise || '-'}</code></p>
                             <span class="recommendation-badge">
