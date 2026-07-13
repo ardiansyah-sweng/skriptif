@@ -43,4 +43,14 @@ class Skripsi extends Model
     {
         return $this->hasMany(ExamSchedule::class)->latest('tanggal_sidang');
     }
+    // app/Models/Skripsi.php
+
+    public function scopeFilterStatus($query, $status)
+    {
+        // Cek jika status dikirim dan tidak kosong
+        if ($status && in_array($status, ['pending', 'disetujui', 'ditolak'])) {
+            return $query->where('status', $status);
+        }
+        return $query;
+    }
 }

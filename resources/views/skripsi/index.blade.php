@@ -49,14 +49,36 @@
             </div>
         @endif
 
-        <div class="d-flex justify-content-between align-items-start mb-4">
-            <div>
-                <h1 class="main-title">Persetujuan Pengajuan Skripsi</h1>
-                <p class="sub-title">Evaluasi usulan judul mahasiswa. Dosen pembimbing sudah dipilih oleh mahasiswa.</p>
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h1 class="main-title">Persetujuan Pengajuan Skripsi</h1>
+                    <p class="sub-title">Evaluasi usulan judul mahasiswa. Dosen pembimbing sudah dipilih oleh mahasiswa.</p>
+                </div>
             </div>
-            
-        </div>
 
+            <div class="d-flex justify-content-end mb-3">
+                <div class="p-1 bg-white rounded-3 border d-inline-flex gap-1 shadow-sm">
+                    <a href="{{ route('skripsi.index') }}" 
+                    class="btn btn-sm px-3 rounded-2 d-flex align-items-center gap-2 transition-all {{ !request('status') ? 'btn-dark fw-medium' : 'btn-light text-secondary border-0 bg-transparent' }}">
+                        <i class="fa-solid fa-layer-group text-xs"></i> Semua
+                    </a>
+                    
+                    <a href="{{ route('skripsi.index', ['status' => 'pending']) }}" 
+                    class="btn btn-sm px-3 rounded-2 d-flex align-items-center gap-2 transition-all {{ request('status') === 'pending' ? 'btn-warning text-dark fw-medium shadow-sm' : 'btn-light text-secondary border-0 bg-transparent' }}">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Pending
+                    </a>
+                    
+                    <a href="{{ route('skripsi.index', ['status' => 'approved']) }}" 
+                    class="btn btn-sm px-3 rounded-2 d-flex align-items-center gap-2 transition-all {{ request('status') === 'approved' ? 'btn-success text-white fw-medium shadow-sm' : 'btn-light text-secondary border-0 bg-transparent' }}">
+                        <i class="fa-solid fa-circle-check"></i> Disetujui
+                    </a>
+                    
+                    <a href="{{ route('skripsi.index', ['status' => 'rejected']) }}" 
+                    class="btn btn-sm px-3 rounded-2 d-flex align-items-center gap-2 transition-all {{ request('status') === 'rejected' ? 'btn-danger text-white fw-medium shadow-sm' : 'btn-light text-secondary border-0 bg-transparent' }}">
+                        <i class="fa-solid fa-circle-xmark"></i> Ditolak
+                    </a>
+                </div>
+            </div>
         <div class="content-card">
             <div class="card-header-custom">
                 <span class="fw-bold text-dark">Daftar Antrean Skripsi</span>
