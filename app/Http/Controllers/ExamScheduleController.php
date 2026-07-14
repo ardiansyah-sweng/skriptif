@@ -9,11 +9,37 @@ use Illuminate\Validation\Rule;
 
 class ExamScheduleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $schedules = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor'])
-            ->latest('tanggal_sidang')
-            ->get();
+        $query = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor']);
+
+        if ($request->filled('nama')) {
+            $query->whereHas('skripsi.student', function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->nama}%");
+            });
+        }
+
+        if ($request->filled('nim')) {
+            $query->whereHas('skripsi.student', function ($q) use ($request) {
+                $q->where('student_id', 'like', "%{$request->nim}%");
+            });
+        }
+
+        if ($request->filled('dosen_penguji')) {
+            $query->whereHas('skripsi.supervisor', function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->dosen_penguji}%");
+            });
+        }
+
+        if ($request->filled('tanggal')) {
+            $query->where('tanggal_sidang', $request->tanggal);
+        }
+
+        if ($request->filled('ruang')) {
+            $query->where('ruang', 'like', "%{$request->ruang}%");
+        }
+
+        $schedules = $query->latest('tanggal_sidang')->get();
 
         return view('exam_schedules.index', compact('schedules'));
     }

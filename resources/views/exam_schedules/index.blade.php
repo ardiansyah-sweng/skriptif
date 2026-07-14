@@ -46,10 +46,36 @@
                 <h1 class="main-title">Jadwal Sidang Skripsi</h1>
                 <p class="sub-title">Kelola penjadwalan sidang proposal dan pendadaran.</p>
             </div>
-            <a href="{{ route('exam-schedules.create') }}" class="btn-add">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Jadwal
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal" style="border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 500;">
+                    <i class="fa-solid fa-filter me-1"></i> Filter
+                    @if(request()->anyFilled(['nama', 'nim', 'dosen_penguji', 'tanggal', 'ruang']))
+                        <span class="badge bg-primary ms-1" style="font-size: 10px;">
+                            {{ collect([request('nama'), request('nim'), request('dosen_penguji'), request('tanggal'), request('ruang')])->filter()->count() }}
+                        </span>
+                    @endif
+                </button>
+                <a href="{{ route('exam-schedules.create') }}" class="btn-add">
+                    <i class="fa-solid fa-plus me-1"></i> Tambah Jadwal
+                </a>
+            </div>
+        </div>
+
+        @if(request()->anyFilled(['nama', 'nim', 'dosen_penguji', 'tanggal', 'ruang']))
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <small class="text-muted">Filter aktif:</small>
+            @foreach(['nama' => 'Nama', 'nim' => 'NIM', 'dosen_penguji' => 'Dosen Pembimbing', 'tanggal' => 'Tanggal', 'ruang' => 'Ruang'] as $key => $label)
+                @if(request()->filled($key))
+                <span class="badge bg-light text-dark border d-inline-flex align-items-center gap-1" style="font-size: 12px; font-weight: 500; padding: 4px 10px;">
+                    {{ $label }}: {{ request($key) }}
+                </span>
+                @endif
+            @endforeach
+            <a href="{{ route('exam-schedules.index') }}" class="btn btn-sm btn-outline-danger border-0" style="font-size: 12px;">
+                <i class="fa-solid fa-times"></i> Hapus filter
             </a>
         </div>
+        @endif
 
         <div class="content-card">
             <div class="card-header-custom">
@@ -130,4 +156,51 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal Filter -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 14px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.12);">
+            <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.25rem 1.5rem;">
+                <h5 class="modal-title fw-bold" id="filterModalLabel">
+                    <i class="fa-solid fa-filter me-2 text-primary"></i>Filter Jadwal Sidang
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <form method="GET" action="{{ route('exam-schedules.index') }}">
+                <div class="modal-body" style="padding: 1.5rem;">
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-muted small">Nama Mahasiswa</label>
+                        <input type="text" name="nama" class="form-control" placeholder="Cari nama mahasiswa..." value="{{ request('nama') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-muted small">NIM</label>
+                        <input type="text" name="nim" class="form-control" placeholder="Cari NIM..." value="{{ request('nim') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-muted small">Dosen Pembimbing</label>
+                        <input type="text" name="dosen_penguji" class="form-control" placeholder="Cari nama dosen..." value="{{ request('dosen_penguji') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-muted small">Tanggal Sidang</label>
+                        <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-medium text-muted small">Ruangan</label>
+                        <input type="text" name="ruang" class="form-control" placeholder="Cari ruangan..." value="{{ request('ruang') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e2e8f0; padding: 1rem 1.5rem;">
+                    <a href="{{ route('exam-schedules.index') }}" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 500;">
+                        <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                    </a>
+                    <button type="submit" class="btn btn-primary" style="border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 500;">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i> Terapkan Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
