@@ -130,9 +130,12 @@
                 <p class="sub">Kelola data mahasiswa dengan nomor induk, nama, email, angkatan, dan status aktif/inaktif.</p>
             </div>
             
-            <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="{{ route('students.print') }}" class="btn" style="background:#fff; border:1px solid #dbe3ee; color:#334155;">
+                    <i class="ti ti-printer"></i> Cetak Student
+                </a>
                 <button type="button" onclick="document.getElementById('importModal').style.display='flex'" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #fff; color: #185FA5; border-radius: 12px; padding: 12px 16px; font-weight: 600; border: 1px solid #dbe3ee; cursor: pointer; font-size: 14px;">
-                    <i class="ti ti-upload"></i> Import CSV
+                        <i class="ti ti-upload"></i> Import CSV
                 </button>
                 <a href="{{ route('students.create') }}" class="primary">
                     <i class="ti ti-plus"></i> Tambah Student
