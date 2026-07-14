@@ -242,7 +242,7 @@
 
 
 
-        // taruh data dosen sebagai JSON dari server (di Blade, sebelum tag ini letakkan di <script>)
+
         const lecturersData = @json($lecturersWithCapacity);
 
         const titleInput = document.getElementById('title');
