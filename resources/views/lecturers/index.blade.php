@@ -36,18 +36,18 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
 
 <div class="container py-5" style="max-width: 1200px;">
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-4">
                 <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show mb-4">
                 <i class="fa-solid fa-circle-xmark me-2"></i> <strong>Terjadi kesalahan:</strong>
                 <ul class="mb-0 mt-1">
-                    @foreach($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
@@ -60,8 +60,13 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
                 <h1 class="main-title">Data Dosen</h1>
                 <p class="sub-title">Kelola data dosen yang terdaftar dalam sistem.</p>
             </div>
-            <div>
-                <input type="text" id="q" class="search-input" placeholder="Cari nama dosen..." oninput="filterTable()">
+            <div class="d-flex gap-2">
+                <input type="text" id="q" class="search-input" placeholder="Cari nama dosen..."
+                    oninput="filterTable()">
+                <a href="{{ route('lecturers.create') }}" class="btn btn-primary d-flex align-items-center"
+                    style="border-radius: 8px; font-size: 14px; font-weight: 500; padding: 8px 16px;">
+                    <i class="fa-solid fa-plus me-2"></i> Tambah Dosen
+                </a>
             </div>
         </div>
 
@@ -83,7 +88,8 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
                         <i class="fa-solid fa-file-pdf"></i> Cetak PDF
                     </a>
                 </div>
-                <span class="meta-text"><i class="fa-solid fa-users me-1"></i> {{ $lecturers->count() }} dosen terdaftar</span>
+                <span class="meta-text"><i class="fa-solid fa-users me-1"></i> {{ $lecturers->count() }} dosen
+                    terdaftar</span>
             </div>
 
             <div class="table-responsive">
@@ -99,45 +105,47 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
                     </thead>
                     <tbody id="tbody">
                         @forelse($lecturers as $index => $lecturer)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
-                                <div class="fw-bold lecturer-name">{{ $lecturer->name }}</div>
-                                <div class="meta-text">ID. {{ $lecturer->lecturer_id }}</div>
-                            </td>
-                            <td>
-                                <div class="meta-text">
-                                    <i class="fa-solid fa-envelope me-1"></i> {{ $lecturer->email }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="meta-text">{{ $lecturer->expertise ?? '-' }}</div>
-                            </td>
-                            <td class="text-center">
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ route('lecturers.show', $lecturer->id) }}" class="btn-detail-action">
-                                        <i class="fa-solid fa-eye"></i> Detail
-                                    </a>
-                                    <a href="{{ route('lecturers.edit', $lecturer->id) }}" class="btn-edit-action">
-                                        <i class="fa-solid fa-pen-to-square"></i> Edit
-                                    </a>
-                                    <form action="{{ route('lecturers.destroy', $lecturer->id) }}" method="POST" onsubmit="return confirm('Hapus dosen ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete-action">
-                                            <i class="fa-solid fa-trash"></i> Hapus
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <div class="fw-bold lecturer-name">{{ $lecturer->name }}</div>
+                                    <div class="meta-text">ID. {{ $lecturer->lecturer_id }}</div>
+                                </td>
+                                <td>
+                                    <div class="meta-text">
+                                        <i class="fa-solid fa-envelope me-1"></i> {{ $lecturer->email }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="meta-text">{{ $lecturer->expertise ?? '-' }}</div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('lecturers.show', $lecturer->id) }}"
+                                            class="btn-detail-action">
+                                            <i class="fa-solid fa-eye"></i> Detail
+                                        </a>
+                                        <a href="{{ route('lecturers.edit', $lecturer->id) }}" class="btn-edit-action">
+                                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                                        </a>
+                                        <form action="{{ route('lecturers.destroy', $lecturer->id) }}" method="POST"
+                                            onsubmit="return confirm('Hapus dosen ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-delete-action">
+                                                <i class="fa-solid fa-trash"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                <i class="fa-regular fa-folder-open d-block mb-2" style="font-size: 24px;"></i>
-                                Tidak ada data dosen.
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="fa-regular fa-folder-open d-block mb-2" style="font-size: 24px;"></i>
+                                    Tidak ada data dosen.
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -180,7 +188,9 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
             const end = start + pageSize;
             const visible = new Set(filteredRows.slice(start, end));
 
-            allRows.forEach(r => { r.style.display = visible.has(r) ? '' : 'none'; });
+            allRows.forEach(r => {
+                r.style.display = visible.has(r) ? '' : 'none';
+            });
 
             renderPaginationControls(totalPages);
         }
@@ -194,7 +204,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
             prevBtn.className = 'page-btn';
             prevBtn.textContent = 'Previous';
             prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => { currentPage--; renderTable(); };
+            prevBtn.onclick = () => {
+                currentPage--;
+                renderTable();
+            };
             container.appendChild(prevBtn);
 
             for (let p = 1; p <= totalPages; p++) {
@@ -202,7 +215,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
                 btn.type = 'button';
                 btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
                 btn.textContent = p;
-                btn.onclick = () => { currentPage = p; renderTable(); };
+                btn.onclick = () => {
+                    currentPage = p;
+                    renderTable();
+                };
                 container.appendChild(btn);
             }
 
@@ -211,7 +227,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #3341
             nextBtn.className = 'page-btn';
             nextBtn.textContent = 'Next';
             nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => { currentPage++; renderTable(); };
+            nextBtn.onclick = () => {
+                currentPage++;
+                renderTable();
+            };
             container.appendChild(nextBtn);
         }
 
