@@ -12,6 +12,7 @@ use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
 
+Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
 Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
