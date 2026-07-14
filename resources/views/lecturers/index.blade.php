@@ -190,6 +190,94 @@
             background-color: #dc2626;
             color: white;
         }
+
+        .import-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1050;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .import-modal-card {
+            width: 100%;
+            max-width: 520px;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 28px 80px rgba(15, 23, 42, 0.16);
+            overflow: hidden;
+        }
+        .import-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 28px 28px 18px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .import-modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .import-modal-header p {
+            margin: 8px 0 0;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .import-modal-close {
+            border: none;
+            background: #f8fafc;
+            color: #475569;
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+        }
+        .import-modal-body {
+            padding: 24px 28px;
+        }
+
+        .import-modal-body input[type="file"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #f8fafc;
+            font-size: 14px;
+        }
+
+        .import-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .import-hint {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .import-modal-footer {
+            padding: 20px 28px 28px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: #f8fafc;
+        }
+
+        .import-modal-footer .btn {
+            min-width: 140px;
+        }
     </style>
 </head>
 
@@ -227,6 +315,9 @@
                     style="border-radius: 8px; font-size: 14px; font-weight: 500; padding: 8px 16px;">
                     <i class="fa-solid fa-plus me-2"></i> Tambah Dosen
                 </a>
+                <button type="button" id="openImportModal" class="btn btn-secondary">
+                    <i class="fa-solid fa-file-csv me-2"></i> Import CSV
+                </button>
             </div>
         </div>
 
@@ -316,6 +407,34 @@
             </div>
         </div>
     </div>
+    
+    <div id="importModal" class="import-modal-overlay" style="display: none;">
+        <div class="import-modal-card">
+            <div class="import-modal-header">
+                <div>
+                    <h2>Import Dosen</h2>
+                    <p>Pilih file CSV (.csv) untuk menambah atau memperbarui data dosen.</p>
+                </div>
+                <button type="button" id="closeImportModal" class="import-modal-close">&times;</button>
+            </div>
+
+            <form action="{{ route('lecturers.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="import-modal-body">
+                    <label class="import-label" for="import_file">Pilih File CSV (.csv)</label>
+                    <input id="import_file" type="file" name="file" accept=".csv,text/csv" required>
+                    <p class="import-hint">Header yang dibutuhkan: lecturer_id, name, email, expertise, max_supervisors</p>
+                </div>
+
+                <div class="import-modal-footer">
+                    <button type="button" id="closeImportModal2" class="btn btn-light">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-upload me-2"></i> Proses Import
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -395,7 +514,29 @@
         }
 
         renderTable();
-    </script>
+
+        const openImportModal = document.getElementById('openImportModal');
+        const closeImportModalButtons = document.querySelectorAll('#closeImportModal, #closeImportModal2');
+        const importModal = document.getElementById('importModal');
+
+        if (openImportModal) {
+            openImportModal.addEventListener('click', () => {
+                importModal.style.display = 'flex';
+            });
+        }
+
+        closeImportModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                importModal.style.display = 'none';
+            });
+        });
+
+        importModal.addEventListener('click', (event) => {
+            if (event.target === importModal) {
+                importModal.style.display = 'none';
+            }
+        });
+        </script>
 </body>
 
 </html>
