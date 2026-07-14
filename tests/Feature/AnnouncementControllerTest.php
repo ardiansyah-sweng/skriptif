@@ -75,6 +75,63 @@ class AnnouncementControllerTest extends TestCase
         $response->assertSessionHasErrors(['title', 'content', 'audience']);
     }
 
+    public function test_update_announcement_success()
+    {
+        $announcement = Announcement::factory()->create([
+            'author_id' => $this->user->id,
+            'title' => 'Judul Lama',
+            'content' => 'Konten lama',
+            'audience' => 'all',
+        ]);
+
+        $response = $this->put(route('announcements.update', $announcement->id), [
+            'title' => 'Judul Baru Diupdate',
+            'content' => 'Konten baru yang sudah diupdate.',
+            'audience' => 'dosen',
+        ]);
+
+        $response->assertRedirect(route('announcements.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('announcements', [
+            'id' => $announcement->id,
+            'title' => 'Judul Baru Diupdate',
+            'content' => 'Konten baru yang sudah diupdate.',
+            'audience' => 'dosen',
+        ]);
+    }
+
+    public function test_update_announcement_validation_fails()
+    {
+        $announcement = Announcement::factory()->create([
+            'author_id' => $this->user->id,
+        ]);
+
+        $response = $this->put(route('announcements.update', $announcement->id), [
+            'title' => '',
+            'content' => '',
+            'audience' => 'invalid-audience',
+        ]);
+
+        $response->assertSessionHasErrors(['title', 'content', 'audience']);
+    }
+
+    public function test_show_announcement_displays_correct_data()
+    {
+        $announcement = Announcement::factory()->create([
+            'author_id' => $this->user->id,
+            'title' => 'Judul Detail Spesifik',
+            'content' => 'Isi detail pengumuman yang lengkap dan panjang untuk pengetesan.',
+            'audience' => 'mahasiswa',
+        ]);
+
+        $response = $this->get(route('announcements.show', $announcement->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('Judul Detail Spesifik');
+        $response->assertSee('Isi detail pengumuman yang lengkap');
+    }
+
     public function test_destroy_announcement_success()
     {
         $announcement = Announcement::factory()->create([
