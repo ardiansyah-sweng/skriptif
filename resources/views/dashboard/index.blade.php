@@ -248,37 +248,22 @@
 
             </div>
 
-            <div class="card">
-
-                <div class="card-header bg-success text-white">
-
-                    Aksi Cepat
-
-                </div>
-
-                <div class="card-body">
-
-                    <a href="{{ route('student.skripsi.create') }}"
-                    class="btn btn-primary">
-
-                        <i class="fa-solid fa-file-circle-plus"></i>
-
-                        Ajukan Skripsi
-
-                    </a>
-
-                    <a href="{{ route('student.skripsi.history') }}"
-                    class="btn btn-outline-secondary">
-
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-
-                        Riwayat Pengajuan
-
-                    </a>
-
-                </div>
-
-            </div>
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            Aksi Cepat
+        </div>
+        <div class="card-body">
+            <a href="{{ route('student.skripsi.create') }}" class="btn btn-primary me-2">
+                <i class="fa-solid fa-file-circle-plus"></i> Ajukan Skripsi
+            </a>
+            <a href="{{ route('student.skripsi.history') }}" class="btn btn-outline-secondary me-2">
+                <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pengajuan
+            </a>
+            <a href="{{ route('student.skripsi.quota') }}" class="btn btn-outline-info">
+                <i class="fa-solid fa-chart-pie"></i> Kuota Dosen
+            </a>
+        </div>
+    </div>
 
         </div>
 
