@@ -52,7 +52,8 @@
             </div>
         @endif
         <div class="form-card">
-            <form action="{{ route('log-books.update', $logBook->id) }}" method="POST">
+            <!-- enctype="multipart/form-data" ditambahkan agar form ini mendukung unggah berkas (file upload) -->
+            <form action="{{ route('log-books.update', $logBook->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <!-- Student Select -->
@@ -108,6 +109,31 @@
                         <option value="rejected" {{ old('status', $logBook->status) == 'rejected' ? 'selected' : '' }}>Rejected (Ditolak / Perlu Pengajuan Ulang)</option>
                     </select>
                     <div class="hint">Status default bimbingan adalah 'Pending' sampai disetujui oleh dosen pembimbing.</div>
+                </div>
+                <!-- Input file untuk memperbarui lampiran bimbingan (menampilkan file saat ini jika ada) -->
+                <!-- Guidance Attachment (Optional) -->
+                <div class="mb-4">
+                    <label for="attachment" class="form-label">Lampiran Dokumen / Gambar (Opsional)</label>
+                    @if($logBook->attachment)
+                        <div class="mb-2">
+                            @if(Str::endsWith(strtolower($logBook->attachment), '.pdf'))
+                                <div class="d-flex align-items-center gap-2 p-2 border rounded bg-light" style="max-width: 300px;">
+                                    <i class="fa-solid fa-file-pdf text-danger fs-3"></i>
+                                    <div class="overflow-hidden">
+                                        <a href="{{ asset('storage/' . $logBook->attachment) }}" target="_blank" class="text-decoration-none fw-semibold text-dark text-truncate d-block" style="font-size: 13px;">
+                                            Lihat Dokumen PDF
+                                        </a>
+                                        <span class="text-muted d-block" style="font-size: 11px;">Berkas Lampiran PDF</span>
+                                    </div>
+                                </div>
+                            @else
+                                <img src="{{ asset('storage/' . $logBook->attachment) }}" alt="Lampiran Bimbingan" class="img-thumbnail" style="max-height: 200px;">
+                            @endif
+                            <div class="hint mt-1">File saat ini. Unggah file baru jika ingin menggantinya.</div>
+                        </div>
+                    @endif
+                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*,application/pdf">
+                    <div class="hint">Format: JPEG, PNG, JPG, PDF. Maksimal 2MB.</div>
                 </div>
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-4">

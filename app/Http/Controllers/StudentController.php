@@ -7,10 +7,18 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
-{
+{   
+    private function getStudents()
+    {
+        return Student::query()
+            ->orderBy('year_entrance', 'desc')
+            ->orderBy('name', 'asc')
+            ->get();
+    }
+    
     public function index()
     {
-        $students = Student::query()->latest()->get();
+        $students = $this->getStudents();
 
         return view('students.index', compact('students'));
     }
@@ -75,5 +83,12 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()->route('students.index');
+    }
+
+    public function printAll()
+    {
+        $students = $this->getStudents();
+
+        return view('students.print', compact('students'));
     }
 }

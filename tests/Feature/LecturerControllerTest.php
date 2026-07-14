@@ -70,6 +70,7 @@ class LecturerControllerTest extends TestCase
             'name'        => 'Dr. Ahmad Fauzi Updated',
             'email'       => 'ahmad.updated@uad.ac.id',
             'expertise'   => 'Data Science',
+            'max_supervisors' => 3,
         ]);
 
         $response->assertRedirect(route('lecturers.index'));
@@ -121,6 +122,7 @@ class LecturerControllerTest extends TestCase
             'name'        => 'Dr. Ahmad Fauzi Edited',
             'email'       => 'ahmad.fauzi@uad.ac.id',
             'expertise'   => 'Rekayasa Perangkat Lunak',
+            'max_supervisors' => 3,
         ]);
 
         $response->assertRedirect(route('lecturers.index'));
@@ -134,6 +136,7 @@ class LecturerControllerTest extends TestCase
             'name'        => 'Dr. Ahmad Fauzi',
             'email'       => 'ahmad.fauzi@uad.ac.id',
             'expertise'   => 'Rekayasa Perangkat Lunak',
+            'max_supervisors' => 3,
         ]);
 
         $response->assertRedirect(route('lecturers.index'));
