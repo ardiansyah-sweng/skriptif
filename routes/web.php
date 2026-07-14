@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ElectiveCourseController;
 use App\Http\Controllers\LecturerController;
@@ -9,6 +10,9 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
+use App\Http\Controllers\EvaluationController;
+// ...
+Route::resource('evaluations', EvaluationController::class);
 
 Route::view('/', 'auth.login')->name('login');
 
