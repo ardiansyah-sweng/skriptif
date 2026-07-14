@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('submission_date')->nullable();
             $table->date('approval_date')->nullable();
             $table->json('elective_courses')->nullable();
+            $table->string('document')->nullable();
             $table->timestamps();
         });
     }
