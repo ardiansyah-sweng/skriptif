@@ -9,10 +9,18 @@ use App\Http\Requests\ImportStudentRequest;
 use App\Services\StudentService;
 
 class StudentController extends Controller
-{
+{   
+    private function getStudents()
+    {
+        return Student::query()
+            ->orderBy('year_entrance', 'desc')
+            ->orderBy('name', 'asc')
+            ->get();
+    }
+    
     public function index()
     {
-        $students = Student::query()->latest()->get();
+        $students = $this->getStudents();
 
         return view('students.index', compact('students'));
     }

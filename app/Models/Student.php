@@ -23,12 +23,14 @@ class Student extends Model
         'email',
         'year_entrance',
         'status',
+        'is_lulus',
     ];
     /**
      * Attribute casting
      */
     protected $casts = [
         'year_entrance' => 'integer',
+        'is_lulus'      => 'boolean',
     ];
     public $timestamps = true;
     /**
@@ -37,4 +39,9 @@ class Student extends Model
     protected $attributes = [
         'status' => 'active',
     ];
+
+    public function skripsi()
+    {
+        return $this->hasOne(Skripsi::class, 'student_id');
+    }
 }

@@ -78,10 +78,18 @@
                     <label for="supervisor_id">Preferred Advisor</label>
                     <select id="supervisor_id" name="supervisor_id">
                         <option value="">-- Select Advisor --</option>
-                        @foreach($lecturers as $lecturer)
-                            <option value="{{ $lecturer->id }}">{{ $lecturer->name }}</option>
+                        @foreach($lecturersWithCapacity as $lecturer)
+                            <option value="{{ $lecturer['id'] }}" 
+                                {{ old('supervisor_id') == $lecturer['id'] ? 'selected' : '' }}
+                                {{ !$lecturer['is_available'] ? 'disabled' : '' }}>
+                                {{ $lecturer['name'] }} 
+                                ({{ $lecturer['approved_count'] }}/{{ $lecturer['max_supervisors'] }} - 
+                                {{ $lecturer['remaining_capacity'] }} tersisa)
+                                {{ !$lecturer['is_available'] ? '❌' : '' }}
+                            </option>
                         @endforeach
                     </select>
+                    <span class="form-hint">Menampilkan kapasitas dosen untuk angkatan Anda. Dosen yang sudah penuh ditandai ❌.</span>
                 </div>
 
                 <div class="form-group">
