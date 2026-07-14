@@ -30,6 +30,7 @@ Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lectur
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+Route::post('lecturers/import', [LecturerController::class, 'import'])->name('lecturers.import');
 // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
 Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);

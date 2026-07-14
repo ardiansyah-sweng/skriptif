@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ImportLecturerRequest;
 use Illuminate\Support\Facades\DB;
 
 class LecturerController extends Controller
@@ -93,5 +94,64 @@ class LecturerController extends Controller
     {
         DB::table('lecturers')->where('id', $id)->delete();
         return redirect()->route('lecturers.index');
+    }
+    
+    public function import(ImportLecturerRequest $request)
+    {
+        $path = $request->file('file')->getPathname();
+
+        if (($handle = fopen($path, 'r')) === false) {
+            return redirect()->route('lecturers.index')
+                ->withErrors(['file' => 'Gagal membaca file CSV.']);
+        }
+
+        $header = fgetcsv($handle, 1000, ',');
+        if ($header === false) {
+            fclose($handle);
+            return redirect()->route('lecturers.index')
+                ->withErrors(['file' => 'File CSV kosong atau tidak valid.']);
+        }
+
+        $header = array_map(fn ($value) => strtolower(trim($value)), $header);
+        $requiredHeaders = ['lecturer_id', 'name', 'email', 'expertise', 'max_supervisors'];
+
+        if (array_diff($requiredHeaders, $header)) {
+            fclose($handle);
+            return redirect()->route('lecturers.index')
+                ->withErrors(['file' => 'Header CSV harus berisi: lecturer_id, name, email, expertise, max_supervisors.']);
+        }
+
+        $now = now();
+
+        while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+            if (empty(array_filter($row))) {
+                continue;
+            }
+
+            $row = array_pad($row, count($header), null);
+            $data = array_combine($header, $row);
+
+            $lecturerId = trim($data['lecturer_id'] ?? '');
+            if ($lecturerId === '') {
+                continue;
+            }
+
+            DB::table('lecturers')->updateOrInsert(
+                ['lecturer_id' => $lecturerId],
+                [
+                    'name'            => trim($data['name'] ?? ''),
+                    'email'           => trim($data['email'] ?? ''),
+                    'expertise'       => trim($data['expertise'] ?? '') ?: null,
+                    'max_supervisors' => is_numeric($data['max_supervisors']) ? (int) $data['max_supervisors'] : 12,
+                    'created_at'      => $now,
+                    'updated_at'      => $now,
+                ]
+            );
+        }
+
+        fclose($handle);
+
+        return redirect()->route('lecturers.index')
+            ->with('success', 'Data dosen berhasil diimpor.');
     }
 }
