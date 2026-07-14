@@ -10,6 +10,8 @@ use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 Route::view('/', 'auth.login')->name('login');
 
 Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
