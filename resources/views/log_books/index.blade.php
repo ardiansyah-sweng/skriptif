@@ -22,6 +22,8 @@
         .status-rejected { background-color: #fee2e2; color: #b91c1c; }
         .btn-add { background-color: #1e293b; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 8px 16px; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background-color 0.2s; }
         .btn-add:hover { background-color: #0f172a; color: white; }
+        .btn-detail { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-detail:hover { background-color: #dcfce7; color: #166534; }
         .btn-edit { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
         .btn-edit:hover { background-color: #dbeafe; color: #1e40af; }
         .btn-delete { background-color: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; }
@@ -167,6 +169,9 @@
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ route('log-books.show', $log->id) }}" class="btn-detail" title="Lihat Detail">
+                                        <i class="fa-solid fa-eye"></i> Detail
+                                    </a>
                                     <a href="{{ route('log-books.edit', $log->id) }}" class="btn-edit" title="Edit Data">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </a>
