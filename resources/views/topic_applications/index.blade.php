@@ -42,7 +42,7 @@
                         @forelse($applications as $index => $application)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $application->student?->name ?? $application->applicant_name }} ({{ $application->student?->student_id ?? $application->applicant_nim }})</td>
+                            <td>{{ $application->student?->name }} ({{ $application->student?->student_id }})</td>
                             <td>{{ $application->lecturerTopic->title }}</td>
                             <td>{{ ucfirst($application->status) }}</td>
                             <td>{{ $application->requirements_note ?? '-' }}</td>

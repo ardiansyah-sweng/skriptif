@@ -11,8 +11,7 @@ class TopicApplication extends Model
     protected $fillable = [
         'student_id',
         'lecturer_topic_id',
-        'applicant_name',
-        'applicant_nim',
+
         'document_path',
         'requirements_note',
         'status',

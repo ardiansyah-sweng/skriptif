@@ -46,8 +46,6 @@ class TopicApplicationController extends Controller
         TopicApplication::create([
             'lecturer_topic_id' => $topic->id,
             'student_id' => $student->id,
-            'applicant_name' => $student->name,
-            'applicant_nim' => $student->student_id,
             'message' => $validated['message'] ?? null,
         ]);
         $topic->update(['status' => 'closed']);

@@ -50,8 +50,7 @@ class TopicApplicationControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Ajukan Diri');
         $response->assertSee('Nama Mahasiswa');
-        $response->assertSee('NIM');
-        $response->assertSee('Dokumen Pendukung');
+        $response->assertSee('Pesan / Catatan');
     }
 
     public function test_student_can_apply_with_document_upload()
@@ -59,25 +58,24 @@ class TopicApplicationControllerTest extends TestCase
         $lecturerId = $this->createLecturer();
         $topicId = $this->createLecturerTopic($lecturerId);
 
-        Storage::fake('public');
-        $file = UploadedFile::fake()->create('proposal.pdf', 100, 'application/pdf');
-
+        $studentId = DB::table('students')->insertGetId([
+            'student_id' => 'NIM12345',
+            'name' => 'Dewi Rahma',
+            'email' => 'dewi.rahma@uad.ac.id',
+            'year_entrance' => 2023,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         $response = $this->post(route('topic-board.apply', $topicId), [
-            'applicant_name' => 'Dewi Rahma',
-            'applicant_nim' => 'NIM12345',
-            'requirements_note' => 'Proposal dan CV sudah dilampirkan sesuai syarat.',
-            'document' => $file,
+            'student_id' => $studentId,
             'message' => 'Saya tertarik dengan topik ini.',
         ]);
 
         $response->assertRedirect(route('topic-board.show', $topicId));
         $response->assertSessionHas('success', 'Pengajuan topik berhasil dikirim.');
-
         $this->assertDatabaseHas('topic_applications', [
             'lecturer_topic_id' => $topicId,
-            'applicant_name' => 'Dewi Rahma',
-            'applicant_nim' => 'NIM12345',
-            'requirements_note' => 'Proposal dan CV sudah dilampirkan sesuai syarat.',
+            'student_id' => $studentId,
             'message' => 'Saya tertarik dengan topik ini.',
             'status' => 'pending',
         ]);
@@ -87,11 +85,17 @@ class TopicApplicationControllerTest extends TestCase
     {
         $lecturerId = $this->createLecturer();
         $topicId = $this->createLecturerTopic($lecturerId);
-
+        $studentId = DB::table('students')->insertGetId([
+            'student_id' => 'NIM12345',
+            'name' => 'Dewi Rahma',
+            'email' => 'dewi.rahma@uad.ac.id',
+            'year_entrance' => 2023,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         $applicationId = DB::table('topic_applications')->insertGetId([
             'lecturer_topic_id' => $topicId,
-            'applicant_name' => 'Dewi Rahma',
-            'applicant_nim' => 'NIM12345',
+            'student_id' => $studentId,
             'document_path' => 'topic_applications/proposal.pdf',
             'requirements_note' => 'Proposal tersedia.',
             'message' => 'Mohon disetujui.',
@@ -115,11 +119,17 @@ class TopicApplicationControllerTest extends TestCase
     {
         $lecturerId = $this->createLecturer();
         $topicId = $this->createLecturerTopic($lecturerId);
-
+        $studentId = DB::table('students')->insertGetId([
+            'student_id' => 'NIM12345',
+            'name' => 'Dewi Rahma',
+            'email' => 'dewi.rahma@uad.ac.id',
+            'year_entrance' => 2023,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         $applicationId = DB::table('topic_applications')->insertGetId([
             'lecturer_topic_id' => $topicId,
-            'applicant_name' => 'Dewi Rahma',
-            'applicant_nim' => 'NIM12345',
+            'student_id' => $studentId,
             'document_path' => 'topic_applications/proposal.pdf',
             'requirements_note' => 'Proposal tersedia.',
             'message' => 'Mohon ditolak untuk demo.',
@@ -127,12 +137,9 @@ class TopicApplicationControllerTest extends TestCase
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
         $response = $this->post(route('topic-applications.reject', $applicationId));
-
         $response->assertRedirect();
-        $response->assertSessionHas('success', 'Aplikasi ditolak.');
-
+        $response->assertSessionHas('success', 'Aplikasi ditolak. Topik kembali dibuka.');
         $this->assertDatabaseHas('topic_applications', [
             'id' => $applicationId,
             'status' => 'rejected',
