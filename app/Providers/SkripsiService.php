@@ -6,9 +6,16 @@ use App\Models\Skripsi;
 
 class SkripsiService
 {
-    public function getAllSkripsi()
+    public function getAllSkripsi($status = null)
     {
-        return Skripsi::with(['student', 'supervisor'])->get();
+        
+        $query = Skripsi::with(['student', 'supervisor']);
+
+        if ($status && in_array($status, ['pending', 'approved', 'rejected'])) {
+            $query->where('status', $status);
+        }
+
+        return $query->latest()->get();
     }
 
     public function submitSkripsi(array $data)

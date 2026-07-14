@@ -18,9 +18,14 @@ class SkripsiController extends Controller
     }
 
     // Halaman admin: list semua skripsi
-    public function index()
+    public function index(Request $request)
     {
-        $allSkripsi = $this->skripsiService->getAllSkripsi();
+        // Ambil status filter dari URL parameter (?status=...)
+        $statusFilter = $request->query('status');
+
+        // Oper status filter ke dalam service layer
+        $allSkripsi = $this->skripsiService->getAllSkripsi($statusFilter);
+
         return view('skripsi.index', compact('allSkripsi'));
     }
 
