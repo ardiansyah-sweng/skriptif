@@ -10,7 +10,10 @@ use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 
+
 Route::view('/', 'auth.login')->name('login');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
 Route::resource('elective-courses', ElectiveCourseController::class);
@@ -33,8 +36,6 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
 Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
-Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
-
 // Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
 Route::get('storage/attachments/{filename}', function ($filename) {
     $filename = basename($filename);
