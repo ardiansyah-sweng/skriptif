@@ -101,6 +101,7 @@
                     <div class="field">
                         <label for="year_entrance">Angkatan</label>
                         <input type="number" id="year_entrance" name="year_entrance" value="{{ old('year_entrance') }}" placeholder="2024" min="1900" max="2100">
+                        <span class="hint">Angkatan lebih dari 7 tahun akan otomatis berstatus inaktif.</span>
                         @error('year_entrance') <span class="error">{{ $message }}</span> @enderror
                     </div>
 

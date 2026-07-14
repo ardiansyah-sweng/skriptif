@@ -33,6 +33,11 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
 Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
+// CETAK HARUS DI ATAS
+Route::get('/students/print', [StudentController::class, 'print'])
+    ->name('students.print');
+
+Route::resource('students', StudentController::class);
 Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
 // Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
@@ -62,6 +67,22 @@ Route::prefix('student/skripsi')->group(function () {
         ->name('student.skripsi.history');
 });
 
+// =========================
+// Dashboard Mahasiswa
+// =========================
+Route::prefix('student')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('student.dashboard');
+
+});
+// Rute Jadwal Sidang Skripsi (sisi admin)
+Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
+Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+Route::get('/exam-schedules/{id}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
+Route::patch('/exam-schedules/{id}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
+Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
 use App\Http\Controllers\AnnouncementController;
 
 Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
