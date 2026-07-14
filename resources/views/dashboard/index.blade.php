@@ -248,37 +248,57 @@
 
             </div>
 
-            <div class="card">
+            <div class="card mb-4">
 
                 <div class="card-header bg-success text-white">
-
                     Aksi Cepat
-
                 </div>
 
-                <div class="card-body">
+            <div class="card-body">
 
-                    <a href="{{ route('student.skripsi.create') }}"
-                    class="btn btn-primary">
+                <div class="row g-3">
 
-                        <i class="fa-solid fa-file-circle-plus"></i>
+                    <div class="col-md-6">
+                        <a href="{{ route('student.skripsi.create') }}"
+                           class="btn btn-primary w-100 d-flex flex-column justify-content-center align-items-center"
+                           style="height:120px;">
+                            <i class="fa-solid fa-file-circle-plus fa-2x mb-2"></i>
+                            <span>Ajukan Skripsi</span>
+                        </a>
+                     </div>
 
-                        Ajukan Skripsi
+                    <div class="col-md-6">
+                        <a href="{{ route('student.skripsi.history') }}"
+                           class="btn btn-secondary w-100 d-flex flex-column justify-content-center align-items-center"
+                           style="height:120px;">
+                            <i class="fa-solid fa-clock-rotate-left fa-2x mb-2"></i>
+                            <span>Riwayat Pengajuan</span>
+                        </a>
+                    </div>
 
-                    </a>
+                    <div class="col-md-6">
+                        <a href="{{ route('log-books.index') }}"
+                           class="btn btn-outline-success w-100 d-flex flex-column justify-content-center align-items-center"
+                           style="height:120px;">
+                            <i class="fa-solid fa-book fa-2x mb-2"></i>
+                            <span>Log Book</span>
+                        </a>
+                    </div>
 
-                    <a href="{{ route('student.skripsi.history') }}"
-                    class="btn btn-outline-secondary">
-
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-
-                        Riwayat Pengajuan
-
-                    </a>
+                    <div class="col-md-6">
+                        <a href="{{ route('elective-courses.index') }}"
+                           class="btn btn-outline-info w-100 d-flex flex-column justify-content-center align-items-center"
+                           style="height:120px;">
+                            <i class="fa-solid fa-book-open fa-2x mb-2"></i>
+                            <span>Mata Kuliah Pilihan</span>
+                        </a>
+                    </div>
 
                 </div>
 
             </div>
+
+        </div>
 
         </div>
 
