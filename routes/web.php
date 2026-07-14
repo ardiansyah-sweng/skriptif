@@ -83,3 +83,8 @@ Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('
 Route::get('/exam-schedules/{id}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
 Route::patch('/exam-schedules/{id}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
 Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
+use App\Http\Controllers\AnnouncementController;
+
+Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
