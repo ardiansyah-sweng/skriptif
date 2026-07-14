@@ -9,14 +9,25 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\ImportStudentRequest;
+use App\Services\StudentService;
 
 class StudentController extends Controller
-{
+{   
+    private function getStudents()
+    {
+        return Student::query()
+            ->orderBy('year_entrance', 'desc')
+            ->orderBy('name', 'asc')
+            ->get();
+    }
+    
     public function index()
     {
         $students = Student::query()->latest()->get();
         $lecturers = Lecturer::all();
         $studyPrograms = collect();
+        $students = $this->getStudents();
 
         if (Schema::hasColumn('students', 'study_program')) {
             $studyPrograms = Student::query()
@@ -251,5 +262,21 @@ class StudentController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    public function printAll()
+    {
+        $students = $this->getStudents();
+
+        return view('students.print', compact('students'));
+    }
+
+    /**
+     * Import students from csv file.
+     */
+    public function import(ImportStudentRequest $request, StudentService $service)
+    {
+        $service->importCsv($request->file('file'));
+        
+        return redirect()->route('students.index')
+                         ->with('success', 'Mahasiswa berhasil diimpor.');
     }
 }

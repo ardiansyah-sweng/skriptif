@@ -57,6 +57,11 @@
             </div>
 
             <div class="detail-row">
+                <div class="detail-label">Maks. Mahasiswa per Angkatan</div>
+                <div class="detail-value">{{ $lecturer->max_supervisors ?? 3 }} mahasiswa</div>
+            </div>
+
+            <div class="detail-row">
                 <div class="detail-label">Terdaftar Sejak</div>
                 <div class="detail-value">{{ \Carbon\Carbon::parse($lecturer->created_at)->translatedFormat('d F Y, H:i') }}</div>
             </div>

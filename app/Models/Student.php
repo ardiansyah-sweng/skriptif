@@ -24,12 +24,14 @@ class Student extends Model
         'year_entrance',
         'study_program',
         'status',
+        'is_lulus',
     ];
     /**
      * Attribute casting
      */
     protected $casts = [
         'year_entrance' => 'integer',
+        'is_lulus'      => 'boolean',
     ];
     public $timestamps = true;
     /**

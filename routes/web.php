@@ -8,10 +8,15 @@ use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
 
+Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
 Route::resource('elective-courses', ElectiveCourseController::class);
+Route::resource('students', StudentController::class);
+Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
+Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
@@ -19,17 +24,31 @@ Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.stor
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
+Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
 Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lecturers.show');
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+// Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
+Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
 // CETAK HARUS DI ATAS
 Route::get('/students/print', [StudentController::class, 'print'])
     ->name('students.print');
 
 Route::resource('students', StudentController::class);
+Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
+
+// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
+Route::get('storage/attachments/{filename}', function ($filename) {
+    $filename = basename($filename);
+    $path = 'attachments/' . $filename;
+    if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    return response()->file(\Illuminate\Support\Facades\Storage::disk('public')->path($path));
+});
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {
@@ -57,3 +76,10 @@ Route::prefix('student')->group(function () {
         ->name('student.dashboard');
 
 });
+// Rute Jadwal Sidang Skripsi (sisi admin)
+Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
+Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+Route::get('/exam-schedules/{id}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
+Route::patch('/exam-schedules/{id}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
+Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');

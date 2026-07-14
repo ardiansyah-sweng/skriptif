@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->integer('year_entrance');
             $table->string('status')->default('active');
+            $table->boolean('is_lulus')->default(false);
             $table->timestamps();
         });
     }
