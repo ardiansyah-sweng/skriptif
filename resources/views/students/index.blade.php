@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Students</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Data Students')
+
+@push('styles')
+<style>
+* { box-sizing: border-box; }
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -114,10 +112,12 @@
             .toolbar { flex-direction: column; align-items: stretch; }
             .search { min-width: 0; width: 100%; }
         }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="hero">
             <div>
                 <div class="crumb">
@@ -250,6 +250,7 @@
         }
     </script>
 
+@endsedtion
     <div id="importModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: #fff; width: 100%; max-width: 420px; border-radius: 20px; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.1);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">

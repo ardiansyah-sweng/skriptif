@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Dosen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+@extends('layouts.app')
+
+@section('title', 'Edit Dosen')
+
+@push('styles')
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
         .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
         .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
         .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); padding: 32px; }
@@ -18,10 +14,12 @@
         .btn-save:hover { background-color: #059669; color: white; }
         .btn-back-custom { background-color: transparent; color: #64748b; font-size: 14px; font-weight: 500; border-radius: 8px; padding: 10px 24px; border: 1px solid #e2e8f0; text-decoration: none; }
         .btn-back-custom:hover { background-color: #f1f5f9; color: #334155; }
-    </style>
-</head>
-<body>
-    <div class="container py-5" style="max-width: 700px;">
+</style>
+@endpush
+
+@section('content')
+
+<div class="container py-5" style="max-width: 700px;">
 
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show mb-4">
@@ -130,5 +128,5 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+@endsection

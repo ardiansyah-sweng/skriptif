@@ -10,7 +10,14 @@ use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 Route::view('/', 'auth.login')->name('login');
+
+// Handler sementara untuk form login (belum ada auth beneran, langsung tembus ke dashboard)
+Route::post('/', function () {
+    return redirect()->route('dashboard');
+});
 
 Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
 Route::resource('elective-courses', ElectiveCourseController::class);
@@ -62,6 +69,13 @@ Route::prefix('student/skripsi')->group(function () {
         ->name('student.skripsi.history');
 });
 
+// Rute Jadwal Sidang Skripsi (sisi admin)
+Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
+Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+Route::get('/exam-schedules/{id}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
+Route::patch('/exam-schedules/{id}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
+Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
 use App\Http\Controllers\AnnouncementController;
 
 Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');

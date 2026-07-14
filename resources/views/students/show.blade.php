@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Student</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Detail Student')
+
+@push('styles')
+<style>
+* { box-sizing: border-box; }
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -55,10 +53,12 @@
             .hero { flex-direction: column; align-items: stretch; }
             .grid { grid-template-columns: 1fr; }
         }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="hero">
             <div>
                 <div class="crumb">
@@ -116,5 +116,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+
+@endsection

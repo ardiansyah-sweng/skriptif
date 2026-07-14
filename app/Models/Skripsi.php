@@ -14,6 +14,7 @@ class Skripsi extends Model
     protected $fillable = [
         'student_id',
         'supervisor_id',
+        'suggestion_supervisor',
         'title',
         'description',
         'status',

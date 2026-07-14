@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mata Kuliah Pilihan</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Mata Kuliah Pilihan')
+
+@push('styles')
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -177,10 +175,12 @@
             body { padding: 16px; }
             .search-box { display: none; }
         }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="page-head">
             <div>
                 <div class="crumb">
@@ -270,5 +270,5 @@
             });
         }
     </script>
-</body>
-</html>
+
+@endsection

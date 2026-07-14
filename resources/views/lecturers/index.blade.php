@@ -1,200 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Dosen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            color: #334155;
-        }
+@section('title', 'Data Dosen')
 
-        .main-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #0f172a;
-        }
+@push('styles')
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
+        .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
+        .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
+        .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; }
+        .table-custom th { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; }
+        .table-custom td { font-size: 14px; color: #334155; padding: 16px 20px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+        .meta-text { font-size: 12px; color: #64748b; }
+        .btn-detail-action { background-color: #64748b; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; text-decoration: none; }
+        .btn-detail-action:hover { background-color: #475569; color: white; }
+        .btn-edit-action { background-color: #3b82f6; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; text-decoration: none; }
+        .btn-edit-action:hover { background-color: #2563eb; color: white; }
+        .btn-delete-action { background-color: #ef4444; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; }
+        .btn-delete-action:hover { background-color: #dc2626; color: white; }
+        .search-input { border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 14px; font-size: 14px; width: 280px; }
+        .search-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .pagination-bar { padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+        .page-size-select { border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 8px; font-size: 14px; color: #334155; }
+        .page-size-select:focus { outline: none; border-color: #3b82f6; }
+        .page-btn { border: 1px solid #e2e8f0; background: #fff; color: #334155; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 5px 12px; }
+        .page-btn:hover:not(:disabled) { background-color: #f1f5f9; }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-btn.active { background-color: #3b82f6; border-color: #3b82f6; color: #fff; }
+        .btn-print-action { background-color: #ef4444; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 14px; border: none; text-decoration: none; }
+        .btn-print-action:hover { background-color: #dc2626; color: white; }
+</style>
+@endpush
 
-        .sub-title {
-            font-size: 14px;
-            color: #64748b;
-            margin-top: 4px;
-        }
+@section('content')
 
-        .content-card {
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-        }
-
-        .card-header-custom {
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-
-        .table-custom th {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #64748b;
-            background-color: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 14px 20px;
-        }
-
-        .table-custom td {
-            font-size: 14px;
-            color: #334155;
-            padding: 16px 20px;
-            border-bottom: 1px solid #e2e8f0;
-            vertical-align: middle;
-        }
-
-        .meta-text {
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .btn-detail-action {
-            background-color: #64748b;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
-            padding: 6px 14px;
-            border: none;
-            text-decoration: none;
-        }
-
-        .btn-detail-action:hover {
-            background-color: #475569;
-            color: white;
-        }
-
-        .btn-edit-action {
-            background-color: #3b82f6;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
-            padding: 6px 14px;
-            border: none;
-            text-decoration: none;
-        }
-
-        .btn-edit-action:hover {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .btn-delete-action {
-            background-color: #ef4444;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
-            padding: 6px 14px;
-            border: none;
-        }
-
-        .btn-delete-action:hover {
-            background-color: #dc2626;
-            color: white;
-        }
-
-        .search-input {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-size: 14px;
-            width: 280px;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .pagination-bar {
-            padding: 14px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-        }
-
-        .page-size-select {
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-size: 14px;
-            color: #334155;
-        }
-
-        .page-size-select:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
-        .page-btn {
-            border: 1px solid #e2e8f0;
-            background: #fff;
-            color: #334155;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
-            padding: 5px 12px;
-        }
-
-        .page-btn:hover:not(:disabled) {
-            background-color: #f1f5f9;
-        }
-
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .page-btn.active {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
-            color: #fff;
-        }
-
-        .btn-print-action {
-            background-color: #ef4444;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
-            padding: 6px 14px;
-            border: none;
-            text-decoration: none;
-        }
-
-        .btn-print-action:hover {
-            background-color: #dc2626;
-            color: white;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container py-5" style="max-width: 1200px;">
+<div class="container py-5" style="max-width: 1200px;">
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-4">
@@ -396,6 +236,5 @@
 
         renderTable();
     </script>
-</body>
 
-</html>
+@endsection

@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Mata Kuliah Pilihan</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+@extends('layouts.app')
+
+@section('title', 'Tambah Mata Kuliah Pilihan')
+
+@push('styles')
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -132,10 +130,12 @@
             font-weight: 500;
         }
         .btn-submit:hover { background: #0C447C; }
-    </style>
-</head>
-<body>
-    <div class="wrap">
+</style>
+@endpush
+
+@section('content')
+
+<div class="wrap">
         <div class="page-head">
             <div>
                 <div class="crumb">
@@ -182,5 +182,5 @@
             </form>
         </div>
     </div>
-</body>
-</html>
+
+@endsection

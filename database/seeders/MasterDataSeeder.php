@@ -9,11 +9,23 @@ class MasterDataSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        }
+
         DB::table('skripsi')->truncate();
         DB::table('lecturers')->truncate();
         DB::table('students')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        if ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        }
 
         // 1. Lecturers
         DB::table('lecturers')->insert([
