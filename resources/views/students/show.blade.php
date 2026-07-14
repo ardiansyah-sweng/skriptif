@@ -8,7 +8,7 @@
             <div>
                 <div class="crumb">
                     <i class="ti ti-home"></i>
-                    <a href="{{ route('dashboard') }}" style="color:#64748b;text-decoration:none">Beranda</a>
+                    <span style="color:#64748b;">Beranda</span>
                     <i class="ti ti-chevron-right"></i>
                     <a href="{{ route('students.index') }}" style="color:#64748b;text-decoration:none">Students</a>
                     <i class="ti ti-chevron-right"></i>
@@ -17,7 +17,7 @@
                 <h1>Detail Student</h1>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('dashboard') }}" class="back"><i class="ti ti-arrow-left"></i> Dashboard</a>
+                <a href="/dashboard" class="back"><i class="ti ti-arrow-left"></i> Dashboard</a>
                 <a href="{{ route('students.index') }}" class="back"><i class="ti ti-arrow-left"></i> Kembali</a>
             </div>
         </div>
