@@ -12,10 +12,11 @@ use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
+Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
+Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
@@ -23,6 +24,7 @@ Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.stor
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
+Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
 Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lecturers.show');
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
@@ -33,7 +35,7 @@ Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('lo
 Route::resource('log-books', LogBookController::class);
 Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
-// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada 
+// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
 Route::get('storage/attachments/{filename}', function ($filename) {
     $filename = basename($filename);
     $path = 'attachments/' . $filename;
@@ -60,10 +62,8 @@ Route::prefix('student/skripsi')->group(function () {
         ->name('student.skripsi.history');
 });
 
-// Rute Jadwal Sidang Skripsi (sisi admin)
-Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
-Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
-Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
-Route::get('/exam-schedules/{id}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
-Route::patch('/exam-schedules/{id}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
-Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
+use App\Http\Controllers\AnnouncementController;
+
+Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');

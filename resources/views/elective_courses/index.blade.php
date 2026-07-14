@@ -30,10 +30,10 @@
                 <i class="ti ti-books" style="font-size:13px"></i>
                 <strong>{{ $courses->count() }}</strong> mata kuliah tersedia
             </div>
-            <div class="search-box">
+            <form class="search-box" action="{{ route('elective-courses.search') }}" method="GET">
                 <i class="ti ti-search"></i>
-                <input type="text" id="q" placeholder="Cari nama mata kuliah..." oninput="filterTable()">
-            </div>
+                <input type="text" name="q" value="{{ $query ?? '' }}" placeholder="Cari nama mata kuliah...">
+            </form>
         </div>
 
         <div class="table-wrap">
@@ -67,6 +67,9 @@
                                 <td class="date-col">{{ \Carbon\Carbon::parse($course->timestamp)->format('d M Y') }}</td>
                                 <td>
                                     <div class="action-wrap">
+                                        <a href="{{ route('elective-courses.show', $course->id) }}" class="btn-edit">
+                                            <i class="ti ti-eye"></i> Detail
+                                        </a>
                                         <a href="{{ route('elective-courses.edit', $course->id) }}" class="btn-edit">
                                             <i class="ti ti-edit"></i> Edit
                                         </a>
