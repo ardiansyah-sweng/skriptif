@@ -87,6 +87,13 @@ class StudentController extends Controller
         return redirect()->route('students.index');
     }
 
+    public function printAll()
+    {
+        $students = $this->getStudents();
+
+        return view('students.print', compact('students'));
+    }
+
     /**
      * Import students from csv file.
      */
