@@ -22,6 +22,7 @@ class Student extends Model
         'name',
         'email',
         'year_entrance',
+        'study_program',
         'status',
     ];
     /**

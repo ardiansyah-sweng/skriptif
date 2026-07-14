@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'auth.login')->name('login');
 
 Route::resource('elective-courses', ElectiveCourseController::class);
-Route::resource('students', StudentController::class);
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
@@ -26,6 +25,11 @@ Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lect
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 Route::resource('log-books', LogBookController::class);
+// CETAK HARUS DI ATAS
+Route::get('/students/print', [StudentController::class, 'print'])
+    ->name('students.print');
+
+Route::resource('students', StudentController::class);
 
 // Group rute untuk student/skripsi
 Route::prefix('student/skripsi')->group(function () {

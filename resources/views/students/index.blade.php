@@ -151,7 +151,27 @@
 
         <div class="panel">
             <div class="toolbar">
-                <div class="count"><strong>{{ $students->count() }}</strong> records tersedia</div>
+                <div style="display:flex;gap:12px;align-items:center;">
+                    <div class="count"><strong>{{ $students->count() }}</strong> records tersedia</div>
+                    <form action="{{ route('students.print') }}" method="GET" target="_blank" style="display:flex;gap:8px;align-items:center;margin-left:12px;flex-wrap:wrap;">
+                        <select name="status" style="padding:8px;border-radius:8px;border:1px solid #dbe3ee;background:#fff;font-size:13px;">
+                            <option value="">Semua Status</option>
+                            <option value="active" @selected(request('status') === 'active')>Active</option>
+                            <option value="inactive" @selected(request('status') === 'inactive')>Inactive</option>
+                        </select>
+                        <input name="year_entrance" type="number" placeholder="Angkatan (tahun)" value="{{ request('year_entrance') }}" style="padding:8px;border-radius:8px;border:1px solid #dbe3ee;min-width:120px;" />
+                        <select name="search_field" style="padding:8px;border-radius:8px;border:1px solid #dbe3ee;background:#fff;font-size:13px;">
+                            <option value="">Pilih Kategori</option>
+                            <option value="student_id" @selected(request('search_field') === 'student_id')>NIM</option>
+                            <option value="name" @selected(request('search_field') === 'name')>Nama</option>
+                            <option value="email" @selected(request('search_field') === 'email')>Email</option>
+                        </select>
+                        <input name="search_value" type="text" placeholder="Nilai kategori" value="{{ request('search_value') }}" style="padding:8px;border-radius:8px;border:1px solid #dbe3ee;min-width:180px;" />
+                        <button type="submit" name="output" value="pdf" class="primary" style="padding:8px 12px; border-radius:10px; background:#0f172a;"> <i class="ti ti-file-text"></i> Export PDF</button>
+                        <button type="submit" name="output" value="csv" class="primary" style="padding:8px 12px; border-radius:10px; background:#047857;"> <i class="ti ti-file"></i> Export Excel</button>
+                    </form>
+                </div>
+
                 <div class="search">
                     <i class="ti ti-search" style="color:#94a3b8"></i>
                     <input type="text" id="studentSearch" placeholder="Cari nama, NIM, email..." oninput="filterStudents()">
@@ -207,6 +227,9 @@
                                             </a>
                                             <a href="{{ route('students.edit', $student->id) }}" class="btn-link">
                                                 <i class="ti ti-edit"></i> Edit
+                                            </a>
+                                            <a href="{{ route('students.print', ['filter' => 'student_id', 'value' => $student->student_id]) }}" target="_blank" class="btn">
+                                                <i class="ti ti-printer"></i> Cetak
                                             </a>
                                             <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Hapus data student ini?')">
                                                 @csrf
