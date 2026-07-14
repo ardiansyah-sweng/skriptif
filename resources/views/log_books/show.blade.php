@@ -41,7 +41,7 @@
     <div class="container py-5" style="max-width: 860px;">
         <div class="crumb">
             <i class="fa-solid fa-house"></i>
-            <a href="{{ route('dashboard') }}">Beranda</a>
+            <a href="/">Beranda</a>
             <i class="fa-solid fa-chevron-right" style="font-size: 8px;"></i>
             <a href="{{ route('log-books.index') }}">Log Book Bimbingan</a>
             <i class="fa-solid fa-chevron-right" style="font-size: 8px;"></i>
