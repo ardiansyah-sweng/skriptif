@@ -239,6 +239,9 @@
                                 <td class="date-col">{{ \Carbon\Carbon::parse($course->timestamp)->format('d M Y') }}</td>
                                 <td>
                                     <div class="action-wrap">
+                                         <a href="{{ route('elective-courses.show', $course->id) }}" class="btn-edit">
+                                            <i class="ti ti-eye"></i> Detail
+                                        </a>
                                         <a href="{{ route('elective-courses.edit', $course->id) }}" class="btn-edit">
                                             <i class="ti ti-edit"></i> Edit
                                         </a>
