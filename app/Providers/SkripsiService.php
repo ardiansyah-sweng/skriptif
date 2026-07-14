@@ -6,9 +6,25 @@ use App\Models\Skripsi;
 
 class SkripsiService
 {
-    public function getAllSkripsi()
+    public function getAllSkripsi($search = null, $status = null)
     {
-        return Skripsi::with(['student', 'supervisor'])->get();
+        $query = Skripsi::with(['student', 'supervisor']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhereHas('student', function ($student) use ($search) {
+                    $student->where('name', 'like', "%{$search}%")
+                            ->orWhere('student_id', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->latest()->get();
     }
 
     public function submitSkripsi(array $data)
