@@ -64,7 +64,6 @@
             </div>
         </div>
 
-        @if($student->skripsi)
         <div class="card" style="margin-top: 18px;">
             <div class="top" style="background: linear-gradient(135deg, rgba(250, 204, 21, 0.08), rgba(24, 95, 165, 0.08));">
                 <div class="avatar" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
@@ -72,6 +71,7 @@
                 </div>
                 <div>
                     <h2 class="name" style="font-size: 20px;">Pengajuan Skripsi</h2>
+                    @if($student->skripsi)
                     <div class="meta">Status: 
                         @if($student->skripsi->status == 'pending')
                             <span class="badge" style="background: #fef3c7; color: #92400e;">Menunggu Review</span>
@@ -81,13 +81,19 @@
                             <span class="badge" style="background: #fee2e2; color: #991b1b;">Ditolak</span>
                         @endif
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="body">
+                @if($student->skripsi)
                 <div class="grid">
                     <div class="item">
                         <div class="label">Judul</div>
                         <div class="value" style="font-weight: 600;">{{ $student->skripsi->title }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Deskripsi</div>
+                        <div class="value">{{ $student->skripsi->description ?? '-' }}</div>
                     </div>
                     <div class="item">
                         <div class="label">Pembimbing</div>
@@ -108,9 +114,17 @@
                     </div>
                     @endif
                 </div>
+                @else
+                <div style="text-align:center; padding: 32px 18px;">
+                    <i class="ti ti-book-off" style="font-size: 42px; color: #94a3b8; display: block; margin-bottom: 12px;"></i>
+                    <p style="color: #64748b; margin-bottom: 16px;">Mahasiswa ini belum memiliki pengajuan skripsi.</p>
+                    <a href="{{ route('student.skripsi.create') }}" class="primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #185FA5; color: #fff; border-radius: 12px; padding: 12px 16px; font-weight: 600; font-size: 14px;">
+                        <i class="ti ti-plus"></i> Ajukan Skripsi
+                    </a>
+                </div>
+                @endif
             </div>
         </div>
-        @endif
     </div>
 @endsection
 
