@@ -129,15 +129,25 @@
                 <h1>Data Students</h1>
                 <p class="sub">Kelola data mahasiswa dengan nomor induk, nama, email, angkatan, dan status aktif/inaktif.</p>
             </div>
+            
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <a href="{{ route('students.print') }}" class="btn" style="background:#fff; border:1px solid #dbe3ee; color:#334155;">
                     <i class="ti ti-printer"></i> Cetak Student
                 </a>
+                <button type="button" onclick="document.getElementById('importModal').style.display='flex'" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #fff; color: #185FA5; border-radius: 12px; padding: 12px 16px; font-weight: 600; border: 1px solid #dbe3ee; cursor: pointer; font-size: 14px;">
+                        <i class="ti ti-upload"></i> Import CSV
+                </button>
                 <a href="{{ route('students.create') }}" class="primary">
                     <i class="ti ti-plus"></i> Tambah Student
                 </a>
             </div>
         </div>
+
+        @if(session('success'))
+            <div style="background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; padding: 14px 18px; border-radius: 12px; margin-bottom: 20px; font-weight: 500;">
+                <i class="ti ti-check"></i> {{ session('success') }}
+            </div>
+        @endif
 
         <div class="stats">
             <div class="stat">
@@ -239,5 +249,24 @@
             });
         }
     </script>
+
+    <div id="importModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #fff; width: 100%; max-width: 420px; border-radius: 20px; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0; color: #1f2937;">Import Mahasiswa</h3>
+                <button type="button" onclick="document.getElementById('importModal').style.display='none'" style="border:none; background:#f1f5f9; border-radius:50%; width:32px; height:32px; cursor:pointer; color:#64748b; display:flex; align-items:center; justify-content:center;">&times;</button>
+            </div>
+            <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #475569;">Pilih File CSV (.csv)</label>
+                    <input type="file" name="file" accept=".csv" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px;">
+                </div>
+                <button type="submit" class="primary" style="width: 100%; justify-content: center; font-size: 15px; padding: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #185FA5; color: #fff; border-radius: 12px; font-weight: 600; border: none; cursor: pointer;">
+                    <i class="ti ti-upload"></i> Proses Import
+                </button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
