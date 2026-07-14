@@ -172,11 +172,11 @@
                 <div class="modal-body" style="padding: 1.5rem;">
                     <div class="mb-3">
                         <label class="form-label fw-medium text-muted small">Nama Mahasiswa</label>
-                        <input type="text" name="nama" class="form-control" placeholder="Cari nama mahasiswa..." value="{{ request('nama') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                        <input type="text" name="nama" class="form-control" placeholder="Cari nama mahasiswa..." value="{{ request('nama') }}" pattern="[A-Za-z\s]+" title="Hanya huruf yang diizinkan" oninput="this.setCustomValidity(''); if(!this.validity.valid) this.setCustomValidity('Hanya huruf yang diizinkan')" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-medium text-muted small">NIM</label>
-                        <input type="text" name="nim" class="form-control" placeholder="Cari NIM..." value="{{ request('nim') }}" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
+                        <input type="text" name="nim" class="form-control" placeholder="Cari NIM..." value="{{ request('nim') }}" pattern="[0-9]+" title="Hanya angka yang diizinkan" oninput="this.setCustomValidity(''); if(!this.validity.valid) this.setCustomValidity('Hanya angka yang diizinkan')" style="border-radius: 8px; padding: 10px 14px; font-size: 14px;">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-medium text-muted small">Dosen Pembimbing</label>
