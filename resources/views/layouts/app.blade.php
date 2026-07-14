@@ -7,6 +7,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
     <style>
         body {
@@ -164,6 +165,9 @@
             <a href="{{ route('skripsi.index') }}" class="{{ request()->routeIs('skripsi.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-book"></i> Data Skripsi
             </a>
+            <a href="{{ route('exam-schedules.index') }}" class="{{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-calendar-check"></i> Jadwal Sidang
+            </a>
 
             <div class="nav-section">Akademik</div>
             <a href="{{ route('students.index') }}" class="{{ request()->routeIs('students.*') ? 'active' : '' }}">
@@ -179,6 +183,11 @@
             <div class="nav-section">Bimbingan</div>
             <a href="{{ route('log-books.index') }}" class="{{ request()->routeIs('log-books.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-notebook"></i> Log Book
+            </a>
+
+            <div class="nav-section">Informasi</div>
+            <a href="{{ route('announcements.index') }}" class="{{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-bullhorn"></i> Pengumuman
             </a>
         </nav>
 
@@ -209,5 +218,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

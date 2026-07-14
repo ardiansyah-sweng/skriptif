@@ -20,6 +20,9 @@ Route::resource('students', StudentController::class);
 Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
 Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
+Route::resource('exam-schedules', ExamScheduleController::class)->except(['edit', 'update']);
+Route::patch('/exam-schedules/{schedule}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
+
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
