@@ -115,6 +115,54 @@
                 </div>
             </div>
         </div>
+
+        @if($student->skripsi)
+        <div class="card" style="margin-top: 18px;">
+            <div class="top" style="background: linear-gradient(135deg, rgba(250, 204, 21, 0.08), rgba(24, 95, 165, 0.08));">
+                <div class="avatar" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
+                    <i class="ti ti-book"></i>
+                </div>
+                <div>
+                    <h2 class="name" style="font-size: 20px;">Pengajuan Skripsi</h2>
+                    <div class="meta">Status:
+                        @if($student->skripsi->status == 'pending')
+                            <span class="badge" style="background: #fef3c7; color: #92400e;">Menunggu Review</span>
+                        @elseif($student->skripsi->status == 'approved')
+                            <span class="badge" style="background: #d1fae5; color: #065f46;">Disetujui</span>
+                        @else
+                            <span class="badge" style="background: #fee2e2; color: #991b1b;">Ditolak</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="grid">
+                    <div class="item">
+                        <div class="label">Judul</div>
+                        <div class="value" style="font-weight: 600;">{{ $student->skripsi->title }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Pembimbing</div>
+                        <div class="value">{{ $student->skripsi->supervisor->name ?? 'Belum ditentukan' }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Tanggal Pengajuan</div>
+                        <div class="value">{{ $student->skripsi->submission_date ? $student->skripsi->submission_date->format('d M Y') : '-' }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Tanggal Disetujui</div>
+                        <div class="value">{{ $student->skripsi->approval_date ? $student->skripsi->approval_date->format('d M Y') : '-' }}</div>
+                    </div>
+                    @if($student->skripsi->rejection_note)
+                    <div class="item" style="grid-column: 1 / -1;">
+                        <div class="label">Catatan Penolakan</div>
+                        <div class="value" style="color: #dc2626;">{{ $student->skripsi->rejection_note }}</div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </body>
 </html>
