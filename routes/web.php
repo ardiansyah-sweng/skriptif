@@ -67,3 +67,5 @@ use App\Http\Controllers\AnnouncementController;
 Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
 Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
 Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+Route::get('/announcements/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
+Route::put('/announcements/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
