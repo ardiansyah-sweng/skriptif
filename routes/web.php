@@ -15,8 +15,11 @@ use App\Http\Controllers\ExamScheduleController;
 
 Route::view('/', 'auth.login')->name('login');
 
+Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
 Route::resource('elective-courses', ElectiveCourseController::class);
 Route::resource('students', StudentController::class);
+Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
+Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
 Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
@@ -24,11 +27,14 @@ Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.stor
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
+Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
 Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lecturers.show');
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
 Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
 Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+// Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
+Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
 Route::resource('lecturer-topics', LecturerTopicController::class);
 Route::get('topic-board', [TopicBoardController::class, 'index'])->name('topic-board.index');
@@ -56,8 +62,8 @@ Route::prefix('student/skripsi')->group(function () {
         ->name('student.skripsi.history');
 });
 
-// Rute Jadwal Sidang Skripsi (sisi admin)
-Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
-Route::get('/exam-schedules/create', [ExamScheduleController::class, 'create'])->name('exam-schedules.create');
-Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
-Route::delete('/exam-schedules/{id}', [ExamScheduleController::class, 'destroy'])->name('exam-schedules.destroy');
+use App\Http\Controllers\AnnouncementController;
+
+Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');

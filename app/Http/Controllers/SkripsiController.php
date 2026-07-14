@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Providers\SkripsiService;
 use App\Models\Lecturer;
 use App\Models\Student;
+use App\Models\Skripsi;
 
 class SkripsiController extends Controller
 {
@@ -47,6 +48,26 @@ class SkripsiController extends Controller
             'title.required'         => 'Judul skripsi wajib diisi.',
             'description.required'   => 'Deskripsi skripsi wajib diisi.',
         ]);
+
+        $student = Student::find($validated['student_id']);
+        $lecturer = Lecturer::find($validated['supervisor_id']);
+
+        if ($student && $lecturer) {
+            $studentYearEntrance = $student->year_entrance;
+
+            $approvedSupervisorCount = Skripsi::where('supervisor_id', $lecturer->id)
+                ->where('status', 'approved')
+                ->whereHas('student', function ($q) use ($studentYearEntrance) {
+                    $q->where('year_entrance', $studentYearEntrance);
+                })
+                ->count();
+
+            if ($approvedSupervisorCount >= (int) ($lecturer->max_supervisors ?? 3)) {
+                return back()->withErrors([
+                    'supervisor_id' => 'Dosen pembimbing ini sudah mencapai batas maksimal mahasiswa dari angkatan ' . $studentYearEntrance . '.'
+                ])->withInput();
+            }
+        }
 
         $this->skripsiService->submitSkripsi($validated);
 

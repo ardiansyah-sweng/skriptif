@@ -52,7 +52,8 @@
             </div>
         @endif
         <div class="form-card">
-            <form action="{{ route('log-books.store') }}" method="POST">
+            <!-- enctype="multipart/form-data" ditambahkan agar form ini mendukung unggah berkas (file upload) -->
+            <form action="{{ route('log-books.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Student Select -->
                 <div class="mb-4">
@@ -107,6 +108,13 @@
                         <option value="rejected" {{ old('status') == 'rejected' ? 'selected' : '' }}>Rejected (Ditolak / Perlu Pengajuan Ulang)</option>
                     </select>
                     <div class="hint">Status default bimbingan adalah 'Pending' sampai disetujui oleh dosen pembimbing.</div>
+                </div>
+                <!-- Input file untuk mengunggah lampiran bimbingan (bersifat opsional) -->
+                <!-- Guidance Attachment (Optional) -->
+                <div class="mb-4">
+                    <label for="attachment" class="form-label">Lampiran Dokumen / Gambar (Opsional)</label>
+                    <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror" accept="image/*,application/pdf">
+                    <div class="hint">Format: JPEG, PNG, JPG, PDF. Maksimal 2MB.</div>
                 </div>
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-4">

@@ -116,6 +116,30 @@ class ExamScheduleController extends Controller
             ->with('success', 'Jadwal sidang berhasil ditambahkan.');
     }
 
+    public function show($id)
+    {
+        $schedule = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor'])
+            ->findOrFail($id);
+
+        return view('exam_schedules.show', compact('schedule'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['terjadwal', 'selesai', 'dibatalkan'])],
+        ], [
+            'status.required' => 'Status jadwal wajib dipilih.',
+            'status.in'       => 'Status jadwal tidak valid.',
+        ]);
+
+        $schedule = ExamSchedule::findOrFail($id);
+        $schedule->update($validated);
+
+        return redirect()->route('exam-schedules.show', $schedule->id)
+            ->with('success', 'Status jadwal sidang berhasil diperbarui.');
+    }
+
     public function destroy($id)
     {
         $schedule = ExamSchedule::findOrFail($id);

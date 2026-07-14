@@ -5,12 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\ImportStudentRequest;
+use App\Services\StudentService;
 
 class StudentController extends Controller
-{
+{   
+    private function getStudents()
+    {
+        return Student::query()
+            ->orderBy('year_entrance', 'desc')
+            ->orderBy('name', 'asc')
+            ->get();
+    }
+    
     public function index()
     {
-        $students = Student::query()->latest()->get();
+        $students = $this->getStudents();
 
         return view('students.index', compact('students'));
     }
@@ -75,5 +85,23 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()->route('students.index');
+    }
+
+    public function printAll()
+    {
+        $students = $this->getStudents();
+
+        return view('students.print', compact('students'));
+    }
+
+    /**
+     * Import students from csv file.
+     */
+    public function import(ImportStudentRequest $request, StudentService $service)
+    {
+        $service->importCsv($request->file('file'));
+        
+        return redirect()->route('students.index')
+                         ->with('success', 'Mahasiswa berhasil diimpor.');
     }
 }
