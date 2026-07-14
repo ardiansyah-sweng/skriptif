@@ -7,7 +7,7 @@ use App\Models\Skripsi;
 class SkripsiService
 {
     public function getAllSkripsi($search = null, $status = null)
-{
+    {
     $query = Skripsi::with(['student', 'supervisor']);
 
     if ($search) {
@@ -25,7 +25,7 @@ class SkripsiService
     }
 
     return $query->latest()->get();
-}
+    }
 
     public function submitSkripsi(array $data)
     {
