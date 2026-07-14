@@ -24,6 +24,7 @@ Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.stor
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
+Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
 Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lecturers.show');
 Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
@@ -34,7 +35,7 @@ Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('lo
 Route::resource('log-books', LogBookController::class);
 Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
-// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada 
+// Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
 Route::get('storage/attachments/{filename}', function ($filename) {
     $filename = basename($filename);
     $path = 'attachments/' . $filename;
