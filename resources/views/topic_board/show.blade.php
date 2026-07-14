@@ -13,8 +13,7 @@
         .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .status-tag { font-size: 12px; padding: 6px 10px; border-radius: 9999px; }
         .status-open { background: #ecfdf5; color: #166534; }
-        .status-filled { background: #e2e8f0; color: #475569; }
-        .status-closed { background: #fee2e2; color: #991b1b; }
+        .status-closed { background: #e2e8f0; color: #475569; }
     </style>
 </head>
 <body>
@@ -47,15 +46,11 @@
                 <div>
                     <h5>Deskripsi</h5>
                     <p>{{ $topic->description }}</p>
-                    <h6>Persyaratan</h6>
-                    <p style="white-space: pre-line;">{{ $topic->requirements ?? '-' }}</p>
                 </div>
                 <div class="border rounded-3 p-3 bg-light" style="min-width: 220px;">
                     <p class="mb-2"><strong>Status</strong></p>
                     <span class="status-tag status-{{ $topic->status }}">{{ ucfirst($topic->status) }}</span>
                     <hr>
-                    <p class="mb-1"><strong>Kapasitas</strong></p>
-                    <p>{{ $topic->applied_count }} / {{ $topic->capacity }}</p>
                     <p class="mb-1"><strong>Deadline</strong></p>
                     <p>{{ $topic->deadline ?? '-' }}</p>
                 </div>
@@ -69,20 +64,14 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label class="form-label">Nama Mahasiswa</label>
-                        <input type="text" name="applicant_name" class="form-control" value="{{ old('applicant_name') }}" required placeholder="Masukkan nama lengkap">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">NIM</label>
-                        <input type="text" name="applicant_nim" class="form-control" value="{{ old('applicant_nim') }}" required placeholder="Masukkan NIM">
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Keterangan Persyaratan</label>
-                        <textarea name="requirements_note" class="form-control" rows="4" placeholder="Tuliskan dokumen yang dilampirkan dan alasan sesuai syarat" required>{{ old('requirements_note') }}</textarea>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Dokumen Pendukung</label>
-                        <input type="file" name="document" class="form-control" required>
-                        <div class="form-text text-muted">Unggah dokumen sesuai syarat: PDF, DOC, DOCX, atau ZIP maksimal 10MB.</div>
+                        <select name="student_id" class="form-select" required>
+                            <option value="">-- Pilih Mahasiswa --</option>
+                            @foreach($students as $student)
+                                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
+                                    {{ $student->name }} ({{ $student->student_id }})
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-12">
                         <label class="form-label">Pesan / Catatan</label>

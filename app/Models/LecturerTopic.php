@@ -14,8 +14,6 @@ class LecturerTopic extends Model
         'description',
         'requirements',
         'status',
-        'capacity',
-        'applied_count',
         'deadline',
         'attachment',
     ];

@@ -19,7 +19,7 @@
     <div class="container py-5" style="max-width: 900px;">
         <div class="mb-4">
             <h1 class="main-title">Tambah Topik Dosen</h1>
-            <p class="text-muted">Masukkan informasi topik skripsi atau proyek yang ditawarkan oleh dosen.</p>
+            <p class="text-muted">Masukkan satu atau lebih topik skripsi yang ditawarkan oleh dosen.</p>
         </div>
 
         @if($errors->any())
@@ -48,38 +48,61 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Judul Topik</label>
-                    <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Deskripsi</label>
-                    <textarea name="description" class="form-control" rows="5" required>{{ old('description') }}</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Kebutuhan / Persyaratan</label>
-                    <textarea name="requirements" class="form-control" rows="3">{{ old('requirements') }}</textarea>
-                </div>
-
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Batas Waktu</label>
-                        <input type="date" name="deadline" class="form-control" value="{{ old('deadline') }}">
+                    <label class="form-label">Judul-Judul Topik</label>
+                    <div id="topics-container">
+                        <div class="topic-item border rounded-3 p-3 mb-3">
+                            <div class="mb-2">
+                                <input type="text" name="titles[]" class="form-control" placeholder="Judul topik 1" required>
+                            </div>
+                            <div class="mb-2">
+                                <textarea name="descriptions[]" class="form-control" rows="3" placeholder="Deskripsi topik 1" required></textarea>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <input type="date" name="deadlines[]" class="form-control" placeholder="Batas waktu (opsional)">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Kapasitas Mahasiswa</label>
-                        <input type="number" name="capacity" class="form-control" min="1" value="{{ old('capacity', 1) }}">
-                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addTopic()">
+                        <i class="fa-solid fa-plus"></i> Tambah Judul Lain
+                    </button>
                 </div>
 
                 <div class="mb-3 mt-4 d-flex gap-2">
                     <a href="{{ route('lecturer-topics.index') }}" class="btn btn-secondary">Kembali</a>
-                    <button type="submit" class="btn btn-primary">Simpan Topik</button>
+                    <button type="submit" class="btn btn-primary">Simpan Semua Topik</button>
                 </div>
             </form>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let topicCount = 1;
+        function addTopic() {
+            topicCount++;
+            const container = document.getElementById('topics-container');
+            const div = document.createElement('div');
+            div.className = 'topic-item border rounded-3 p-3 mb-3';
+            div.innerHTML = `
+                <div class="mb-2">
+                    <input type="text" name="titles[]" class="form-control" placeholder="Judul topik ${topicCount}" required>
+                </div>
+                <div class="mb-2">
+                    <textarea name="descriptions[]" class="form-control" rows="3" placeholder="Deskripsi topik ${topicCount}" required></textarea>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <input type="date" name="deadlines[]" class="form-control" placeholder="Batas waktu (opsional)">
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.topic-item').remove()">
+                            <i class="fa-solid fa-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    </script>
 </body>
-</html>
+</html>opic

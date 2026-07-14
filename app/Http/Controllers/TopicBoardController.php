@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Student;
 use App\Models\LecturerTopic;
+
 
 class TopicBoardController extends Controller
 {
@@ -28,6 +30,8 @@ class TopicBoardController extends Controller
     public function show($id)
     {
         $topic = LecturerTopic::with('lecturer')->findOrFail($id);
-        return view('topic_board.show', compact('topic'));
+        $students = Student::orderBy('name')->get();
+        return view('topic_board.show', compact('topic', 'students'));
     }
 }
+

@@ -28,52 +28,34 @@ class TopicApplicationController extends Controller
         $topic = LecturerTopic::findOrFail($topicId);
 
         $validated = $request->validate([
-            'applicant_name' => 'required|string|max:255',
-            'applicant_nim' => 'required|string|max:100',
-            'document' => 'required|file|mimes:pdf,doc,docx,zip|max:10240',
-            'requirements_note' => 'required|string|max:1000',
+            'student_id' => 'required|exists:students,id',
             'message' => 'nullable|string|max:1000',
         ], [
-            'applicant_name.required' => 'Nama mahasiswa wajib diisi.',
-            'applicant_nim.required' => 'NIM mahasiswa wajib diisi.',
-            'document.required' => 'Dokumen aplikasi wajib dilampirkan.',
-            'document.mimes' => 'Dokumen harus berupa PDF, DOC, DOCX, atau ZIP.',
-            'document.max' => 'Ukuran dokumen maksimal 10MB.',
-            'requirements_note.required' => 'Keterangan persyaratan wajib diisi.',
+            'student_id.required' => 'Pilih mahasiswa terlebih dahulu.',
+            'student_id.exists' => 'Mahasiswa tidak ditemukan.',
         ]);
-
+        $student = Student::findOrFail($validated['student_id']);
         $existing = TopicApplication::where('lecturer_topic_id', $topic->id)
-            ->where('applicant_nim', $validated['applicant_nim'])
+            ->where('student_id', $student->id)
             ->first();
-
         if ($existing) {
             return redirect()->route('topic-board.show', $topic->id)
-                ->with('error', 'Anda sudah mengajukan topik ini dengan NIM yang sama.');
+                ->with('error', 'Anda sudah mengajukan topik ini.');
         }
-
-        $path = $request->file('document')->store('topic_applications', 'public');
 
         TopicApplication::create([
             'lecturer_topic_id' => $topic->id,
-            'applicant_name' => $validated['applicant_name'],
-            'applicant_nim' => $validated['applicant_nim'],
-            'document_path' => $path,
-            'requirements_note' => $validated['requirements_note'],
+            'student_id' => $student->id,
+            'applicant_name' => $student->name,
+            'applicant_nim' => $student->student_id,
             'message' => $validated['message'] ?? null,
         ]);
-
-        $topic->increment('applied_count');
-        if ($topic->applied_count >= $topic->capacity) {
-            $topic->update(['status' => 'filled']);
-        }
-
+        $topic->update(['status' => 'closed']);
         return redirect()->route('topic-board.show', $topic->id)
             ->with('success', 'Pengajuan topik berhasil dikirim.');
     }
 
-    /**
-     * Approve an application (set status = approved)
-     */
+    
     public function approve(Request $request, $id)
     {
         $application = TopicApplication::with('lecturerTopic')->findOrFail($id);
@@ -83,19 +65,9 @@ class TopicApplicationController extends Controller
         }
 
         $application->update(['status' => 'approved']);
-
-        $topic = $application->lecturerTopic;
-        // jika kapasitas terpenuhi, set status filled
-        if ($topic->applied_count >= $topic->capacity) {
-            $topic->update(['status' => 'filled']);
-        }
-
         return redirect()->back()->with('success', 'Aplikasi disetujui.');
     }
 
-    /**
-     * Reject an application (set status = rejected) and decrement applied_count
-     */
     public function reject(Request $request, $id)
     {
         $application = TopicApplication::with('lecturerTopic')->findOrFail($id);
@@ -105,43 +77,14 @@ class TopicApplicationController extends Controller
         }
 
         $application->update(['status' => 'rejected']);
-
-        $topic = $application->lecturerTopic;
-        if ($topic->applied_count > 0) {
-            $topic->decrement('applied_count');
-        }
-
-        // jika sebelumnya filled dan sekarang ada ruang, buka kembali
-        if ($topic->status === 'filled' && $topic->applied_count < $topic->capacity) {
-            $topic->update(['status' => 'open']);
-        }
-
-        return redirect()->back()->with('success', 'Aplikasi ditolak.');
+        $application->lecturerTopic->update(['status' => 'open']);
+        return redirect()->back()->with('success', 'Aplikasi ditolak. Topik kembali dibuka.');
     }
 
-    /**
-     * Destroy (delete) an application. Decrements counts and re-opens topic if needed.
-     */
     public function destroy(Request $request, $id)
     {
         $application = TopicApplication::with('lecturerTopic')->findOrFail($id);
-
-        $topic = $application->lecturerTopic;
-
-        // If application was counted towards applied_count, decrement
-        if (in_array($application->status, ['pending', 'approved'])) {
-            if ($topic->applied_count > 0) {
-                $topic->decrement('applied_count');
-            }
-        }
-
-        // If topic was filled and now has space, set to open
-        if ($topic->status === 'filled' && $topic->applied_count < $topic->capacity) {
-            $topic->update(['status' => 'open']);
-        }
-
         $application->delete();
-
         return redirect()->back()->with('success', 'Aplikasi mahasiswa berhasil dihapus.');
     }
 }

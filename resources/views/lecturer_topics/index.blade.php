@@ -68,8 +68,7 @@
                             <th style="width: 24%">Judul Topik</th>
                             <th style="width: 20%">Dosen</th>
                             <th style="width: 12%">Status</th>
-                            <th style="width: 10%">Kapsitas</th>
-                            <th style="width: 29%" class="text-center">Aksi</th>
+                            <th style="width: 34%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,10 +84,7 @@
                                 <div class="meta-text">{{ $topic->lecturer->lecturer_id }}</div>
                             </td>
                             <td>
-                                <span class="badge bg-{{ $topic->status === 'open' ? 'success' : ($topic->status === 'filled' ? 'secondary' : 'danger') }}">{{ ucfirst($topic->status) }}</span>
-                            </td>
-                            <td>
-                                <div class="meta-text">{{ $topic->applied_count }} / {{ $topic->capacity }}</div>
+                                <span class="badge bg-{{ $topic->status === 'open' ? 'success' : 'secondary' }}">{{ ucfirst($topic->status) }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2 flex-wrap">
@@ -98,7 +94,7 @@
                                     <a href="{{ route('lecturer-topics.edit', $topic->id) }}" class="btn-edit-action">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </a>
-                                    <form action="{{ route('lecturer-topics.destroy', $topic->id) }}" method="POST" onsubmit="return confirm('Hapus topik ini?')">
+                                    <form action="{{ route('lecturer-topics.destroy', $topic->id) }}" method="POST" onsubmit="return confirm('Hapus topik \"{{ $topic->title }}\" secara permanen?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-delete-action">
@@ -110,7 +106,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
+                            <td colspan="5" class="text-center py-5 text-muted">
                                 Tidak ada topik dosen.
                             </td>
                         </tr>

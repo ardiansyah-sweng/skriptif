@@ -46,10 +46,8 @@
                 <div class="col-md-4">
                     <div class="border rounded-3 p-3 bg-light">
                         <p class="mb-2"><strong>Status</strong></p>
-                        <span class="badge bg-{{ $topic->status === 'open' ? 'success' : ($topic->status === 'filled' ? 'secondary' : 'danger') }} badge-status">{{ ucfirst($topic->status) }}</span>
+                        <span class="badge bg-{{ $topic->status === 'open' ? 'success' : 'secondary' }} badge-status">{{ ucfirst($topic->status) }}</span>
                         <hr>
-                        <p class="mb-1"><strong>Kapasitas</strong></p>
-                        <p>{{ $topic->applied_count }} / {{ $topic->capacity }}</p>
                         <p class="mb-1"><strong>Batas waktu</strong></p>
                         <p>{{ $topic->deadline ?? '-' }}</p>
                     </div>

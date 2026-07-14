@@ -22,28 +22,39 @@ class LecturerTopicController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'lecturer_id' => 'required|exists:lecturers,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|min:10',
-            'requirements' => 'nullable|string|max:1000',
-            'deadline' => 'nullable|date',
-            'capacity' => 'nullable|integer|min:1|max:50',
-            'attachment' => 'nullable|url',
+            'titles' => 'required|array|min:1',
+            'titles.*' => 'required|string|max:255',
+            'descriptions' => 'required|array|min:1',
+            'descriptions.*' => 'required|string|min:10',
+            'deadlines' => 'nullable|array',
+            'deadlines.*' => 'nullable|date',
         ], [
             'lecturer_id.required' => 'Dosen harus dipilih.',
             'lecturer_id.exists' => 'Dosen tidak ditemukan.',
-            'title.required' => 'Judul topik wajib diisi.',
-            'description.required' => 'Deskripsi topik wajib diisi.',
+            'titles.required' => 'Minimal satu judul topik wajib diisi.',
+            'titles.*.required' => 'Setiap judul topik wajib diisi.',
+            'descriptions.*.required' => 'Setiap deskripsi topik wajib diisi.',
+            'descriptions.*.min' => 'Deskripsi topik minimal 10 karakter.',
         ]);
+        $lecturerId = $request->lecturer_id;
+        $titles = $request->titles;
+        $descriptions = $request->descriptions;
+        $deadlines = $request->deadlines ?? [];
 
-        $validated['capacity'] = $validated['capacity'] ?? 1;
-        $validated['status'] = 'open';
-        $validated['applied_count'] = 0;
+        foreach ($titles as $i => $title) {
+            LecturerTopic::create([
+                'lecturer_id' => $lecturerId,
+                'title' => $title,
+                'description' => $descriptions[$i] ?? '',
+                'deadline' => $deadlines[$i] ?? null,
+                'status' => 'open',
+            ]);
+        }
 
-        LecturerTopic::create($validated);
-
-        return redirect()->route('lecturer-topics.index')->with('success', 'Topik dosen berhasil dibuat.');
+        $count = count($titles);
+        return redirect()->route('lecturer-topics.index')->with('success', "{$count} topik dosen berhasil dibuat.");
     }
 
     public function show($id)
@@ -69,7 +80,6 @@ class LecturerTopicController extends Controller
             'description' => 'required|string|min:10',
             'requirements' => 'nullable|string|max:1000',
             'deadline' => 'nullable|date',
-            'capacity' => 'required|integer|min:1|max:50',
             'attachment' => 'nullable|url',
             'status' => 'required|in:open,closed,filled',
         ]);

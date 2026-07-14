@@ -47,7 +47,6 @@
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-4">
                         <div class="text-muted">
-                            <div>Kapasitas: {{ $topic->applied_count }} / {{ $topic->capacity }}</div>
                             <div>Deadline: {{ $topic->deadline ?? '-' }}</div>
                         </div>
                         <a href="{{ route('topic-board.show', $topic->id) }}" class="btn btn-outline-primary">Lihat Detail</a>
