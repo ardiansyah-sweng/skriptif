@@ -18,7 +18,7 @@ class SkripsiController extends Controller
     }
 
     // Halaman admin: list semua skripsi
-   public function index(Request $request)
+    public function index(Request $request)
     {
         $search = $request->search;
         $status = $request->status;
@@ -33,19 +33,19 @@ class SkripsiController extends Controller
 
                 $rejected = $allSkripsi->where('status','rejected')->count();
 
-    return view(
-        'skripsi.index',
-        compact(
-            'allSkripsi',
-            'total',
-            'pending',
-            'approved',
-            'rejected',
-            'search',
-            'status'
-        )
-    );
-}
+        return view(
+            'skripsi.index',
+            compact(
+                'allSkripsi',
+                'total',
+                'pending',
+                'approved',
+                'rejected',
+                'search',
+                'status'
+            )
+        );
+    }
 
     // Halaman mahasiswa: form pengajuan
     public function create()
