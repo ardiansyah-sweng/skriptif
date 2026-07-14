@@ -5,16 +5,15 @@
 @push('styles')
 <style>
     :root {
-        --grad-blue: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --grad-green: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        --grad-orange: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        --grad-cyan: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        --grad-purple: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-        --grad-red: linear-gradient(135deg, #f5576c 0%, #ff6f45 100%);
-        --grad-yellow: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        --grad-teal: linear-gradient(135deg, #2af598 0%, #009efd 100%);
-        --grad-pink: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        --grad-indigo: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);
+        --soft-blue: #4a7cbf;
+        --soft-green: #4a9c6f;
+        --soft-teal: #4a9ca8;
+        --soft-purple: #7a6fa8;
+        --soft-coral: #c27a7a;
+        --soft-amber: #b8944a;
+        --soft-slate: #6a7a8a;
+        --soft-rose: #b87a8a;
+        --soft-cyan: #5a8a9a;
     }
 
     .card {
@@ -80,7 +79,7 @@
     }
 
     .welcome-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--soft-blue);
         border-radius: 20px;
         padding: 2rem 2.5rem;
         position: relative;
@@ -221,7 +220,7 @@
 
 <div class="row g-3 mb-4">
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-blue);">
+        <div class="stat-card" style="background: var(--soft-blue);">
             <div class="stat-overlay"><i class="fa-solid fa-user-graduate"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -235,7 +234,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-green);">
+        <div class="stat-card" style="background: var(--soft-green);">
             <div class="stat-overlay"><i class="fa-solid fa-chalkboard-user"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -249,7 +248,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-cyan);">
+        <div class="stat-card" style="background: var(--soft-teal);">
             <div class="stat-overlay"><i class="fa-solid fa-file-lines"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -263,7 +262,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-orange);">
+        <div class="stat-card" style="background: var(--soft-amber);">
             <div class="stat-overlay"><i class="fa-solid fa-book"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -277,7 +276,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-purple);">
+        <div class="stat-card" style="background: var(--soft-purple);">
             <div class="stat-overlay"><i class="fa-solid fa-calendar-check"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -291,7 +290,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-teal);">
+        <div class="stat-card" style="background: var(--soft-cyan);">
             <div class="stat-overlay"><i class="fa-solid fa-book-open"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -305,7 +304,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-pink);">
+        <div class="stat-card" style="background: var(--soft-rose);">
             <div class="stat-overlay"><i class="fa-solid fa-bullhorn"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
                 <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
@@ -319,7 +318,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
-        <div class="stat-card" style="background: var(--grad-indigo);">
+        <div class="stat-card" style="background: var(--soft-slate);">
             <div class="stat-overlay"><i class="fa-solid fa-layer-group"></i></div>
             <div class="stat-content">
                 <div class="d-flex flex-column gap-1">
