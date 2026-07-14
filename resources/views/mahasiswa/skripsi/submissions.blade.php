@@ -69,6 +69,7 @@
                             <th>Advisor</th>
                             <th>Status</th>
                             <th>Submission Date</th>
+                            <th>Dokumen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,6 +95,15 @@
                                 <span class="{{ $statusClass }}">{{ ucfirst($skripsi->status) }}</span>
                             </td>
                             <td>{{ $skripsi->submission_date ? $skripsi->submission_date->format('d M Y') : '-' }}</td>
+                            <td>
+                                @if($skripsi->document)
+                                    <a href="{{ asset('storage/' . $skripsi->document) }}" target="_blank">
+                                        <i class="ti ti-file-download"></i> Unduh
+                                    </a>
+                                @else
+                                    <span style="color:#9ca3af;">-</span>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

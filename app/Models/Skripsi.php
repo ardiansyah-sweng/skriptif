@@ -21,6 +21,7 @@ class Skripsi extends Model
         'submission_date',
         'approval_date',
         'elective_courses',
+        'document',
     ];
 
     protected $casts = [
