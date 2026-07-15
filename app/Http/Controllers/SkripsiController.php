@@ -50,9 +50,7 @@ class SkripsiController extends Controller
     // Halaman mahasiswa: form pengajuan
     public function create()
     {
-        $lecturers = Lecturer::all();
-        $students  = Student::where('status', 'active')->get();
-        return view('skripsi.create', compact('lecturers', 'students'));
+        return redirect()->route('student.skripsi.create');
     }
 
     // Proses submit pengajuan dari mahasiswa

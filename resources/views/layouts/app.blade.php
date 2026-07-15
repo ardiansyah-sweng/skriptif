@@ -185,6 +185,17 @@
                 <i class="fa-solid fa-notebook"></i> Log Book
             </a>
 
+            <div class="nav-section">Mahasiswa</div>
+            <a href="{{ route('student.skripsi.create') }}" class="{{ request()->routeIs('student.skripsi.create') ? 'active' : '' }}">
+                <i class="fa-solid fa-pen-to-square"></i> Ajukan Skripsi
+            </a>
+            <a href="{{ route('student.skripsi.history') }}" class="{{ request()->routeIs('student.skripsi.history') ? 'active' : '' }}">
+                <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pengajuan
+            </a>
+            <a href="{{ route('student.skripsi.index') }}" class="{{ request()->routeIs('student.skripsi.index') ? 'active' : '' }}">
+                <i class="fa-solid fa-book"></i> Skripsiku
+            </a>
+
             <div class="nav-section">Informasi</div>
             <a href="{{ route('announcements.index') }}" class="{{ request()->routeIs('announcements.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-bullhorn"></i> Pengumuman
@@ -219,6 +230,21 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function() {
+            var nav = document.querySelector('.sidebar-nav');
+            if (nav) {
+                var saved = sessionStorage.getItem('sidebarScroll');
+                if (saved) nav.scrollTop = parseInt(saved);
+            }
+            document.querySelectorAll('.sidebar-nav a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    var n = document.querySelector('.sidebar-nav');
+                    if (n) sessionStorage.setItem('sidebarScroll', n.scrollTop);
+                });
+            });
+        })();
+    </script>
     @stack('scripts')
 </body>
 </html>

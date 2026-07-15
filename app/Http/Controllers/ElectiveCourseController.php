@@ -25,7 +25,7 @@ class ElectiveCourseController extends Controller
             'courses'   => $request->courses,
             'timestamp' => now(),
         ]);
-        return redirect()->route('elective-courses.index');
+        return redirect()->route('elective-courses.index')->with('success', 'Mata kuliah berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -64,12 +64,12 @@ class ElectiveCourseController extends Controller
         DB::table('elective_courses')->where('id', $id)->update([
             'courses' => $request->courses,
         ]);
-        return redirect()->route('elective-courses.index');
+        return redirect()->route('elective-courses.index')->with('success', 'Mata kuliah berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         DB::table('elective_courses')->where('id', $id)->delete();
-        return redirect()->route('elective-courses.index');
+        return redirect()->route('elective-courses.index')->with('success', 'Mata kuliah berhasil dihapus.');
     }
 }

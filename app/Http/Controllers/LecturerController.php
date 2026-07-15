@@ -59,7 +59,7 @@ class LecturerController extends Controller
             'updated_at'  => now(),
         ]);
 
-        return redirect()->route('lecturers.index');
+        return redirect()->route('lecturers.index')->with('success', 'Dosen berhasil diperbarui.');
     }
 
     public function store(Request $request)
@@ -86,12 +86,12 @@ class LecturerController extends Controller
             'updated_at'  => now(),
         ]);
 
-        return redirect()->route('lecturers.index');
+        return redirect()->route('lecturers.index')->with('success', 'Dosen berhasil ditambahkan.');
     }
 
     public function destroy($id)
     {
         DB::table('lecturers')->where('id', $id)->delete();
-        return redirect()->route('lecturers.index');
+        return redirect()->route('lecturers.index')->with('success', 'Dosen berhasil dihapus.');
     }
 }

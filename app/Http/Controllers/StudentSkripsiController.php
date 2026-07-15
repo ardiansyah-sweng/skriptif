@@ -105,6 +105,11 @@ class StudentSkripsiController extends Controller
     }
 }
 
+    public function index()
+    {
+        return redirect()->route('student.skripsi.history');
+    }
+
     public function history()
     {
         $student = Student::first();

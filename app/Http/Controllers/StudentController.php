@@ -42,7 +42,7 @@ class StudentController extends Controller
 
         Student::create($validated);
 
-        return redirect()->route('students.index');
+        return redirect()->route('students.index')->with('success', 'Mahasiswa berhasil ditambahkan.');
     }
 
     public function show(Student $student)
@@ -79,14 +79,14 @@ class StudentController extends Controller
 
         $student->update($validated);
 
-        return redirect()->route('students.index');
+        return redirect()->route('students.index')->with('success', 'Mahasiswa berhasil diperbarui.');
     }
 
     public function destroy(Student $student)
     {
         $student->delete();
 
-        return redirect()->route('students.index');
+        return redirect()->route('students.index')->with('success', 'Mahasiswa berhasil dihapus.');
     }
 
     public function printAll()
