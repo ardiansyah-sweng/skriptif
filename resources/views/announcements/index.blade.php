@@ -1,26 +1,25 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengumuman</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
+@extends('layouts.app')
+
+@section('title', 'Pengumuman')
+
+@push('styles')
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
             }
         }
-    </script>
-</head>
-<body class="bg-gray-50 font-sans text-gray-800 min-h-screen">
+    }
+</script>
+@endpush
 
-    <div class="max-w-4xl mx-auto px-4 py-10">
+@section('content')
+    <div class="max-w-4xl mx-auto">
 
         {{-- Header --}}
         <div class="flex items-center justify-between mb-8">
@@ -38,13 +37,6 @@
                 Tambah Pengumuman
             </button>
         </div>
-
-        {{-- Alert Success --}}
-        @if(session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-lg mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
 
         {{-- Modal Form Tambah --}}
         <div id="modalTambah" class="hidden fixed inset-0 z-50 flex items-center justify-center">
@@ -264,7 +256,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Edit Modal Handlers
             const editButtons = document.querySelectorAll('.edit-btn');
             const modalEdit = document.getElementById('modalEdit');
             const editForm = document.getElementById('editForm');
@@ -290,5 +281,4 @@
             });
         });
     </script>
-</body>
-</html>
+@endsection
