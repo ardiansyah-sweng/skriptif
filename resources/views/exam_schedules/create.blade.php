@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Jadwal Sidang - Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
-        .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
-        .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
-        .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .meta-text { font-size: 12px; color: #64748b; }
-        .btn-back { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
-        .btn-back:hover { color: #1d4ed8; text-decoration: underline; }
-        .btn-submit { background-color: #2563eb; color: white; font-size: 14px; font-weight: 500; border-radius: 8px; padding: 10px 24px; border: none; }
-        .btn-submit:hover { background-color: #1d4ed8; color: white; }
-    </style>
-</head>
-<body>
-    <div class="container py-5" style="max-width: 800px;">
+@extends('layouts.app')
+
+@section('title', 'Tambah Jadwal Sidang')
+
+@push('styles')
+<style>
+    .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
+    .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
+    .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
+    .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; }
+    .meta-text { font-size: 12px; color: #64748b; }
+    .btn-back { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
+    .btn-back:hover { color: #1d4ed8; text-decoration: underline; }
+    .btn-submit { background-color: #2563eb; color: white; font-size: 14px; font-weight: 500; border-radius: 8px; padding: 10px 24px; border: none; }
+    .btn-submit:hover { background-color: #1d4ed8; color: white; }
+</style>
+@endpush
+
+@section('content')
+    <div style="max-width: 800px;">
 
         <div class="mb-4">
             <a href="{{ route('exam-schedules.index') }}" class="btn-back">
@@ -42,7 +38,6 @@
                 <form action="{{ route('exam-schedules.store') }}" method="POST">
                     @csrf
 
-                    {{-- Skripsi --}}
                     <div class="mb-3">
                         <label for="skripsi_id" class="form-label small fw-bold text-secondary">
                             Skripsi <span class="text-danger">*</span>
@@ -61,7 +56,6 @@
                         @enderror
                     </div>
 
-                    {{-- Jenis Sidang --}}
                     <div class="mb-3">
                         <label for="jenis_sidang" class="form-label small fw-bold text-secondary">
                             Jenis Sidang <span class="text-danger">*</span>
@@ -76,7 +70,6 @@
                         @enderror
                     </div>
 
-                    {{-- Tanggal Sidang --}}
                     <div class="mb-3">
                         <label for="tanggal_sidang" class="form-label small fw-bold text-secondary">
                             Tanggal Sidang <span class="text-danger">*</span>
@@ -89,7 +82,6 @@
                         @enderror
                     </div>
 
-                    {{-- Jam Mulai & Jam Selesai --}}
                     <div class="row mb-3">
                         <div class="col-6">
                             <label for="jam_mulai" class="form-label small fw-bold text-secondary">
@@ -115,7 +107,6 @@
                         </div>
                     </div>
 
-                    {{-- Ruang --}}
                     <div class="mb-3">
                         <label for="ruang" class="form-label small fw-bold text-secondary">
                             Ruang Sidang <span class="text-danger">*</span>
@@ -128,7 +119,6 @@
                         @enderror
                     </div>
 
-                    {{-- Catatan --}}
                     <div class="mb-4">
                         <label for="catatan" class="form-label small fw-bold text-secondary">
                             Catatan <span class="text-muted">(opsional)</span>
@@ -148,7 +138,4 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

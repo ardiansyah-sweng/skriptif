@@ -47,6 +47,8 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
+        $student->load('skripsi.supervisor');
+
         return view('students.show', compact('student'));
     }
 
