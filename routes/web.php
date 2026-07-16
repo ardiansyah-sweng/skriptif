@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
     Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
     Route::resource('log-books', LogBookController::class);
+    Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
+        ->name('elective-courses.import');
 
     // Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
     Route::get('storage/attachments/{filename}', function ($filename) {
@@ -69,9 +71,7 @@ Route::middleware('auth')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
-});
-
-use App\Http\Controllers\AnnouncementController;
+    });
 
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
