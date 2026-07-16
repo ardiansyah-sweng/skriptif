@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
     
     Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
         ->name('elective-courses.import');
-});
+
         // TETAP CREATE: Tidak jadi diubah
         Route::get('/create', [StudentSkripsiController::class, 'create'])
             ->name('student.skripsi.create');
