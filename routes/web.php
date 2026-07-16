@@ -61,6 +61,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [StudentSkripsiController::class, 'index'])
             ->name('student.skripsi.index');
 
+    // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
+    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
+        ->name('student.skripsi.history');
+    
+    Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
+        ->name('elective-courses.import');
+});
         // TETAP CREATE: Tidak jadi diubah
         Route::get('/create', [StudentSkripsiController::class, 'create'])
             ->name('student.skripsi.create');
