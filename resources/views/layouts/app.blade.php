@@ -203,9 +203,12 @@
         </nav>
 
         <div class="sidebar-footer">
-            <a href="{{ route('login') }}">
-                <i class="fa-solid fa-right-from-bracket"></i> Log Out
-            </a>
+            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit" style="background:none;border:none;color:inherit;width:100%;text-align:left;padding:8px 18px;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                </button>
+            </form>
         </div>
     </aside>
 
