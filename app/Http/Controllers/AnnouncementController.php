@@ -48,6 +48,31 @@ class AnnouncementController extends Controller
             ->with('success', 'Pengumuman berhasil ditambahkan.');
     }
 
+    public function show($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+        return view('announcements.show', compact('announcement'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title'    => 'required|string|max:255',
+            'content'  => 'required|string',
+            'audience' => 'required|in:all,admin,dosen,mahasiswa',
+        ]);
+
+        $announcement = Announcement::findOrFail($id);
+        $announcement->update([
+            'title'    => $request->title,
+            'content'  => $request->content,
+            'audience' => $request->audience,
+        ]);
+
+        return redirect()->route('announcements.index')
+            ->with('success', 'Pengumuman berhasil diperbarui.');
+    }
+
     public function destroy($id)
     {
         $announcement = Announcement::findOrFail($id);
