@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
     Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
     Route::resource('log-books', LogBookController::class);
+    Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
+        ->name('elective-courses.import');
 
     // Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
     Route::get('storage/attachments/{filename}', function ($filename) {
@@ -59,6 +61,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [StudentSkripsiController::class, 'index'])
             ->name('student.skripsi.index');
 
+    // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
+    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
+        ->name('student.skripsi.history');
+    
+    Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
+        ->name('elective-courses.import');
+
         // TETAP CREATE: Tidak jadi diubah
         Route::get('/create', [StudentSkripsiController::class, 'create'])
             ->name('student.skripsi.create');
@@ -66,9 +75,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [StudentSkripsiController::class, 'store'])
             ->name('student.skripsi.store');
 
-        // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
-        Route::get('/submissions', [StudentSkripsiController::class, 'history'])
-            ->name('student.skripsi.history');
+    // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
+    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
+        ->name('student.skripsi.history');
     });
 
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');

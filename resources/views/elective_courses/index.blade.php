@@ -195,6 +195,9 @@
                 <i class="ti ti-search"></i>
                 <input type="text" name="q" value="{{ $query ?? '' }}" placeholder="Cari nama mata kuliah...">
             </form>
+            <button onclick="document.getElementById('importModal').style.display='flex'" class="btn-primary">
+                <i class="ti ti-upload"></i> Import CSV
+            </button>
         </div>
 
         <div class="table-wrap">
@@ -251,6 +254,22 @@
         </div>
     </div>
 
+    <div id="importModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #fff; width: 100%; max-width: 420px; border-radius: 20px; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h3 style="margin: 0; color: #1f2937;">Import Mata Kuliah</h3>
+                <button type="button" onclick="document.getElementById('importModal').style.display='none'" style="border:none; background:#f1f5f9; border-radius:50%; width:32px; height:32px; cursor:pointer;">&times;</button>
+            </div>
+            <form action="{{ route('elective-courses.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="file" accept=".csv" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 10px;">
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">
+                    <i class="ti ti-upload"></i> Proses Import
+                </button>
+            </form>
+        </div>
+    </div>
+    
     <script>
         function filterTable() {
             const q = document.getElementById('q').value.toLowerCase();
