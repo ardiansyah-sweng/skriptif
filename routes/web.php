@@ -16,6 +16,14 @@ Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -25,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
     Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
 
-    Route::resource('exam-schedules', ExamScheduleController::class)->except(['edit', 'update']);
+    Route::resource('exam-schedules', ExamScheduleController::class);
     Route::patch('/exam-schedules/{schedule}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
 
     Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');

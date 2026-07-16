@@ -150,6 +150,82 @@ class ExamScheduleController extends Controller
         return view('exam_schedules.show', compact('schedule'));
     }
 
+    public function edit($id)
+    {
+        $schedule = ExamSchedule::with('skripsi.student')->findOrFail($id);
+
+        $approvedSkripsi = Skripsi::where('status', 'approved')
+            ->whereHas('student', function ($query) {
+                $query->where('is_lulus', false);
+            })
+            ->whereDoesntHave('examSchedules', function ($query) use ($schedule) {
+                $query->where('jenis_sidang', 'pendadaran');
+            })
+            ->orWhere('id', $schedule->skripsi_id)
+            ->with('student')
+            ->get();
+
+        return view('exam_schedules.edit', compact('schedule', 'approvedSkripsi'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $schedule = ExamSchedule::findOrFail($id);
+
+        $request->validate([
+            'skripsi_id'     => 'required|exists:skripsi,id',
+            'jenis_sidang'   => [
+                'required',
+                'in:proposal,pendadaran',
+                Rule::unique('exam_schedules')->where(function ($query) use ($request) {
+                    return $query->where('skripsi_id', $request->skripsi_id);
+                })->ignore($schedule->id),
+            ],
+            'tanggal_sidang' => 'required|date',
+            'jam_mulai'      => 'required|date_format:H:i',
+            'jam_selesai'    => 'required|date_format:H:i|after:jam_mulai',
+            'ruang'          => 'required|string|max:100',
+            'catatan'        => 'nullable|string',
+        ], [
+            'skripsi_id.required'          => 'Skripsi wajib dipilih.',
+            'skripsi_id.exists'            => 'Skripsi tidak valid.',
+            'jenis_sidang.required'        => 'Jenis sidang wajib dipilih.',
+            'jenis_sidang.in'              => 'Jenis sidang tidak valid.',
+            'jenis_sidang.unique'          => 'Mahasiswa sudah menjadwalkan sidang jenis ini.',
+            'tanggal_sidang.required'      => 'Tanggal sidang wajib diisi.',
+            'jam_mulai.required'           => 'Jam mulai wajib diisi.',
+            'jam_selesai.required'         => 'Jam selesai wajib diisi.',
+            'jam_selesai.after'            => 'Jam selesai harus setelah jam mulai.',
+            'ruang.required'               => 'Ruang sidang wajib diisi.',
+        ]);
+
+        $overlapCount = ExamSchedule::where('ruang', $request->ruang)
+            ->where('tanggal_sidang', $request->tanggal_sidang)
+            ->where('id', '!=', $schedule->id)
+            ->where(function ($query) use ($request) {
+                $query->where('jam_mulai', '<', $request->jam_selesai)
+                      ->where('jam_selesai', '>', $request->jam_mulai);
+            })
+            ->count();
+
+        if ($overlapCount > 0) {
+            return back()->withErrors(['ruang' => 'Ruangan sudah terpakai pada waktu tersebut.'])->withInput();
+        }
+
+        $schedule->update($request->only([
+            'skripsi_id',
+            'jenis_sidang',
+            'tanggal_sidang',
+            'jam_mulai',
+            'jam_selesai',
+            'ruang',
+            'catatan',
+        ]));
+
+        return redirect()->route('exam-schedules.show', $schedule->id)
+            ->with('success', 'Jadwal sidang berhasil diperbarui.');
+    }
+
     public function updateStatus(Request $request, $id)
     {
         $validated = $request->validate([
