@@ -9,11 +9,37 @@ use Illuminate\Validation\Rule;
 
 class ExamScheduleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $schedules = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor'])
-            ->latest('tanggal_sidang')
-            ->get();
+        $query = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor']);
+
+        if ($request->filled('nama')) {
+            $query->whereHas('skripsi.student', function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->nama}%");
+            });
+        }
+
+        if ($request->filled('nim')) {
+            $query->whereHas('skripsi.student', function ($q) use ($request) {
+                $q->where('student_id', 'like', "%{$request->nim}%");
+            });
+        }
+
+        if ($request->filled('dosen_penguji')) {
+            $query->whereHas('skripsi.supervisor', function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->dosen_penguji}%");
+            });
+        }
+
+        if ($request->filled('tanggal')) {
+            $query->where('tanggal_sidang', $request->tanggal);
+        }
+
+        if ($request->filled('ruang')) {
+            $query->where('ruang', 'like', "%{$request->ruang}%");
+        }
+
+        $schedules = $query->latest('tanggal_sidang')->get();
 
         return view('exam_schedules.index', compact('schedules'));
     }
@@ -114,6 +140,30 @@ class ExamScheduleController extends Controller
 
         return redirect()->route('exam-schedules.index')
             ->with('success', 'Jadwal sidang berhasil ditambahkan.');
+    }
+
+    public function show($id)
+    {
+        $schedule = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor'])
+            ->findOrFail($id);
+
+        return view('exam_schedules.show', compact('schedule'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['terjadwal', 'selesai', 'dibatalkan'])],
+        ], [
+            'status.required' => 'Status jadwal wajib dipilih.',
+            'status.in'       => 'Status jadwal tidak valid.',
+        ]);
+
+        $schedule = ExamSchedule::findOrFail($id);
+        $schedule->update($validated);
+
+        return redirect()->route('exam-schedules.show', $schedule->id)
+            ->with('success', 'Status jadwal sidang berhasil diperbarui.');
     }
 
     public function destroy($id)
