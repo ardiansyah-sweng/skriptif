@@ -189,6 +189,20 @@
             <a href="{{ route('announcements.index') }}" class="{{ request()->routeIs('announcements.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-bullhorn"></i> Pengumuman
             </a>
+
+            <div class="nav-section">Asisten & Utilitas</div>
+            <a href="{{ route('utilities.similarity') }}" class="{{ request()->routeIs('utilities.similarity*') ? 'active' : '' }}">
+                <i class="fa-solid fa-magnifying-glass-chart"></i> Deteksi Duplikasi
+            </a>
+            <a href="{{ route('utilities.supervisor') }}" class="{{ request()->routeIs('utilities.supervisor*') ? 'active' : '' }}">
+                <i class="fa-solid fa-user-gear"></i> Plotting Pembimbing
+            </a>
+            <a href="{{ route('utilities.progress') }}" class="{{ request()->routeIs('utilities.progress*') ? 'active' : '' }}">
+                <i class="fa-solid fa-triangle-exclamation"></i> Pelacak Kritis
+            </a>
+            <a href="{{ route('utilities.repository') }}" class="{{ request()->routeIs('utilities.repository*') ? 'active' : '' }}">
+                <i class="fa-solid fa-file-arrow-down"></i> Unduh Panduan
+            </a>
         </nav>
 
         <div class="sidebar-footer">
