@@ -7,6 +7,7 @@ use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\StudentSkripsiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
@@ -18,6 +19,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/students/dashboard', [StudentDashboardController::class, 'index'])->name('students.dashboard');
 
     Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
     Route::resource('elective-courses', ElectiveCourseController::class);

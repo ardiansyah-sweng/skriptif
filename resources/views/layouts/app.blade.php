@@ -158,7 +158,15 @@
 
         <nav class="sidebar-nav">
             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i class="fa-solid fa-gauge"></i> Dashboard
+                <i class="fa-solid fa-gauge"></i> Dashboard Admin
+            </a>
+
+            <div class="nav-section">Portal Mahasiswa</div>
+            <a href="{{ route('students.dashboard') }}" class="{{ request()->routeIs('students.dashboard') ? 'active' : '' }}">
+                <i class="fa-solid fa-house-user"></i> Dashboard Mahasiswa
+            </a>
+            <a href="{{ route('student.skripsi.index') }}" class="{{ request()->routeIs('student.skripsi.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-file-pen"></i> Pengajuan Skripsi
             </a>
 
             <div class="nav-section">Skripsi</div>
