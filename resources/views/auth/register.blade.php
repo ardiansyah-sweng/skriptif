@@ -136,6 +136,22 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="student_id">Student ID (NIM)</label>
+                    <div class="input-wrap">
+                        <i class="ti ti-id"></i>
+                        <input type="text" id="student_id" name="student_id" placeholder="2100012345" value="{{ old('student_id') }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="year_entrance">Angkatan</label>
+                    <div class="input-wrap">
+                        <i class="ti ti-calendar"></i>
+                        <input type="number" id="year_entrance" name="year_entrance" placeholder="2021" value="{{ old('year_entrance', date('Y')) }}" required min="2000" max="2100">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="email">Email Address</label>
                     <div class="input-wrap">
                         <i class="ti ti-mail"></i>

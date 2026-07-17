@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -50,9 +51,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email|unique:students,email',
+            'password'      => 'required|string|min:8|confirmed',
+            'student_id'    => 'required|string|max:50|unique:students,student_id',
+            'year_entrance' => 'required|integer|digits:4',
         ]);
 
         $user = User::create([
@@ -60,6 +63,15 @@ class AuthController extends Controller
             'email'    => $validated['email'],
             'password' => $validated['password'],
             'role'     => 'mahasiswa',
+        ]);
+
+        Student::create([
+            'student_id'    => $validated['student_id'],
+            'name'          => $validated['name'],
+            'email'         => $validated['email'],
+            'year_entrance' => (int)$validated['year_entrance'],
+            'status'        => 'active',
+            'is_lulus'      => false,
         ]);
 
         Auth::login($user);
