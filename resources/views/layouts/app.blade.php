@@ -161,6 +161,9 @@
                 <i class="fa-solid fa-gauge"></i> Dashboard
             </a>
 
+            @php $role = Auth::user()->role ?? 'mahasiswa'; @endphp
+
+            @if($role === 'admin' || $role === 'dosen')
             <div class="nav-section">Skripsi</div>
             <a href="{{ route('skripsi.index') }}" class="{{ request()->routeIs('skripsi.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-book"></i> Data Skripsi
@@ -168,7 +171,9 @@
             <a href="{{ route('exam-schedules.index') }}" class="{{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-calendar-check"></i> Jadwal Sidang
             </a>
+            @endif
 
+            @if($role === 'admin')
             <div class="nav-section">Akademik</div>
             <a href="{{ route('students.index') }}" class="{{ request()->routeIs('students.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-graduate"></i> Mahasiswa
@@ -179,11 +184,24 @@
             <a href="{{ route('elective-courses.index') }}" class="{{ request()->routeIs('elective-courses.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-book-open"></i> Mata Kuliah Pilihan
             </a>
+            @endif
 
+            @if($role === 'admin' || $role === 'dosen')
             <div class="nav-section">Bimbingan</div>
             <a href="{{ route('log-books.index') }}" class="{{ request()->routeIs('log-books.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-notebook"></i> Log Book
             </a>
+            @endif
+
+            @if($role === 'mahasiswa')
+            <div class="nav-section">Skripsi</div>
+            <a href="{{ route('student.skripsi.create') }}" class="{{ request()->routeIs('student.skripsi.create') ? 'active' : '' }}">
+                <i class="fa-solid fa-file-plus"></i> Ajukan Skripsi
+            </a>
+            <a href="{{ route('student.skripsi.history') }}" class="{{ request()->routeIs('student.skripsi.history') ? 'active' : '' }}">
+                <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Skripsi
+            </a>
+            @endif
 
             <div class="nav-section">Informasi</div>
             <a href="{{ route('announcements.index') }}" class="{{ request()->routeIs('announcements.*') ? 'active' : '' }}">
@@ -192,6 +210,9 @@
         </nav>
 
         <div class="sidebar-footer">
+            <div class="small px-3 pb-2" style="color:rgba(255,255,255,0.4);font-size:11px;">
+                {{ Auth::user()->name }} ({{ ucfirst($role) }})
+            </div>
             <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" style="background:none;border:none;color:inherit;width:100%;text-align:left;padding:8px 18px;">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Thesis Management System</title>
+    <title>Forgot Password — Thesis Management System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -91,12 +91,20 @@
             border: 0.5px solid;
         }
         .alert-danger { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .alert-success { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
         .footer-note {
             text-align: center;
             font-size: 12px;
             color: #9ca3af;
             margin-top: 20px;
         }
+        .back-link {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 16px;
+        }
+        .back-link a { color: #185FA5; text-decoration: none; font-weight: 500; }
+        .back-link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -105,8 +113,8 @@
             <div class="logo-wrap">
                 <i class="ti ti-school"></i>
             </div>
-            <h1>Thesis Management System</h1>
-            <p>Log in using your UAD webmail account</p>
+            <h1>Forgot Password</h1>
+            <p>Enter your email to receive a reset link</p>
         </div>
 
         @if ($errors->any())
@@ -116,67 +124,33 @@
             </div>
         @endif
 
-        @if (session('error'))
-            <div class="alert alert-danger">
-                <i class="ti ti-alert-circle"></i>
-                <span>{{ session('error') }}</span>
+        @if (session('success'))
+            <div class="alert alert-success">
+                <i class="ti ti-check-circle"></i>
+                <span>{{ session('success') }}</span>
             </div>
         @endif
 
         <div class="card">
-            <form action="{{ route('login') }}" method="POST">
+            <form action="{{ route('password.email') }}" method="POST">
                 @csrf
 
                 <div class="form-group">
-                    <label for="email">Webmail Address</label>
+                    <label for="email">Email Address</label>
                     <div class="input-wrap">
                         <i class="ti ti-mail"></i>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="nim@webmail.uad.ac.id"
-                            value="{{ old('email') }}"
-                            required
-                            autocomplete="email"
-                        >
+                        <input type="email" id="email" name="email" placeholder="you@example.com" value="{{ old('email') }}" required autocomplete="email">
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-wrap">
-                        <i class="ti ti-lock"></i>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="••••••••"
-                            required
-                            autocomplete="current-password"
-                        >
-                    </div>
-                </div>
-
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#1a1a2e;cursor:pointer;">
-                        <input type="checkbox" name="remember" style="width:14px;height:14px;accent-color:#185FA5;">
-                        Remember me
-                    </label>
-                    <a href="{{ route('password.request') }}" style="font-size:13px;color:#185FA5;text-decoration:none;font-weight:500;">
-                        Forgot Password?
-                    </a>
                 </div>
 
                 <button type="submit" class="btn-primary">
-                    <i class="ti ti-login"></i> Log In
+                    <i class="ti ti-send"></i> Send Reset Link
                 </button>
             </form>
+        </div>
 
-            <div style="text-align:center;margin-top:16px;font-size:13px;">
-                Don't have an account?
-                <a href="{{ route('register') }}" style="color:#185FA5;text-decoration:none;font-weight:500;">Register</a>
-            </div>
+        <div class="back-link">
+            <a href="{{ route('login') }}"><i class="ti ti-arrow-left"></i> Back to Login</a>
         </div>
 
         <p class="footer-note">Universitas Ahmad Dahlan &mdash; Academic System</p>
