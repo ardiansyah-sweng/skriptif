@@ -84,8 +84,16 @@ Route::middleware('auth')->group(function () {
             ->name('student.skripsi.store');
 
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
-    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
-        ->name('student.skripsi.history');
+        Route::get('/submissions', [StudentSkripsiController::class, 'history'])
+            ->name('student.skripsi.history');
+
+        // Detail tampilan skripsi mahasiswa (pastikan ini berada setelah /create dan /submissions)
+        Route::get('/{id}', [StudentSkripsiController::class, 'show'])
+            ->name('student.skripsi.show');
+
+        // Update pengajuan skripsi (edit)
+        Route::put('/{id}', [StudentSkripsiController::class, 'update'])
+            ->name('student.skripsi.update');
     });
 
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');

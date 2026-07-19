@@ -7,9 +7,32 @@ use App\Models\Lecturer;
 use App\Models\Skripsi;
 use App\Models\ElectiveCourse;
 use App\Models\Student;
+use Illuminate\Http\Request;
 
 class StudentSkripsiController extends Controller
 {
+    public function index()
+    {
+        $student = Student::first();
+        $skripsis = $student
+            ? Skripsi::where('student_id', $student->id)->with('supervisor')->latest()->get()
+            : collect();
+
+        return view('mahasiswa.skripsi.index', compact('skripsis'));
+    }
+
+    public function show($id)
+    {
+        $student = Student::first();
+        $skripsi = Skripsi::with('supervisor')->findOrFail($id);
+
+        if ($student && $skripsi->student_id !== $student->id) {
+            abort(403);
+        }
+
+        return view('mahasiswa.skripsi.index', compact('skripsi'));
+    }
+
     public function create()
     {
         $student = Student::first();
@@ -104,6 +127,26 @@ class StudentSkripsiController extends Controller
         return back()->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
     }
 }
+
+    public function update(Request $request, $id)
+    {
+        $skripsi = Skripsi::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'supervisor_id' => 'required|exists:lecturers,id',
+        ]);
+
+        $skripsi->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'supervisor_id' => $validated['supervisor_id'],
+        ]);
+
+        return redirect()->route('student.skripsi.show', $skripsi->id)
+            ->with('success', 'Data skripsi berhasil diperbarui.');
+    }
 
     public function history()
     {
