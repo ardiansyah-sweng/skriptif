@@ -114,3 +114,4 @@ Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::clas
         Route::get('/repository', [UtilityController::class, 'documentRepository'])->name('repository');
         Route::get('/repository/download/{file}', [UtilityController::class, 'downloadTemplate'])->name('repository.download');
     });
+});
