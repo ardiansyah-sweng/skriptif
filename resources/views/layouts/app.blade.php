@@ -191,6 +191,9 @@
             <a href="{{ route('log-books.index') }}" class="{{ request()->routeIs('log-books.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-notebook"></i> Log Book
             </a>
+            <a href="{{ route('seminar-proposal.index') }}" class="{{ request()->routeIs('seminar-proposal.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-paperclip me-1"></i> Berkas Sempro
+            </a>
             @endif
 
             @if($role === 'mahasiswa')
