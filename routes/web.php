@@ -105,7 +105,6 @@ Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::clas
     Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
     Route::get('/announcements/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
     Route::put('/announcements/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
-});
 
     Route::prefix('utilities')->name('utilities.')->group(function () {
         Route::get('/similarity', [UtilityController::class, 'similarityCheck'])->name('similarity');
