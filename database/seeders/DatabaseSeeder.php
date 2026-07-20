@@ -34,5 +34,5 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
         ]);
     }
-    
+
 }

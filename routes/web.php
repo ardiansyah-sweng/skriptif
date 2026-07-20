@@ -7,6 +7,7 @@ use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\StudentSeminarProposalDocumentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 
@@ -61,6 +62,16 @@ Route::prefix('student/skripsi')->group(function () {
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
 });
+
+// Rute untuk pengumpulan berkas syarat seminar proposal (khusus mahasiswa)
+Route::get('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'index'])
+    ->name('seminar-proposal.index');
+
+Route::get('/seminar-proposal/create', [StudentSeminarProposalDocumentController::class, 'create'])
+    ->name('seminar-proposal.create');
+
+Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'store'])
+    ->name('seminar-proposal.store');
 
 use App\Http\Controllers\AnnouncementController;
 
