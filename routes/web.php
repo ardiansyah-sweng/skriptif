@@ -87,7 +87,6 @@ Route::get('/seminar-proposal/create', [StudentSeminarProposalDocumentController
 Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'store'])
     ->name('seminar-proposal.store');
 
-use App\Http\Controllers\AnnouncementController;
         // TETAP CREATE: Tidak jadi diubah
         Route::get('/create', [StudentSkripsiController::class, 'create'])
             ->name('student.skripsi.create');
