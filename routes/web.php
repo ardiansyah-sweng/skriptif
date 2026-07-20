@@ -20,7 +20,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // SEMENTARA di luar middleware auth, cuma buat testing tanpa login.
 // Setelah selesai testing, pindahkan lagi Route::resource('evaluations', ...)
 // ini ke dalam Route::middleware('auth')->group() di bawah.
-Route::resource('evaluations', EvaluationController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
