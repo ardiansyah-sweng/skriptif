@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <form action="{{ route('student.skripsi.store') }}" method="POST">
+        <form action="{{ route('student.skripsi.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="card">
@@ -90,6 +90,15 @@
                     <label for="suggestion_supervisor">Other Proposed Advisors (Optional)</label>
                     <input type="text" id="suggestion_supervisor" name="suggestion_supervisor">
                     <span class="form-hint">This is only a proposal. The final decision rests with the department.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="document">Upload Dokumen Proposal</label>
+                    <input type="file" id="document" name="document" accept=".pdf,.doc,.docx" required>
+                    <span class="form-hint">Format PDF, DOC, atau DOCX. Maksimal 5MB.</span>
+                    @error('document')
+                        <span class="form-hint" style="color:#dc2626;">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 

@@ -84,6 +84,12 @@ class StudentSkripsiController extends Controller
         }
     }
 
+    $documentPath = null;
+    if ($request->hasFile('document')) {
+        // Simpan dokumen proposal di folder storage/app/public/attachments
+        $documentPath = $request->file('document')->store('attachments', 'public');
+    }
+
     try {
         $skripsi = Skripsi::create([
             'student_id'            => $student->id,
@@ -92,6 +98,7 @@ class StudentSkripsiController extends Controller
             'description'           => $request->description,
             'suggestion_supervisor' => $request->suggestion_supervisor,
             'elective_courses'      => $electiveData,
+            'document'              => $documentPath,
             'status'                => 'pending',
             'submission_date'       => now(),
         ]);
