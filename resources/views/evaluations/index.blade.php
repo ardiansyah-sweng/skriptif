@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -16,7 +15,7 @@
             padding: 32px 24px;
         }
 
-        .wrap { max-width: 1000px; margin: 0 auto; }
+        .wrap { max-width: 1100px; margin: 0 auto; }
 
         .page-head {
             display: flex;
@@ -79,6 +78,16 @@
         }
         .count-pill strong { color: #1a1a2e; font-weight: 500; }
 
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin: 28px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .table-wrap {
             background: #fff;
             border: 0.5px solid #e5e7eb;
@@ -110,6 +119,17 @@
 
         .title-cell { font-size: 13px; color: #1a1a2e; font-weight: 500; }
         .sub-cell { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .role-pembimbing { background: #E6F1FB; color: #0C447C; }
+        .role-penguji { background: #FFF6E0; color: #A66A00; }
 
         .grade-badge {
             display: inline-flex;
@@ -163,6 +183,12 @@
         }
         .empty i { font-size: 36px; display: block; margin-bottom: 10px; opacity: .4; }
         .empty p { font-size: 14px; }
+
+        .rekap-total {
+            font-weight: 700;
+            color: #185FA5;
+        }
+        .rekap-muted { color: #9ca3af; font-style: italic; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -176,7 +202,7 @@
                     <span>Evaluasi Skripsi</span>
                 </div>
                 <h1>Evaluasi Skripsi</h1>
-                <p>Hasil penilaian dosen penguji terhadap skripsi mahasiswa</p>
+                <p>Hasil penilaian dosen pembimbing &amp; dosen penguji terhadap skripsi mahasiswa</p>
             </div>
             <a href="{{ route('evaluations.create') }}" class="btn-primary">
                 <i class="ti ti-plus"></i> Tambah Evaluasi
@@ -204,9 +230,12 @@
                         <tr>
                             <th style="width:40px">No</th>
                             <th>Mahasiswa / Skripsi</th>
-                            <th>Dosen Penguji</th>
+                            <th>Peran</th>
+                            <th>Dosen</th>
                             <th style="width:70px">Nilai</th>
                             <th style="width:60px">Grade</th>
+                            <th style="width:70px">Bobot</th>
+                            <th style="width:80px">Nilai Akhir</th>
                             <th style="width:120px">Tanggal</th>
                             <th style="width:120px">Aksi</th>
                         </tr>
@@ -219,11 +248,18 @@
                                     <div class="title-cell">{{ $evaluation->skripsi->student->name ?? '-' }}</div>
                                     <div class="sub-cell">{{ $evaluation->skripsi->title ?? '-' }}</div>
                                 </td>
+                                <td>
+                                    <span class="role-badge role-{{ $evaluation->role }}">
+                                        {{ $evaluation->role === 'pembimbing' ? 'Pembimbing' : 'Penguji' }}
+                                    </span>
+                                </td>
                                 <td>{{ $evaluation->lecturer->name ?? '-' }}</td>
                                 <td>{{ number_format($evaluation->score, 1) }}</td>
                                 <td>
                                     <span class="grade-badge grade-{{ $evaluation->grade }}">{{ $evaluation->grade }}</span>
                                 </td>
+                                <td>{{ number_format($evaluation->weight, 0) }}%</td>
+                                <td>{{ number_format($evaluation->final_score, 1) }}</td>
                                 <td class="date-col">{{ \Carbon\Carbon::parse($evaluation->evaluation_date)->format('d M Y') }}</td>
                                 <td>
                                     <div class="action-wrap">
@@ -245,6 +281,49 @@
                 </table>
             @endif
         </div>
+
+        @if(!$evaluations->isEmpty())
+            <div class="section-title"><i class="ti ti-report"></i> Rekap Penilaian per Skripsi</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mahasiswa / Skripsi</th>
+                            <th style="width:180px">Pembimbing</th>
+                            <th style="width:180px">Penguji</th>
+                            <th style="width:130px">Total Nilai Semprog</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($rekap as $row)
+                            <tr>
+                                <td>
+                                    <div class="title-cell">{{ $row['skripsi']->student->name ?? '-' }}</div>
+                                    <div class="sub-cell">{{ $row['skripsi']->title ?? '-' }}</div>
+                                </td>
+                                <td>
+                                    @if($row['pembimbing'])
+                                        {{ $row['pembimbing']->lecturer->name ?? '-' }}<br>
+                                        <span class="sub-cell">{{ number_format($row['pembimbing']->score, 1) }} × {{ number_format($row['pembimbing']->weight, 0) }}% = {{ number_format($row['pembimbing']->final_score, 1) }}</span>
+                                    @else
+                                        <span class="rekap-muted">Belum dinilai</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($row['penguji'])
+                                        {{ $row['penguji']->lecturer->name ?? '-' }}<br>
+                                        <span class="sub-cell">{{ number_format($row['penguji']->score, 1) }} × {{ number_format($row['penguji']->weight, 0) }}% = {{ number_format($row['penguji']->final_score, 1) }}</span>
+                                    @else
+                                        <span class="rekap-muted">Belum dinilai</span>
+                                    @endif
+                                </td>
+                                <td class="rekap-total">{{ number_format($row['total'], 1) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 </body>
 </html>

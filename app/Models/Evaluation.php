@@ -14,6 +14,8 @@ class Evaluation extends Model
     protected $fillable = [
         'skripsi_id',
         'lecturer_id',
+        'role',          // Pastikan ini ditambahkan agar bisa di-insert via controller
+        'weight',        // Pastikan ini ditambahkan agar bisa di-insert via controller
         'score',
         'grade',
         'notes',
@@ -26,8 +28,49 @@ class Evaluation extends Model
     ];
 
     /**
-     * Setiap kali skor disimpan, grade huruf ikut otomatis dihitung ulang
-     * supaya controller tidak perlu mikirin konversi manual tiap saat.
+     * Relasi ke detail nilai komponen evaluasi (EvaluationComponentScore)
+     */
+    public function componentScores()
+    {
+        return $this->hasMany(EvaluationComponentScore::class, 'evaluation_id');
+    }
+
+    /**
+     * Sinkronisasi nilai komponen dan hitung total score otomatis.
+     */
+    public function syncComponentScores(array $scoresInput): void
+    {
+        $totalScore = 0;
+
+        foreach ($scoresInput as $componentId => $scoreValue) {
+            $scoreValue = (float) $scoreValue;
+            $totalScore += $scoreValue;
+
+            $this->componentScores()->updateOrCreate(
+                ['evaluation_component_id' => $componentId],
+                ['score' => $scoreValue]
+            );
+        }
+
+        // Simpan total skor akhir, otomatis memicu boot saving untuk mengubah ke grade huruf
+        $this->update(['score' => $totalScore]);
+    }
+
+    /**
+     * FIX: Nilai Akhir = Nilai (score) x Bobot (weight) / 100.
+     * Sebelumnya $evaluation->final_score selalu null karena tidak pernah
+     * didefinisikan sebagai kolom maupun accessor, sehingga di semua
+     * view (index, show) dan rekap di controller selalu tampil 0.0.
+     * Dihitung otomatis lewat accessor, tidak perlu kolom tambahan di DB,
+     * supaya selalu sinkron kalau score atau weight berubah.
+     */
+    public function getFinalScoreAttribute(): float
+    {
+        return round(((float) $this->score) * ((float) $this->weight) / 100, 2);
+    }
+
+    /**
+     * Otomatis hitung grade huruf setiap kali skor disimpan.
      */
     protected static function booted(): void
     {
@@ -36,10 +79,6 @@ class Evaluation extends Model
         });
     }
 
-    /**
-     * Konversi nilai 0-100 ke huruf.
-     * Batas nilai bisa disesuaikan kalau standar kampus beda.
-     */
     public static function convertScoreToGrade(float|string $score): string
     {
         $score = (float) $score;
