@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Skripsi;
+use App\Notifications\SkripsiStatusUpdated;
+use App\Notifications\NewSkripsiSubmitted;
+use Illuminate\Support\Facades\Log;
 
 class SkripsiService
 {
@@ -29,7 +32,7 @@ class SkripsiService
 
     public function submitSkripsi(array $data)
     {
-        return Skripsi::create([
+        $skripsi = Skripsi::create([
             'student_id'      => $data['student_id'],
             'supervisor_id'   => $data['supervisor_id'],
             'title'           => $data['title'],
@@ -37,6 +40,16 @@ class SkripsiService
             'status'          => 'pending',
             'submission_date' => now()->toDateString(),
         ]);
+
+        // Kirim notifikasi ke dosen pembimbing yang dipilih
+        $skripsi->load(['student', 'supervisor']);
+        if ($account = $skripsi->supervisor->account()) {
+            $account->notify(new NewSkripsiSubmitted($skripsi));
+        } else {
+            Log::warning('Notifikasi pengajuan skripsi baru gagal dikirim: tidak ada User dengan email ' . $skripsi->supervisor->email);
+        }
+
+        return $skripsi;
     }
 
     public function updateStatus($id, array $data)
@@ -53,6 +66,17 @@ class SkripsiService
         }
 
         $skripsi->update($updateData);
+
+        // Kirim notifikasi ke mahasiswa saat pengajuan disetujui/ditolak
+        if (in_array($skripsi->status, ['approved', 'rejected'])) {
+            $skripsi->load('student');
+            if ($account = $skripsi->student->account()) {
+                $account->notify(new SkripsiStatusUpdated($skripsi));
+            } else {
+                Log::warning('Notifikasi status skripsi gagal dikirim: tidak ada User dengan email ' . $skripsi->student->email);
+            }
+        }
+
         return $skripsi;
     }
 }

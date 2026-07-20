@@ -66,6 +66,7 @@ class AuthController extends Controller
         ]);
 
         Student::create([
+            'user_id'       => $user->id,
             'student_id'    => $validated['student_id'],
             'name'          => $validated['name'],
             'email'         => $validated['email'],

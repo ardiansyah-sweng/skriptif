@@ -1,6 +1,11 @@
 <?php
 namespace App\Providers;
 use App\Models\LogBook;
+use App\Notifications\NewLogBookSubmitted;
+use App\Notifications\NewLogBookAdded;
+use App\Notifications\LogBookReviewed;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 class LogBookService
 {
     /**
@@ -43,7 +48,7 @@ class LogBookService
      */
     public function storeLogBook(array $data)
     {
-        return LogBook::create([
+        $logBook = LogBook::create([
             'student_id'  => $data['student_id'],
             'lecturer_id' => $data['lecturer_id'],
             'date'        => $data['date'],
@@ -53,6 +58,28 @@ class LogBookService
             // Simpan nama file lampiran gambar ke kolom database
             'attachment'  => $data['attachment'] ?? null,
         ]);
+
+        // Kirim notifikasi ke pihak yang belum tahu (bukan ke diri sendiri yang barusan input)
+        $logBook->load(['student', 'lecturer']);
+        $currentUserId = Auth::id();
+
+        if ($account = $logBook->lecturer->account()) {
+            if ($account->id !== $currentUserId) {
+                $account->notify(new NewLogBookSubmitted($logBook));
+            }
+        } else {
+            Log::warning('Notifikasi log book baru gagal dikirim ke dosen: tidak ada User dengan email ' . $logBook->lecturer->email);
+        }
+
+        if ($account = $logBook->student->account()) {
+            if ($account->id !== $currentUserId) {
+                $account->notify(new NewLogBookAdded($logBook));
+            }
+        } else {
+            Log::warning('Notifikasi log book baru gagal dikirim ke mahasiswa: tidak ada User dengan email ' . $logBook->student->email);
+        }
+
+        return $logBook;
     }
     /**
      * Update existing log book.
@@ -60,6 +87,7 @@ class LogBookService
     public function updateLogBook($id, array $data)
     {
         $logBook = LogBook::findOrFail($id);
+        $statusBefore = $logBook->status;
         $updateData = [
             'student_id'  => $data['student_id'],
             'lecturer_id' => $data['lecturer_id'],
@@ -75,6 +103,17 @@ class LogBookService
         }
 
         $logBook->update($updateData);
+
+        // Kirim notifikasi ke mahasiswa hanya saat status berubah jadi approved/rejected
+        if ($statusBefore !== $logBook->status && in_array($logBook->status, ['approved', 'rejected'])) {
+            $logBook->load(['student', 'lecturer']);
+            if (($account = $logBook->student->account()) && $account->id !== Auth::id()) {
+                $account->notify(new LogBookReviewed($logBook));
+            } elseif (!$account) {
+                Log::warning('Notifikasi log book direview gagal dikirim: tidak ada User dengan email ' . $logBook->student->email);
+            }
+        }
+
         return $logBook;
     }
     /**
