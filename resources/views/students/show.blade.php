@@ -72,7 +72,7 @@
                 <div>
                     <h2 class="name" style="font-size: 20px;">Pengajuan Skripsi</h2>
                     @if($student->skripsi)
-                    <div class="meta">Status: 
+                    <div class="meta">Status:
                         @if($student->skripsi->status == 'pending')
                             <span class="badge" style="background: #fef3c7; color: #92400e;">Menunggu Review</span>
                         @elseif($student->skripsi->status == 'approved')
@@ -118,9 +118,9 @@
                 <div style="text-align:center; padding: 32px 18px;">
                     <i class="ti ti-book-off" style="font-size: 42px; color: #94a3b8; display: block; margin-bottom: 12px;"></i>
                     <p style="color: #64748b; margin-bottom: 16px;">Mahasiswa ini belum memiliki pengajuan skripsi.</p>
-                    <a href="{{ route('student.skripsi.create') }}" class="primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #185FA5; color: #fff; border-radius: 12px; padding: 12px 16px; font-weight: 600; font-size: 14px;">
+                    <!-- <a href="{{ route('student.skripsi.create') }}" class="primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #185FA5; color: #fff; border-radius: 12px; padding: 12px 16px; font-weight: 600; font-size: 14px;">
                         <i class="ti ti-plus"></i> Ajukan Skripsi
-                    </a>
+                    </a> -->
                 </div>
                 @endif
             </div>
