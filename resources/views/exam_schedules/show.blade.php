@@ -45,9 +45,14 @@
             </div>
         @endif
 
-        <div class="mb-4">
-            <h1 class="main-title">Detail Jadwal Sidang</h1>
-            <p class="sub-title">Lihat informasi jadwal dan perbarui status pelaksanaan sidang.</p>
+        <div class="mb-4 d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="main-title">Detail Jadwal Sidang</h1>
+                <p class="sub-title">Lihat informasi jadwal dan perbarui status pelaksanaan sidang.</p>
+            </div>
+            <a href="{{ route('exam-schedules.edit', $schedule->id) }}" class="btn-submit">
+                <i class="fa-solid fa-pen me-1"></i> Edit Jadwal
+            </a>
         </div>
 
         <div class="content-card mb-4">
