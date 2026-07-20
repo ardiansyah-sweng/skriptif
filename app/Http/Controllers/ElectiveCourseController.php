@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ImportElectiveCourseRequest;
+use App\Services\ElectiveCourseService;
 
 class ElectiveCourseController extends Controller
 {
@@ -71,5 +73,11 @@ class ElectiveCourseController extends Controller
     {
         DB::table('elective_courses')->where('id', $id)->delete();
         return redirect()->route('elective-courses.index');
+    }
+    public function import(ImportElectiveCourseRequest $request, ElectiveCourseService $service)
+    {
+        $service->importCsv($request->file('file'));
+        return redirect()->route('elective-courses.index')
+                        ->with('success', 'Mata kuliah berhasil diimpor.');
     }
 }
