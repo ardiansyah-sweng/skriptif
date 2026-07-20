@@ -47,7 +47,7 @@
                 <p class="sub-title">Kelola penjadwalan sidang proposal dan pendadaran.</p>
             </div>
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal" style="border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 500;">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal" style="border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 500; border: 1px solid #e2e8f0;">
                     <i class="fa-solid fa-filter me-1"></i> Filter
                     @if(request()->anyFilled(['nama', 'nim', 'dosen_penguji', 'tanggal', 'ruang']))
                         <span class="badge bg-primary ms-1" style="font-size: 10px;">
