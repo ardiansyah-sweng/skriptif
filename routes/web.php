@@ -11,6 +11,7 @@ use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\UtilityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -91,4 +92,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
     Route::get('/announcements/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
     Route::put('/announcements/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
+
+    Route::prefix('utilities')->name('utilities.')->group(function () {
+        Route::get('/similarity', [UtilityController::class, 'similarityCheck'])->name('similarity');
+        Route::post('/similarity', [UtilityController::class, 'similarityCheck'])->name('similarity.check');
+        Route::get('/supervisor', [UtilityController::class, 'supervisorRecommendation'])->name('supervisor');
+        Route::get('/progress', [UtilityController::class, 'progressTracker'])->name('progress');
+        Route::get('/repository', [UtilityController::class, 'documentRepository'])->name('repository');
+        Route::get('/repository/download/{file}', [UtilityController::class, 'downloadTemplate'])->name('repository.download');
+    });
 });
