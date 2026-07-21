@@ -56,15 +56,25 @@
                     <textarea name="description" class="form-control" rows="5" required>{{ old('description', $topic->description) }}</textarea>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Persyaratan</label>
+                    <textarea name="requirements" class="form-control" rows="3">{{ old('requirements', $topic->requirements) }}</textarea>
+                </div>
+
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label">Kapasitas</label>
+                        <input type="number" name="capacity" class="form-control" value="{{ old('capacity', $topic->capacity) }}" min="1">
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select" required>
                             <option value="open" {{ old('status', $topic->status) === 'open' ? 'selected' : '' }}>Open</option>
+                            <option value="filled" {{ old('status', $topic->status) === 'filled' ? 'selected' : '' }}>Filled</option>
                             <option value="closed" {{ old('status', $topic->status) === 'closed' ? 'selected' : '' }}>Closed</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Batas Waktu</label>
                         <input type="date" name="deadline" class="form-control" value="{{ old('deadline', $topic->deadline) }}">
                     </div>

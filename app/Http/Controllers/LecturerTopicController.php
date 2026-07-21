@@ -17,7 +17,7 @@ class LecturerTopicController extends Controller
     public function create()
     {
         $lecturers = Lecturer::all();
-        return view('lecturers_topics.create', compact('lecturers'));
+        return view('lecturer_topics.create', compact('lecturers'));
     }
 
     public function store(Request $request)
@@ -30,6 +30,10 @@ class LecturerTopicController extends Controller
             'descriptions.*' => 'required|string|min:10',
             'deadlines' => 'nullable|array',
             'deadlines.*' => 'nullable|date',
+            'requirements' => 'nullable|array',
+            'requirements.*' => 'nullable|string|max:1000',
+            'capacities' => 'nullable|array',
+            'capacities.*' => 'nullable|integer|min:1|max:999',
         ], [
             'lecturer_id.required' => 'Dosen harus dipilih.',
             'lecturer_id.exists' => 'Dosen tidak ditemukan.',
@@ -37,17 +41,23 @@ class LecturerTopicController extends Controller
             'titles.*.required' => 'Setiap judul topik wajib diisi.',
             'descriptions.*.required' => 'Setiap deskripsi topik wajib diisi.',
             'descriptions.*.min' => 'Deskripsi topik minimal 10 karakter.',
+            'capacities.*.integer' => 'Kapasitas harus berupa angka.',
+            'capacities.*.min' => 'Kapasitas minimal 1.',
         ]);
         $lecturerId = $request->lecturer_id;
         $titles = $request->titles;
         $descriptions = $request->descriptions;
         $deadlines = $request->deadlines ?? [];
+        $requirements = $request->requirements ?? [];
+        $capacities = $request->capacities ?? [];
 
         foreach ($titles as $i => $title) {
             LecturerTopic::create([
                 'lecturer_id' => $lecturerId,
                 'title' => $title,
                 'description' => $descriptions[$i] ?? '',
+                'requirements' => $requirements[$i] ?? null,
+                'capacity' => $capacities[$i] ?? 1,
                 'deadline' => $deadlines[$i] ?? null,
                 'status' => 'open',
             ]);
@@ -67,7 +77,7 @@ class LecturerTopicController extends Controller
     {
         $topic = LecturerTopic::findOrFail($id);
         $lecturers = Lecturer::all();
-        return view('lecturers_topics.edit', compact('topic', 'lecturers'));
+        return view('lecturer_topics.edit', compact('topic', 'lecturers'));
     }
 
     public function update(Request $request, $id)
@@ -79,8 +89,9 @@ class LecturerTopicController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|min:10',
             'requirements' => 'nullable|string|max:1000',
+            'capacity' => 'nullable|integer|min:1|max:999',
             'deadline' => 'nullable|date',
-            'attachment' => 'nullable|url',
+            'attachment' => 'nullable|string|max:255',
             'status' => 'required|in:open,closed,filled',
         ]);
 

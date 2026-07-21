@@ -57,8 +57,14 @@
                             <div class="mb-2">
                                 <textarea name="descriptions[]" class="form-control" rows="3" placeholder="Deskripsi topik 1" required></textarea>
                             </div>
+                            <div class="mb-2">
+                                <textarea name="requirements[]" class="form-control" rows="2" placeholder="Persyaratan (opsional)"></textarea>
+                            </div>
                             <div class="row g-2">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <input type="number" name="capacities[]" class="form-control" placeholder="Kapasitas" value="1" min="1">
+                                </div>
+                                <div class="col-md-4">
                                     <input type="date" name="deadlines[]" class="form-control" placeholder="Batas waktu (opsional)">
                                 </div>
                             </div>
@@ -90,11 +96,17 @@
                 <div class="mb-2">
                     <textarea name="descriptions[]" class="form-control" rows="3" placeholder="Deskripsi topik ${topicCount}" required></textarea>
                 </div>
+                <div class="mb-2">
+                    <textarea name="requirements[]" class="form-control" rows="2" placeholder="Persyaratan (opsional)"></textarea>
+                </div>
                 <div class="row g-2">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <input type="number" name="capacities[]" class="form-control" placeholder="Kapasitas" value="1" min="1">
+                    </div>
+                    <div class="col-md-4">
                         <input type="date" name="deadlines[]" class="form-control" placeholder="Batas waktu (opsional)">
                     </div>
-                    <div class="col-md-6 d-flex align-items-end">
+                    <div class="col-md-4 d-flex align-items-end">
                         <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.topic-item').remove()">
                             <i class="fa-solid fa-trash"></i> Hapus
                         </button>
