@@ -25,12 +25,8 @@ class DatabaseSeeder extends Seeder
             ExamScheduleSeeder::class,
         ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
         $this->call([
+            UserSeeder::class,
             AnnouncementSeeder::class,
         ]);
     }

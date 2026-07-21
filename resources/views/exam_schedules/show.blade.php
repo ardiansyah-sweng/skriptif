@@ -1,48 +1,37 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Jadwal Sidang - Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
-        .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
-        .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
-        .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .meta-text { font-size: 12px; color: #64748b; }
-        .detail-label { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-        .detail-value { font-size: 15px; font-weight: 600; color: #0f172a; word-break: break-word; }
-        .detail-box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; background: #ffffff; height: 100%; }
-        .btn-back { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
-        .btn-back:hover { color: #1d4ed8; text-decoration: underline; }
-        .btn-submit { background-color: #2563eb; color: white; font-size: 14px; font-weight: 500; border-radius: 8px; padding: 9px 18px; border: none; }
-        .btn-submit:hover { background-color: #1d4ed8; color: white; }
-        .badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
-        .badge-proposal { background: #eff6ff; color: #1d4ed8; }
-        .badge-pendadaran { background: #dcfce7; color: #15803d; }
-        .status-terjadwal { background-color: #eff6ff; color: #1d4ed8; }
-        .status-selesai { background-color: #dcfce7; color: #15803d; }
-        .status-dibatalkan { background-color: #fee2e2; color: #b91c1c; }
-    </style>
-</head>
-<body>
-    <div class="container py-5" style="max-width: 960px;">
+@extends('layouts.app')
+
+@section('title', 'Detail Jadwal Sidang')
+
+@push('styles')
+<style>
+    .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
+    .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
+    .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
+    .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; }
+    .meta-text { font-size: 12px; color: #64748b; }
+    .detail-label { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    .detail-value { font-size: 15px; font-weight: 600; color: #0f172a; word-break: break-word; }
+    .detail-box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; background: #ffffff; height: 100%; }
+    .btn-back { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
+    .btn-back:hover { color: #1d4ed8; text-decoration: underline; }
+    .btn-submit { background-color: #2563eb; color: white; font-size: 14px; font-weight: 500; border-radius: 8px; padding: 9px 18px; border: none; }
+    .btn-submit:hover { background-color: #1d4ed8; color: white; }
+    .badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .badge-proposal { background: #eff6ff; color: #1d4ed8; }
+    .badge-pendadaran { background: #dcfce7; color: #15803d; }
+    .status-terjadwal { background-color: #eff6ff; color: #1d4ed8; }
+    .status-selesai { background-color: #dcfce7; color: #15803d; }
+    .status-dibatalkan { background-color: #fee2e2; color: #b91c1c; }
+</style>
+@endpush
+
+@section('content')
+    <div style="max-width: 960px;">
         <div class="mb-4">
             <a href="{{ route('exam-schedules.index') }}" class="btn-back">
                 <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Daftar Jadwal
             </a>
         </div>
-
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show mb-4">
-                <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show mb-4">
@@ -56,9 +45,14 @@
             </div>
         @endif
 
-        <div class="mb-4">
-            <h1 class="main-title">Detail Jadwal Sidang</h1>
-            <p class="sub-title">Lihat informasi jadwal dan perbarui status pelaksanaan sidang.</p>
+        <div class="mb-4 d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="main-title">Detail Jadwal Sidang</h1>
+                <p class="sub-title">Lihat informasi jadwal dan perbarui status pelaksanaan sidang.</p>
+            </div>
+            <a href="{{ route('exam-schedules.edit', $schedule->id) }}" class="btn-submit">
+                <i class="fa-solid fa-pen me-1"></i> Edit Jadwal
+            </a>
         </div>
 
         <div class="content-card mb-4">
@@ -164,7 +158,4 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

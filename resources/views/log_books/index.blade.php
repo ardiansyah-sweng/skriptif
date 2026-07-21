@@ -1,53 +1,44 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Book Bimbingan - Skriptif</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
-        .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
-        .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
-        .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .table-custom th { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; }
-        .table-custom td { font-size: 14px; color: #334155; padding: 16px 20px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
-        .badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; text-transform: capitalize; }
-        .status-pending  { background-color: #fef3c7; color: #d97706; }
-        .status-approved { background-color: #dcfce7; color: #15803d; }
-        .status-rejected { background-color: #fee2e2; color: #b91c1c; }
-        .btn-add { background-color: #1e293b; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 8px 16px; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background-color 0.2s; }
-        .btn-add:hover { background-color: #0f172a; color: white; }
-        .btn-edit { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
-        .btn-edit:hover { background-color: #dbeafe; color: #1e40af; }
-        .btn-delete { background-color: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; }
-        .btn-delete:hover { background-color: #ffe4e6; color: #9f1239; }
-        .meta-text { font-size: 12px; color: #64748b; }
-        .crumb { font-size: 12px; color: #94a3b8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-        .crumb a { color: #64748b; text-decoration: none; }
-        .crumb a:hover { color: #0f172a; }
-        .search-input { border-radius: 8px 0 0 8px; border: 1px solid #cbd5e1; font-size: 14px; padding: 8px 16px; }
-        .search-input:focus { box-shadow: none; border-color: #94a3b8; }
-        .filter-select { border-radius: 0; border: 1px solid #cbd5e1; border-left: none; font-size: 14px; color: #64748b; width: 150px; }
-        .filter-select:focus { box-shadow: none; border-color: #94a3b8; }
-        .search-btn { border-radius: 0 8px 8px 0; border: 1px solid #cbd5e1; border-left: none; background: #f1f5f9; color: #334155; font-size: 14px; padding: 8px 16px; }
-        .search-btn:hover { background: #e2e8f0; }
-        .reset-btn { border-radius: 8px; font-size: 14px; padding: 8px 16px; text-decoration: none; display: inline-flex; align-items: center; background: transparent; color: #64748b; border: 1px solid #e2e8f0; margin-left: 8px; }
-        .reset-btn:hover { background: #f8fafc; color: #334155; }
-    </style>
-</head>
-<body>
-    <div class="container py-5" style="max-width: 1200px;">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show mb-4 border-0 shadow-sm" style="background-color: #dcfce7; color: #15803d; border-radius: 8px;">
-                <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+@section('title', 'Log Book Bimbingan')
+
+@push('styles')
+<style>
+    .main-title { font-size: 24px; font-weight: 700; color: #0f172a; }
+    .sub-title { font-size: 14px; color: #64748b; margin-top: 4px; }
+    .content-card { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05); }
+    .card-header-custom { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .table-custom th { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; }
+    .table-custom td { font-size: 14px; color: #334155; padding: 16px 20px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+    .badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; text-transform: capitalize; }
+    .status-pending  { background-color: #fef3c7; color: #d97706; }
+    .status-approved { background-color: #dcfce7; color: #15803d; }
+    .status-rejected { background-color: #fee2e2; color: #b91c1c; }
+    .btn-add { background-color: #1e293b; color: white; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 8px 16px; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background-color 0.2s; }
+    .btn-add:hover { background-color: #0f172a; color: white; }
+    .btn-detail { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-detail:hover { background-color: #dcfce7; color: #166534; }
+    .btn-edit { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-edit:hover { background-color: #dbeafe; color: #1e40af; }
+    .btn-delete { background-color: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 13px; font-weight: 500; border-radius: 6px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-delete:hover { background-color: #ffe4e6; color: #9f1239; }
+    .meta-text { font-size: 12px; color: #64748b; }
+    .crumb { font-size: 12px; color: #94a3b8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .crumb a { color: #64748b; text-decoration: none; }
+    .crumb a:hover { color: #0f172a; }
+    .search-input { border-radius: 8px 0 0 8px; border: 1px solid #cbd5e1; font-size: 14px; padding: 8px 16px; }
+    .search-input:focus { box-shadow: none; border-color: #94a3b8; }
+    .filter-select { border-radius: 0; border: 1px solid #cbd5e1; border-left: none; font-size: 14px; color: #64748b; width: 150px; }
+    .filter-select:focus { box-shadow: none; border-color: #94a3b8; }
+    .search-btn { border-radius: 0 8px 8px 0; border: 1px solid #cbd5e1; border-left: none; background: #f1f5f9; color: #334155; font-size: 14px; padding: 8px 16px; }
+    .search-btn:hover { background: #e2e8f0; }
+    .reset-btn { border-radius: 8px; font-size: 14px; padding: 8px 16px; text-decoration: none; display: inline-flex; align-items: center; background: transparent; color: #64748b; border: 1px solid #e2e8f0; margin-left: 8px; }
+    .reset-btn:hover { background: #f8fafc; color: #334155; }
+</style>
+@endpush
+
+@section('content')
+    <div style="max-width: 1200px;">
         <div class="crumb">
             <i class="fa-solid fa-house"></i>
             <a href="/">Beranda</a>
@@ -113,7 +104,6 @@
                             <td>
                                 <div class="fw-bold text-dark">{{ $log->student->name ?? '-' }}</div>
                                 <div class="meta-text">NIM. {{ $log->student->student_id ?? '-' }}</div>
-                                <!-- Tombol cetak PDF khusus untuk Log Book bimbingan mahasiswa ini saja -->
                                 <div class="mt-1">
                                     <a href="{{ route('log-books.print', ['student_id' => $log->student_id]) }}" target="_blank" class="text-decoration-none text-danger fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 11px;">
                                         <i class="fa-solid fa-file-pdf"></i> Cetak Logbook
@@ -129,7 +119,6 @@
                             </td>
                             <td>
                                 <div class="fw-medium text-dark" style="white-space: pre-line;">{{ Str::limit($log->activity, 150) }}</div>
-                                <!-- Tautan link untuk membuka lampiran bimbingan jika ada -->
                                 @if($log->attachment)
                                     <div class="mt-2">
                                         @if(Str::endsWith(strtolower($log->attachment), '.pdf'))
@@ -152,21 +141,18 @@
                             </td>
                             <td class="text-center">
                                 @if($log->status == 'pending')
-                                    <span class="badge-status status-pending">
-                                        <i class="fa-solid fa-spinner fa-spin"></i> Pending
-                                    </span>
+                                    <span class="badge-status status-pending"><i class="fa-solid fa-spinner fa-spin"></i> Pending</span>
                                 @elseif($log->status == 'approved')
-                                    <span class="badge-status status-approved">
-                                        <i class="fa-solid fa-circle-check"></i> Approved
-                                    </span>
+                                    <span class="badge-status status-approved"><i class="fa-solid fa-circle-check"></i> Approved</span>
                                 @else
-                                    <span class="badge-status status-rejected">
-                                        <i class="fa-solid fa-circle-xmark"></i> Rejected
-                                    </span>
+                                    <span class="badge-status status-rejected"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>
                                 @endif
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ route('log-books.show', $log->id) }}" class="btn-detail" title="Lihat Detail">
+                                        <i class="fa-solid fa-eye"></i> Detail
+                                    </a>
                                     <a href="{{ route('log-books.edit', $log->id) }}" class="btn-edit" title="Edit Data">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </a>
@@ -196,6 +182,4 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Thesis Management System</title>
+    <title>Reset Password — Thesis Management System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -105,8 +105,8 @@
             <div class="logo-wrap">
                 <i class="ti ti-school"></i>
             </div>
-            <h1>Thesis Management System</h1>
-            <p>Log in using your UAD webmail account</p>
+            <h1>Reset Password</h1>
+            <p>Enter your new password</p>
         </div>
 
         @if ($errors->any())
@@ -116,67 +116,40 @@
             </div>
         @endif
 
-        @if (session('error'))
-            <div class="alert alert-danger">
-                <i class="ti ti-alert-circle"></i>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
-
         <div class="card">
-            <form action="{{ route('login') }}" method="POST">
+            <form action="{{ route('password.update') }}" method="POST">
                 @csrf
 
+                <input type="hidden" name="token" value="{{ $token }}">
+
                 <div class="form-group">
-                    <label for="email">Webmail Address</label>
+                    <label for="email">Email Address</label>
                     <div class="input-wrap">
                         <i class="ti ti-mail"></i>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="nim@webmail.uad.ac.id"
-                            value="{{ old('email') }}"
-                            required
-                            autocomplete="email"
-                        >
+                        <input type="email" id="email" name="email" placeholder="you@example.com" value="{{ old('email') }}" required autocomplete="email">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">New Password</label>
                     <div class="input-wrap">
                         <i class="ti ti-lock"></i>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="••••••••"
-                            required
-                            autocomplete="current-password"
-                        >
+                        <input type="password" id="password" name="password" placeholder="Min. 8 characters" required autocomplete="new-password">
                     </div>
                 </div>
 
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#1a1a2e;cursor:pointer;">
-                        <input type="checkbox" name="remember" style="width:14px;height:14px;accent-color:#185FA5;">
-                        Remember me
-                    </label>
-                    <a href="{{ route('password.request') }}" style="font-size:13px;color:#185FA5;text-decoration:none;font-weight:500;">
-                        Forgot Password?
-                    </a>
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <div class="input-wrap">
+                        <i class="ti ti-lock"></i>
+                        <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Repeat password" required autocomplete="new-password">
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-primary">
-                    <i class="ti ti-login"></i> Log In
+                    <i class="ti ti-check"></i> Reset Password
                 </button>
             </form>
-
-            <div style="text-align:center;margin-top:16px;font-size:13px;">
-                Don't have an account?
-                <a href="{{ route('register') }}" style="color:#185FA5;text-decoration:none;font-weight:500;">Register</a>
-            </div>
         </div>
 
         <p class="footer-note">Universitas Ahmad Dahlan &mdash; Academic System</p>
