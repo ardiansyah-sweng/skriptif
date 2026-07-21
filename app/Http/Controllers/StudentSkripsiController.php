@@ -18,7 +18,9 @@ class StudentSkripsiController extends Controller
             ? Skripsi::where('student_id', $student->id)->with('supervisor')->latest()->get()
             : collect();
 
-        return view('mahasiswa.skripsi.index', compact('skripsis'));
+        $lecturers = Lecturer::all();
+
+        return view('mahasiswa.skripsi.index', compact('skripsis', 'lecturers'));
     }
 
     public function show($id)
@@ -30,12 +32,20 @@ class StudentSkripsiController extends Controller
             abort(403);
         }
 
-        return view('mahasiswa.skripsi.index', compact('skripsi'));
+        $lecturers = Lecturer::all();
+        return view('mahasiswa.skripsi.index', compact('skripsi', 'lecturers'));
     }
 
     public function create()
     {
-        $student = Student::first();
+        // Support optional student_id passed as query param from students list
+        $studentId = request()->query('student_id');
+        $selectedStudent = null;
+        if ($studentId) {
+            $selectedStudent = Student::find($studentId);
+        }
+
+        $student = $selectedStudent ?? Student::first();
         if (!$student) {
             return redirect()->back()->with('error', 'Tidak ada data mahasiswa.');
         }
@@ -64,7 +74,7 @@ class StudentSkripsiController extends Controller
             ];
         });
 
-        return view('mahasiswa.skripsi.create', compact('lecturersWithCapacity', 'electiveCourses'));
+        return view('mahasiswa.skripsi.create', compact('lecturersWithCapacity', 'electiveCourses', 'student'));
     }
 
  public function store(StoreStudentSkripsiRequest $request)
@@ -107,9 +117,9 @@ class StudentSkripsiController extends Controller
         }
     }
 
-    try {
+        try {
         $skripsi = Skripsi::create([
-            'student_id'            => $student->id,
+            'student_id'            => $request->input('student_id', $student->id),
             'supervisor_id'         => $request->supervisor_id,
             'title'                 => $request->title,
             'description'           => $request->description,

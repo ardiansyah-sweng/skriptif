@@ -55,6 +55,13 @@
         <form action="{{ route('student.skripsi.store') }}" method="POST">
             @csrf
 
+            @if(isset($student))
+                <input type="hidden" name="student_id" value="{{ $student->id }}">
+                <div style="margin-bottom:12px;font-size:13px;color:#374151;">
+                    <strong>Pengajuan untuk:</strong> {{ $student->name }} (NIM: {{ $student->student_id }})
+                </div>
+            @endif
+
             <div class="card">
                 <div class="card-title">Thesis Information</div>
 

@@ -195,6 +195,9 @@
 
             @if($role === 'mahasiswa')
             <div class="nav-section">Skripsi</div>
+            <a href="{{ route('student.skripsi.index') }}" class="{{ request()->routeIs('student.skripsi.index') ? 'active' : '' }}">
+                <i class="fa-solid fa-list"></i> Daftar Skripsi
+            </a>
             <a href="{{ route('student.skripsi.create') }}" class="{{ request()->routeIs('student.skripsi.create') ? 'active' : '' }}">
                 <i class="fa-solid fa-file-plus"></i> Ajukan Skripsi
             </a>
