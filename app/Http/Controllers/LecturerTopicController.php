@@ -17,7 +17,7 @@ class LecturerTopicController extends Controller
     public function create()
     {
         $lecturers = Lecturer::all();
-        return view('lecturer_topics.create', compact('lecturers'));
+        return view('lecturers_topics.create', compact('lecturers'));
     }
 
     public function store(Request $request)
@@ -67,7 +67,7 @@ class LecturerTopicController extends Controller
     {
         $topic = LecturerTopic::findOrFail($id);
         $lecturers = Lecturer::all();
-        return view('lecturer_topics.edit', compact('topic', 'lecturers'));
+        return view('lecturers_topics.edit', compact('topic', 'lecturers'));
     }
 
     public function update(Request $request, $id)

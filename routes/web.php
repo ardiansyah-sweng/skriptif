@@ -25,6 +25,7 @@ Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
+Route::resource('lecturers/topics', LecturerTopicController::class)->names('lecturer-topics');
 Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
 Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
@@ -36,7 +37,6 @@ Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('
 // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
 Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
 Route::resource('log-books', LogBookController::class);
-Route::resource('lecturer-topics', LecturerTopicController::class);
 Route::get('topic-board', [TopicBoardController::class, 'index'])->name('topic-board.index');
 Route::get('topic-board/{id}', [TopicBoardController::class, 'show'])->name('topic-board.show');
 Route::post('topic-board/{id}/apply', [TopicApplicationController::class, 'store'])->name('topic-board.apply');
