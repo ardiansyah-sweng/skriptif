@@ -32,8 +32,13 @@ class StudentSkripsiController extends Controller
             abort(403);
         }
 
+        // also load the list for left panel so it remains visible
+        $skripsis = $student
+            ? Skripsi::where('student_id', $student->id)->with('supervisor')->latest()->get()
+            : collect();
+
         $lecturers = Lecturer::all();
-        return view('mahasiswa.skripsi.index', compact('skripsi', 'lecturers'));
+        return view('mahasiswa.skripsi.index', compact('skripsi', 'lecturers', 'skripsis'));
     }
 
     public function create()
