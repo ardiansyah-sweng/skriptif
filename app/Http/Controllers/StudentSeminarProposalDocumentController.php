@@ -19,21 +19,6 @@ class StudentSeminarProposalDocumentController extends Controller
         'bukti_toefl'     => 'Bukti TOEFL',
     ];
 
-    /**
-     * Daftar mahasiswa beserta status kelengkapan berkas seminar proposalnya.
-     */
-    public function index()
-    {
-        $students = Student::whereHas('skripsi')
-            ->with(['skripsi.supervisor', 'skripsi.seminarProposalDocument'])
-            ->orderBy('name')
-            ->get();
-
-        return view('seminar_proposal.index', [
-            'documentFields' => $this->documentFields,
-            'students'       => $students,
-        ]);
-    }
 
     /**
      * Form pemilihan mahasiswa dan pengunggahan berkas seminar proposal.
@@ -120,7 +105,7 @@ class StudentSeminarProposalDocumentController extends Controller
 
         $document->save();
 
-        return redirect()->route('seminar-proposal.index')
+        return redirect()->route('exam-schedules.index')
             ->with('success', 'Berkas berhasil diunggah.');
     }
 }
