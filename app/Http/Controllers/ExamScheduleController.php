@@ -11,7 +11,7 @@ class ExamScheduleController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor']);
+        $query = ExamSchedule::with(['skripsi.student', 'skripsi.supervisor', 'skripsi.seminarProposalDocument']);
 
         if ($request->filled('nama')) {
             $query->whereHas('skripsi.student', function ($q) use ($request) {

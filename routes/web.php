@@ -79,8 +79,6 @@ Route::middleware('auth')->group(function () {
         ->name('elective-courses.import');
 
     // Rute untuk pengumpulan berkas syarat seminar proposal (khusus mahasiswa)
-    Route::get('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'index'])
-        ->name('seminar-proposal.index');
 
     Route::get('/seminar-proposal/create', [StudentSeminarProposalDocumentController::class, 'create'])
         ->name('seminar-proposal.create');
