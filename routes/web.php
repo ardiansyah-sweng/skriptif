@@ -8,6 +8,7 @@ use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSkripsiController;
+use App\Http\Controllers\StudentSeminarProposalDocumentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 use App\Http\Controllers\AnnouncementController;
@@ -73,16 +74,24 @@ Route::middleware('auth')->group(function () {
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])
         ->name('student.skripsi.history');
-    
+
     Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
         ->name('elective-courses.import');
 
-        // TETAP CREATE: Tidak jadi diubah
-        Route::get('/create', [StudentSkripsiController::class, 'create'])
-            ->name('student.skripsi.create');
+    // Rute untuk pengumpulan berkas syarat seminar proposal (khusus mahasiswa)
 
-        Route::post('/', [StudentSkripsiController::class, 'store'])
-            ->name('student.skripsi.store');
+    Route::get('/seminar-proposal/create', [StudentSeminarProposalDocumentController::class, 'create'])
+        ->name('seminar-proposal.create');
+
+    Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'store'])
+        ->name('seminar-proposal.store');
+
+    // TETAP CREATE: Tidak jadi diubah
+    Route::get('/create', [StudentSkripsiController::class, 'create'])
+        ->name('student.skripsi.create');
+
+    Route::post('/', [StudentSkripsiController::class, 'store'])
+        ->name('student.skripsi.store');
 
     // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
     Route::get('/submissions', [StudentSkripsiController::class, 'history'])

@@ -43,4 +43,9 @@ class Skripsi extends Model
     {
         return $this->hasMany(ExamSchedule::class)->latest('tanggal_sidang');
     }
+
+    public function seminarProposalDocument()
+    {
+        return $this->hasOne(SeminarProposalDocument::class, 'skripsi_id');
+    }
 }
