@@ -13,6 +13,8 @@
     .badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; }
     .meta-text { font-size: 12px; color: #64748b; }
     .badge-proposal { background: #eff6ff; color: #1d4ed8; }
+    .badge-proposal.is-link { text-decoration: none; cursor: pointer; }
+    .badge-proposal.is-link:hover { background: #dbeafe; }
     .badge-pendadaran { background: #dcfce7; color: #15803d; }
     .status-terjadwal { background-color: #eff6ff; color: #1d4ed8; }
     .status-selesai { background-color: #dcfce7; color: #15803d; }
@@ -113,7 +115,22 @@
                             </td>
                             <td class="text-center">
                                 @if($schedule->jenis_sidang === 'proposal')
-                                    <span class="badge-status badge-proposal"><i class="fa-solid fa-file-lines"></i> Proposal</span>
+                                    @php
+                                        $document = $schedule->skripsi->seminarProposalDocument ?? null;
+                                        $requiredDocFields = ['bukti_turnitin', 'bukti_literasi', 'bukti_transkrip', 'bukti_toefl'];
+                                        $completedDocs = collect($requiredDocFields)->filter(fn ($field) => $document && $document->$field)->count();
+                                        $docStudentId = $schedule->skripsi->student->id ?? null;
+                                    @endphp
+                                    @if($docStudentId)
+                                        <a href="{{ route('seminar-proposal.create', ['student_id' => $docStudentId]) }}"
+                                           class="badge-status badge-proposal is-link"
+                                           title="Kelola berkas syarat seminar proposal">
+                                            <i class="fa-solid fa-file-lines"></i> Proposal
+                                        </a>
+                                    @else
+                                        <span class="badge-status badge-proposal"><i class="fa-solid fa-file-lines"></i> Proposal</span>
+                                    @endif
+                                    <div class="meta-text mt-1">{{ $completedDocs }}/{{ count($requiredDocFields) }} berkas</div>
                                 @else
                                     <span class="badge-status badge-pendadaran"><i class="fa-solid fa-graduation-cap"></i> Pendadaran</span>
                                 @endif

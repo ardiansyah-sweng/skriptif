@@ -168,6 +168,7 @@
                             </td>
                             <td class="text-center">
                                 @if($skripsi->status == 'pending')
+                                    @if(Auth::user()->role === 'admin')
                                     <div class="d-flex justify-content-center gap-2">
                                         <button class="btn-approve" onclick="executeApprove('{{ $skripsi->id }}')">
                                             <i class="fa-solid fa-check"></i> Setujui
@@ -177,6 +178,11 @@
                                             <i class="fa-solid fa-xmark"></i> Tolak
                                         </button>
                                     </div>
+                                    @else
+                                        <span class="text-muted meta-text">
+                                            <i class="fa-solid fa-hourglass-half me-1"></i> Menunggu keputusan admin
+                                        </span>
+                                    @endif
                                 @else
                                     <span class="text-muted meta-text">
                                         <i class="fa-solid fa-lock me-1"></i> Locked
