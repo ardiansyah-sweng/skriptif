@@ -203,4 +203,50 @@
         </div>
     </div>
 </div>
+
+<div class="row g-4 mt-1">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header-custom">
+                <span><i class="fa-solid fa-clipboard-check text-info"></i> Hasil Evaluasi Skripsi</span>
+                <a href="{{ route('evaluations.index') }}" class="btn btn-sm btn-outline-info rounded-pill px-3">
+                    Lihat Semua <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Dosen Penilai</th>
+                                <th>Peran</th>
+                                <th>Nilai Akhir</th>
+                                <th>Tanggal Evaluasi</th>
+                                <th>Catatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($evaluations as $ev)
+                            <tr>
+                                <td class="fw-medium">{{ $ev->lecturer->name ?? '-' }}</td>
+                                <td><span class="badge bg-secondary">{{ ucfirst($ev->role ?? 'penilai') }}</span></td>
+                                <td><span class="fw-bold text-primary">{{ $ev->final_score ?? $ev->score }}</span></td>
+                                <td>{{ \Carbon\Carbon::parse($ev->evaluation_date)->format('d/m/Y') }}</td>
+                                <td class="text-muted small">{{ $ev->notes ?? '-' }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-inbox fs-3 d-block mb-2"></i>
+                                    Belum ada evaluasi skripsi.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
