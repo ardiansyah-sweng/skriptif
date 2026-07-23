@@ -201,6 +201,13 @@
             <a href="{{ route('student.skripsi.history') }}" class="{{ request()->routeIs('student.skripsi.history') ? 'active' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Skripsi
             </a>
+            <div class="nav-section">Akun</div>
+            <a href="{{ route('student.profile.show') }}" class="{{ request()->routeIs('student.profile.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-user-gear"></i> Profil Saya
+            </a>
+            <a href="{{ route('student.password.edit') }}" class="{{ request()->routeIs('student.password.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-key"></i> Keamanan Akun
+            </a>
             @endif
 
             <div class="nav-section">Informasi</div>

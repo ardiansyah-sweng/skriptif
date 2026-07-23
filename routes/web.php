@@ -123,6 +123,14 @@ Route::middleware('auth')->group(function () {
             ->name('student.skripsi.history');
     });
 
+    Route::prefix('student')->middleware('role:mahasiswa')->group(function () {
+        // Pengelolaan akun pribadi mahasiswa.
+        Route::get('/profile', [AuthController::class, 'showStudentProfile'])->name('student.profile.show');
+        Route::put('/profile', [AuthController::class, 'updateStudentProfile'])->name('student.profile.update');
+        Route::get('/change-password', [AuthController::class, 'showStudentChangePasswordForm'])->name('student.password.edit');
+        Route::put('/change-password', [AuthController::class, 'changeStudentPassword'])->name('student.password.update');
+    });
+
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/announcements/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
 
