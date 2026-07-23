@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -127,5 +128,54 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('success', __($status))
             : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    /** Display the profile of the authenticated student. */
+    public function showStudentProfile(Request $request)
+    {
+        return view('auth.student-profile', [
+            'user' => Auth::user(),
+            'isEditing' => $request->boolean('edit'),
+        ]);
+    }
+
+    /** Update the authenticated student's basic account details. */
+    public function updateStudentProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('student.profile.show')
+            ->with('success', 'Profil mahasiswa berhasil diperbarui.');
+    }
+
+    /** Display the student password-change form. */
+    public function showStudentChangePasswordForm()
+    {
+        return view('auth.student-change-password');
+    }
+
+    /** Verify the current password and save a new student password. */
+    public function changeStudentPassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'current_password.current_password' => 'Password saat ini tidak sesuai.',
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('student.password.edit')
+            ->with('success', 'Password mahasiswa berhasil diperbarui.');
     }
 }
