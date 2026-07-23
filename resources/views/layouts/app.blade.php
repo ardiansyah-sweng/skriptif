@@ -197,9 +197,11 @@
             <a href="{{ route('topic-board.index') }}" class="{{ request()->routeIs('topic-board.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-chalkboard"></i> Papan Topik
             </a>
+            @if($role === 'admin')
             <a href="{{ route('topic-applications.index') }}" class="{{ request()->routeIs('topic-applications.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-file-signature"></i> Aplikasi Topik
             </a>
+            @endif
             @endif
 
             @if($role === 'mahasiswa')

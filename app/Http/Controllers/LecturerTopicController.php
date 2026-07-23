@@ -17,7 +17,11 @@ class LecturerTopicController extends Controller
     public function create()
     {
         $lecturers = Lecturer::all();
-        return view('lecturer_topics.create', compact('lecturers'));
+        $loggedLecturer = null;
+        if (auth()->user()->role === 'dosen') {
+            $loggedLecturer = Lecturer::where('email', auth()->user()->email)->first();
+        }
+        return view('lecturer_topics.create', compact('lecturers', 'loggedLecturer'));
     }
 
     public function store(Request $request)

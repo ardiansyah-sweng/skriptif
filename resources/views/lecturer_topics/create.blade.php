@@ -32,15 +32,20 @@
         <form action="{{ route('lecturer-topics.store') }}" method="POST">
             @csrf
             <div class="mb-3">
-                <label class="form-label">Pilih Dosen</label>
-                <select name="lecturer_id" class="form-select" required>
-                    <option value="">-- Pilih Dosen --</option>
-                    @foreach($lecturers as $lecturer)
-                        <option value="{{ $lecturer->id }}" {{ old('lecturer_id') == $lecturer->id ? 'selected' : '' }}>
-                            {{ $lecturer->name }} ({{ $lecturer->lecturer_id }})
-                        </option>
-                    @endforeach
-                </select>
+                <label class="form-label">Nama Dosen</label>
+                @if($loggedLecturer)
+                    <input type="text" class="form-control" value="{{ $loggedLecturer->name }} ({{ $loggedLecturer->lecturer_id }})" readonly>
+                    <input type="hidden" name="lecturer_id" value="{{ $loggedLecturer->id }}">
+                @else
+                    <select name="lecturer_id" class="form-select" required>
+                        <option value="">-- Pilih Dosen --</option>
+                        @foreach($lecturers as $lecturer)
+                            <option value="{{ $lecturer->id }}" {{ old('lecturer_id') == $lecturer->id ? 'selected' : '' }}>
+                                {{ $lecturer->name }} ({{ $lecturer->lecturer_id }})
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
             </div>
 
             <div class="mb-3">
