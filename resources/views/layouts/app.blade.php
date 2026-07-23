@@ -217,6 +217,12 @@
             </a>
             <a href="{{ route('topic-applications.index') }}" class="{{ request()->routeIs('topic-applications.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-file-signature"></i> Aplikasi Topik
+            <div class="nav-section">Akun</div>
+            <a href="{{ route('student.profile.show') }}" class="{{ request()->routeIs('student.profile.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-user-gear"></i> Profil Saya
+            </a>
+            <a href="{{ route('student.password.edit') }}" class="{{ request()->routeIs('student.password.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-key"></i> Keamanan Akun
             </a>
             @endif
 
