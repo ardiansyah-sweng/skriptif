@@ -32,6 +32,17 @@ class StudentAccountControllerTest extends TestCase
             ->assertSee('Mahasiswa Skriptif');
     }
 
+    public function test_student_can_open_edit_mode_from_profile_page(): void
+    {
+        $student = $this->student();
+
+        $this->actingAs($student)
+            ->get(route('student.profile.show', ['edit' => 1]))
+            ->assertOk()
+            ->assertViewIs('auth.student-profile')
+            ->assertSee('Simpan Perubahan');
+    }
+
     public function test_student_can_update_profile(): void
     {
         $student = $this->student();
@@ -73,5 +84,22 @@ class StudentAccountControllerTest extends TestCase
             ->assertRedirect(route('student.password.edit'));
 
         $this->assertTrue(Hash::check('password-baru', $student->fresh()->password));
+    }
+
+    public function test_student_cannot_change_password_with_incorrect_current_password(): void
+    {
+        $student = $this->student();
+
+        $this->actingAs($student)
+            ->from(route('student.password.edit'))
+            ->put(route('student.password.update'), [
+                'current_password' => 'password-salah',
+                'password' => 'password-baru',
+                'password_confirmation' => 'password-baru',
+            ])
+            ->assertRedirect(route('student.password.edit'))
+            ->assertSessionHasErrors('current_password');
+
+        $this->assertTrue(Hash::check('password-lama', $student->fresh()->password));
     }
 }
