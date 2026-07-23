@@ -76,6 +76,20 @@
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="password" class="form-label">PASSWORD AKUN LOGIN <span class="text-danger">*</span></label>
+                    <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Minimal 8 karakter" required>
+                    <div class="form-text text-muted" style="font-size: 12px; margin-top: 6px;">Akun login dosen dibuat otomatis dengan email di atas, agar dosen bisa masuk ke sistem.</div>
+                    @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="password_confirmation" class="form-label">KONFIRMASI PASSWORD <span class="text-danger">*</span></label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Ulangi password" required>
+                </div>
+
                 <div class="d-flex justify-content-end gap-2 mt-4 pt-3" style="border-top: 1px solid #e2e8f0;">
                     <a href="{{ route('lecturers.index') }}" class="btn-back-custom">Batal</a>
                     <button type="submit" class="btn-save-action">

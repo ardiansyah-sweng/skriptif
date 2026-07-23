@@ -27,6 +27,7 @@
                 <h1 class="text-2xl font-bold text-gray-900">Pengumuman</h1>
                 <p class="text-sm text-gray-500 mt-1">Informasi terbaru untuk civitas akademika</p>
             </div>
+            @if(Auth::user()->role === 'admin')
             <button
                 onclick="document.getElementById('modalTambah').classList.remove('hidden')"
                 class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
@@ -36,9 +37,11 @@
                 </svg>
                 Tambah Pengumuman
             </button>
+            @endif
         </div>
 
         {{-- Modal Form Tambah --}}
+        @if(Auth::user()->role === 'admin')
         <div id="modalTambah" class="hidden fixed inset-0 z-50 flex items-center justify-center">
             <div class="absolute inset-0 bg-black/40" onclick="document.getElementById('modalTambah').classList.add('hidden')"></div>
             <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 p-6">
@@ -101,6 +104,7 @@
                 </form>
             </div>
         </div>
+        @endif
 
         {{-- List Pengumuman --}}
         @forelse($announcements as $announcement)
@@ -141,6 +145,7 @@
                             @endif
                         </p>
                     </div>
+                    @if(Auth::user()->role === 'admin')
                     <div class="flex items-center gap-2 shrink-0">
                         <button
                             type="button"
@@ -175,6 +180,7 @@
                             </button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         @empty
@@ -190,6 +196,7 @@
     </div>
 
     <!-- Modal Form Edit -->
+    @if(Auth::user()->role === 'admin')
     <div id="modalEdit" class="hidden fixed inset-0 z-50 flex items-center justify-center">
         <div class="absolute inset-0 bg-black/40" onclick="document.getElementById('modalEdit').classList.add('hidden')"></div>
         <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 p-6">
@@ -253,6 +260,7 @@
             </form>
         </div>
     </div>
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
