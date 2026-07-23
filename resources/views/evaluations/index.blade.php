@@ -291,7 +291,7 @@
                             <th>Mahasiswa / Skripsi</th>
                             <th style="width:180px">Pembimbing</th>
                             <th style="width:180px">Penguji</th>
-                            <th style="width:130px">Total Nilai Semprog</th>
+                            <th style="width:130px">Total Nilai Sempro</th>
                         </tr>
                     </thead>
                     <tbody>

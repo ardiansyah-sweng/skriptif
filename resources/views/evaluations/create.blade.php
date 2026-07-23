@@ -229,7 +229,7 @@
                 <div class="field" style="margin-bottom:0">
                     <label for="weight">Bobot Peran (%)</label>
                     <input type="number" name="weight" id="weight" min="0" max="100" step="0.01" value="{{ old('weight', 50) }}">
-                    <div class="hint">Default 50%, sesuai rekap Pembimbing 50% + Penguji 50% = Total Nilai Semprog.</div>
+                    <div class="hint">Default 50%, sesuai rekap Pembimbing 50% + Penguji 50% = Total Nilai Sempro.</div>
                     @error('weight') <div class="error-text">{{ $message }}</div> @enderror
                 </div>
             </div>
@@ -361,23 +361,13 @@
             roleTabs.forEach(tab => tab.classList.toggle('active', tab.dataset.roleTab === role));
             rolePanels.forEach(panel => panel.classList.toggle('active', panel.dataset.rolePanel === role));
 
+                document.querySelectorAll('.component-input').forEach(input => {
+                input.disabled = input.dataset.role !== role;
+                 });
+
             const lecturerSelect = document.querySelector(`.lecturer-select[data-role="${role}"]`);
             lecturerHidden.value = lecturerSelect ? lecturerSelect.value : '';
-            function setActiveRole(role) {
-    roleTabs.forEach(tab => tab.classList.toggle('active', tab.dataset.roleTab === role));
-    rolePanels.forEach(panel => panel.classList.toggle('active', panel.dataset.rolePanel === role));
-
-    // FIX: nonaktifkan input komponen dari role yang tidak aktif supaya
-    // tidak ikut ter-submit sebagai components[] kosong / salah rubrik
-    document.querySelectorAll('.component-input').forEach(input => {
-        input.disabled = input.dataset.role !== role;
-    });
-
-    const lecturerSelect = document.querySelector(`.lecturer-select[data-role="${role}"]`);
-    lecturerHidden.value = lecturerSelect ? lecturerSelect.value : '';
-
-    updateTotal();
-}
+            
 
             updateTotal();
             
