@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use App\Models\Lecturer;
+use App\Models\LecturerTopic;
 use App\Models\Skripsi;
 use App\Models\LogBook;
 use App\Models\ExamSchedule;
@@ -74,6 +75,7 @@ class DashboardController extends Controller
         $bimbinganCount = 0;
         $recentLogBooks = collect();
         $upcomingSchedules = collect();
+        $topics = collect();
 
         if ($lecturer) {
             $bimbinganCount = Skripsi::where('supervisor_id', $lecturer->id)
@@ -95,16 +97,29 @@ class DashboardController extends Controller
                 ->orderBy('jam_mulai')
                 ->take(10)
                 ->get();
+
+            $topics = LecturerTopic::with(['lecturer', 'applications.student'])
+                ->withCount('applications')
+                ->where('lecturer_id', $lecturer->id)
+                ->latest()
+                ->take(50)
+                ->get();
         }
 
         $totalAnnouncements = Announcement::count();
+        $topicCount = $topics->count();
+
+        $lecturers = Lecturer::all();
 
         return view('dashboard.dosen', compact(
             'lecturer',
             'bimbinganCount',
             'recentLogBooks',
             'upcomingSchedules',
-            'totalAnnouncements'
+            'totalAnnouncements',
+            'topics',
+            'topicCount',
+            'lecturers'
         ));
     }
 

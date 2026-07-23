@@ -27,8 +27,8 @@ Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index
 Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
 Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
+// HARUS sebelum route lecturers/{id} agar tidak konflik
 Route::resource('lecturers/topics', LecturerTopicController::class)->names('lecturer-topics');
-Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
 Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
 Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
 Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
