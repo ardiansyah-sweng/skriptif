@@ -171,6 +171,9 @@
             <a href="{{ route('exam-schedules.index') }}" class="{{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-calendar-check"></i> Jadwal Sidang
             </a>
+            <a href="{{ route('evaluations.index') }}" class="{{ request()->routeIs('evaluations.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-clipboard-check"></i> Evaluasi Skripsi
+            </a>
             @endif
 
             @if($role === 'admin')
@@ -212,11 +215,15 @@
             <a href="{{ route('student.skripsi.history') }}" class="{{ request()->routeIs('student.skripsi.history') ? 'active' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Skripsi
             </a>
+            <a href="{{ route('evaluations.index') }}" class="{{ request()->routeIs('evaluations.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-clipboard-check"></i> Evaluasi Skripsi
+            </a>
             <a href="{{ route('topic-board.index') }}" class="{{ request()->routeIs('topic-board.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-chalkboard"></i> Papan Topik
             </a>
             <a href="{{ route('topic-applications.index') }}" class="{{ request()->routeIs('topic-applications.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-file-signature"></i> Aplikasi Topik
+            </a>
             <div class="nav-section">Akun</div>
             <a href="{{ route('student.profile.show') }}" class="{{ request()->routeIs('student.profile.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-gear"></i> Profil Saya

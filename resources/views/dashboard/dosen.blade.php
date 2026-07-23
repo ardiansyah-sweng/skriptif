@@ -57,25 +57,31 @@
 </div>
 
 <div class="row g-3 mb-4">
-    <div class="col-md-3">
+    <div class="col-md-4 col-lg">
         <div class="stat-card" style="background: #4a7cbf;">
             <div class="stat-number">{{ $bimbinganCount }}</div>
             <div class="stat-label">Mahasiswa Bimbingan</div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4 col-lg">
         <div class="stat-card" style="background: #e67e22;">
             <div class="stat-number">{{ $topicCount }}</div>
             <div class="stat-label">Topik Dosen</div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4 col-lg">
         <div class="stat-card" style="background: #4a9c6f;">
             <div class="stat-number">{{ $upcomingSchedules->count() }}</div>
-            <div class="stat-label">Jadwal Sidang Mendatang</div>
+            <div class="stat-label">Jadwal Sidang</div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4 col-lg">
+        <div class="stat-card" style="background: #185FA5;">
+            <div class="stat-number">{{ $evaluationCount }}</div>
+            <div class="stat-label">Evaluasi Skripsi</div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg">
         <div class="stat-card" style="background: #7a6fa8;">
             <div class="stat-number">{{ $totalAnnouncements }}</div>
             <div class="stat-label">Pengumuman</div>

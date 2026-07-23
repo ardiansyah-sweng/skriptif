@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ElectiveCourseController;
+use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\ExamScheduleController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LogBookController;
 use App\Http\Controllers\LecturerTopicController;
@@ -10,12 +13,10 @@ use App\Http\Controllers\TopicApplicationController;
 use App\Http\Controllers\TopicBoardController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\StudentSkripsiController;
 use App\Http\Controllers\StudentSeminarProposalDocumentController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ExamScheduleController;
-use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\StudentSkripsiController;
 use App\Http\Controllers\UtilityController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
@@ -54,8 +55,8 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('evaluations', EvaluationController::class);
 
-    // Data master & manajemen penuh: khusus admin
     Route::middleware('role:admin')->group(function () {
         Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
         Route::resource('elective-courses', ElectiveCourseController::class);
@@ -75,78 +76,47 @@ Route::middleware('auth')->group(function () {
         Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
         Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 
-        // Penjadwalan sidang & keputusan hasil: khusus admin (dosen hanya melihat)
         Route::resource('exam-schedules', ExamScheduleController::class)->except(['index', 'show']);
         Route::patch('/exam-schedules/{schedule}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
 
-        // Persetujuan/penolakan pengajuan skripsi: khusus admin
         Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
         Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
         Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
 
-        // Penulisan pengumuman: khusus admin (semua role tetap bisa membaca)
         Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
         Route::put('/announcements/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
         Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
     });
 
-    // Data akademik yang boleh dilihat admin & dosen; log book boleh dikelola penuh oleh dosen
     Route::middleware('role:admin,dosen')->group(function () {
         Route::resource('exam-schedules', ExamScheduleController::class)->only(['index', 'show']);
 
         Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
 
-        // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
         Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
         Route::resource('log-books', LogBookController::class);
     });
 
-    // Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
     Route::get('storage/attachments/{filename}', function ($filename) {
         $filename = basename($filename);
         $path = 'attachments/' . $filename;
         if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
             abort(404);
         }
+
         return response()->file(\Illuminate\Support\Facades\Storage::disk('public')->path($path));
     });
 
-    // Group rute untuk student/skripsi (khusus mahasiswa)
     Route::prefix('student/skripsi')->middleware('role:mahasiswa')->group(function () {
-        Route::get('/', [StudentSkripsiController::class, 'index'])
-            ->name('student.skripsi.index');
+        Route::get('/', [StudentSkripsiController::class, 'index'])->name('student.skripsi.index');
+        Route::get('/submissions', [StudentSkripsiController::class, 'history'])->name('student.skripsi.history');
+        Route::get('/create', [StudentSkripsiController::class, 'create'])->name('student.skripsi.create');
+        Route::post('/', [StudentSkripsiController::class, 'store'])->name('student.skripsi.store');
 
-        // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
-        Route::get('/submissions', [StudentSkripsiController::class, 'history'])
-            ->name('student.skripsi.history');
-
-        Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
-            ->name('elective-courses.import');
-    // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
-    Route::get('/submissions', [StudentSkripsiController::class, 'history'])
-        ->name('student.skripsi.history');
-
-    Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
-        ->name('elective-courses.import');
-
-    // Rute untuk pengumpulan berkas syarat seminar proposal (khusus mahasiswa)
-
-    Route::get('/seminar-proposal/create', [StudentSeminarProposalDocumentController::class, 'create'])
-        ->name('seminar-proposal.create');
-
-    Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'store'])
-        ->name('seminar-proposal.store');
-
-    // TETAP CREATE: Tidak jadi diubah
-    Route::get('/create', [StudentSkripsiController::class, 'create'])
-        ->name('student.skripsi.create');
-
-    Route::post('/', [StudentSkripsiController::class, 'store'])
-        ->name('student.skripsi.store');
-
-        // REVISI: Hanya mengubah URL '/history' menjadi '/submissions'
-        Route::get('/submissions', [StudentSkripsiController::class, 'history'])
-            ->name('student.skripsi.history');
+        Route::get('/seminar-proposal/create', [StudentSeminarProposalDocumentController::class, 'create'])
+            ->name('seminar-proposal.create');
+        Route::post('/seminar-proposal', [StudentSeminarProposalDocumentController::class, 'store'])
+            ->name('seminar-proposal.store');
     });
 
     Route::prefix('student')->middleware('role:mahasiswa')->group(function () {

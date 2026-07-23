@@ -10,6 +10,7 @@ use App\Models\LogBook;
 use App\Models\ExamSchedule;
 use App\Models\ElectiveCourse;
 use App\Models\Announcement;
+use App\Models\Evaluation;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -41,6 +42,7 @@ class DashboardController extends Controller
         $totalExamSchedules = ExamSchedule::count();
         $totalElectiveCourses = ElectiveCourse::count();
         $totalAnnouncements = Announcement::count();
+        $totalEvaluations = Evaluation::count();
 
         $recentSkripsi = Skripsi::with('student')
             ->latest()
@@ -49,6 +51,11 @@ class DashboardController extends Controller
 
         $recentLogBooks = LogBook::with('student', 'lecturer')
             ->latest()
+            ->take(5)
+            ->get();
+
+        $recentEvaluations = Evaluation::with(['skripsi.student', 'lecturer'])
+            ->latest('evaluation_date')
             ->take(5)
             ->get();
 
@@ -63,8 +70,10 @@ class DashboardController extends Controller
             'totalExamSchedules',
             'totalElectiveCourses',
             'totalAnnouncements',
+            'totalEvaluations',
             'recentSkripsi',
-            'recentLogBooks'
+            'recentLogBooks',
+            'recentEvaluations'
         ));
     }
 
@@ -108,6 +117,12 @@ class DashboardController extends Controller
 
         $totalAnnouncements = Announcement::count();
         $topicCount = $topics->count();
+        $evaluationCount = Evaluation::count();
+
+        $recentEvaluations = Evaluation::with(['skripsi.student', 'lecturer'])
+            ->latest('evaluation_date')
+            ->take(5)
+            ->get();
 
         $lecturers = Lecturer::all();
 
@@ -119,6 +134,8 @@ class DashboardController extends Controller
             'totalAnnouncements',
             'topics',
             'topicCount',
+            'evaluationCount',
+            'recentEvaluations',
             'lecturers'
         ));
     }
@@ -130,6 +147,7 @@ class DashboardController extends Controller
         $skripsi = null;
         $schedules = collect();
         $recentLogBooks = collect();
+        $evaluations = collect();
 
         if ($student) {
             $skripsi = Skripsi::with('supervisor')
@@ -149,6 +167,13 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get();
+
+            $evaluations = Evaluation::with('lecturer')
+                ->whereHas('skripsi', function ($q) use ($student) {
+                    $q->where('student_id', $student->id);
+                })
+                ->latest('evaluation_date')
+                ->get();
         }
 
         $totalAnnouncements = Announcement::count();
@@ -158,6 +183,7 @@ class DashboardController extends Controller
             'skripsi',
             'schedules',
             'recentLogBooks',
+            'evaluations',
             'totalAnnouncements'
         ));
     }

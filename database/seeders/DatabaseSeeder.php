@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ElectiveCourseSeeder::class,
             SkripsiSeeder::class,
             ExamScheduleSeeder::class,
+            EvaluationComponentSeeder::class,
         ]);
 
         $this->call([

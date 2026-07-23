@@ -304,6 +304,20 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-3 counter-animate">
+        <div class="stat-card" style="background: #185FA5;">
+            <div class="stat-overlay"><i class="fa-solid fa-clipboard-check"></i></div>
+            <div class="stat-content d-flex align-items-center gap-3">
+                <div class="stat-icon-box" style="background: rgba(255,255,255,0.2);">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <div>
+                    <div class="stat-number" data-target="{{ $totalEvaluations }}">0</div>
+                    <div class="stat-label">Evaluasi Skripsi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 counter-animate">
         <div class="stat-card" style="background: var(--soft-rose);">
             <div class="stat-overlay"><i class="fa-solid fa-bullhorn"></i></div>
             <div class="stat-content d-flex align-items-center gap-3">
@@ -430,6 +444,52 @@
     </div>
 </div>
 
+<div class="row g-4 mt-1">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header-table">
+                <span class="section-header"><i class="fa-solid fa-clipboard-check text-info"></i> Evaluasi Skripsi Terbaru</span>
+                <a href="{{ route('evaluations.index') }}" class="btn btn-sm btn-outline-info rounded-pill px-3">
+                    Lihat Semua <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Mahasiswa</th>
+                                <th>Dosen Penilai</th>
+                                <th>Peran</th>
+                                <th>Nilai Akhir</th>
+                                <th>Tanggal Evaluasi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentEvaluations as $ev)
+                            <tr>
+                                <td class="fw-medium">{{ $ev->skripsi->student->name ?? '-' }}</td>
+                                <td>{{ $ev->lecturer->name ?? '-' }}</td>
+                                <td><span class="badge bg-secondary">{{ ucfirst($ev->role ?? 'penilai') }}</span></td>
+                                <td><span class="fw-bold text-primary">{{ $ev->final_score ?? $ev->score }}</span></td>
+                                <td>{{ \Carbon\Carbon::parse($ev->evaluation_date)->format('d/m/Y') }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-inbox fs-3 d-block mb-2"></i>
+                                    Belum ada data evaluasi skripsi.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
@@ -438,6 +498,9 @@
             </div>
             <div class="card-body">
                 <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ route('evaluations.index') }}" class="btn btn-outline-primary quick-action-btn">
+                        <i class="fa-solid fa-clipboard-check me-1"></i> Evaluasi Skripsi
+                    </a>
                     <a href="{{ route('students.index') }}" class="btn btn-outline-primary quick-action-btn">
                         <i class="fa-solid fa-user-graduate me-1"></i> Mahasiswa
                     </a>
