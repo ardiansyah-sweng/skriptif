@@ -44,17 +44,22 @@
     <form action="{{ route('topic-board.apply', $topic->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row gy-3">
-            <div class="col-md-6">
-                <label class="form-label">Nama Mahasiswa</label>
-                <select name="student_id" class="form-select" required>
-                    <option value="">-- Pilih Mahasiswa --</option>
-                    @foreach($students as $student)
-                        <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                            {{ $student->name }} ({{ $student->student_id }})
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Mahasiswa</label>
+                        @if($student)
+                            <input type="text" class="form-control" value="{{ $student->name }} ({{ $student->student_id }})" readonly>
+                            <input type="hidden" name="student_id" value="{{ $student->id }}">
+                        @else
+                            <select name="student_id" class="form-select" required>
+                                <option value="">-- Pilih Mahasiswa --</option>
+                                @foreach(\App\Models\Student::orderBy('name')->get() as $s)
+                                    <option value="{{ $s->id }}" {{ old('student_id') == $s->id ? 'selected' : '' }}>
+                                        {{ $s->name }} ({{ $s->student_id }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endif
+                    </div>
             <div class="col-12">
                 <label class="form-label">Pesan / Catatan</label>
                 <textarea name="message" class="form-control" rows="3" placeholder="Alasan atau catatan singkat">{{ old('message') }}</textarea>

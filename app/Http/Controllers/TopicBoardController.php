@@ -30,8 +30,11 @@ class TopicBoardController extends Controller
     public function show($id)
     {
         $topic = LecturerTopic::with('lecturer')->findOrFail($id);
-        $students = Student::orderBy('name')->get();
-        return view('topic_board.show', compact('topic', 'students'));
+        $student = null;
+        if (auth()->user()->role === 'mahasiswa') {
+            $student = Student::where('email', auth()->user()->email)->first();
+        }
+        return view('topic_board.show', compact('topic', 'student'));
     }
 }
 
