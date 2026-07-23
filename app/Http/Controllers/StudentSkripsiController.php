@@ -34,6 +34,7 @@ class StudentSkripsiController extends Controller
             return [
                 'id'                  => $lecturer->id,
                 'name'                => $lecturer->name,
+                'expertise'           => $lecturer->expertise,
                 'max_supervisors'     => $maxCapacity,
                 'approved_count'      => $approvedCount,
                 'remaining_capacity'  => $remainingCapacity,

@@ -60,7 +60,14 @@
 
                 <div class="form-group">
                     <label for="title">Thesis Title</label>
-                    <input type="text" id="title" name="title" placeholder="Example: Advisor recommendation system based on topic similarity" required>
+                    <input type="text" id="title" name="title" placeholder="Example: Advisor recommendation system based on topic similarity" required autocomplete="off">
+
+                    <div id="reco-box" class="reco-box" style="display:none;">
+                        <div class="reco-box-title">
+                            <i class="ti ti-sparkles"></i> Rekomendasi Dosen Berdasarkan Judul
+                        </div>
+                        <div id="reco-list" class="reco-list"></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -73,11 +80,11 @@
                     <select id="supervisor_id" name="supervisor_id">
                         <option value="">-- Select Advisor --</option>
                         @foreach($lecturersWithCapacity as $lecturer)
-                            <option value="{{ $lecturer['id'] }}" 
+                            <option value="{{ $lecturer['id'] }}"
                                 {{ old('supervisor_id') == $lecturer['id'] ? 'selected' : '' }}
                                 {{ !$lecturer['is_available'] ? 'disabled' : '' }}>
-                                {{ $lecturer['name'] }} 
-                                ({{ $lecturer['approved_count'] }}/{{ $lecturer['max_supervisors'] }} - 
+                                {{ $lecturer['name'] }}
+                                ({{ $lecturer['approved_count'] }}/{{ $lecturer['max_supervisors'] }} -
                                 {{ $lecturer['remaining_capacity'] }} tersisa)
                                 {{ !$lecturer['is_available'] ? '❌' : '' }}
                             </option>
@@ -167,6 +174,79 @@
             if (rows.length > 1) {
                 btn.closest('.course-row').remove();
             }
+        }
+
+
+
+
+        const lecturersData = @json($lecturersWithCapacity);
+
+        const titleInput = document.getElementById('title');
+        const recoBox = document.getElementById('reco-box');
+        const recoList = document.getElementById('reco-list');
+        const supervisorSelect = document.getElementById('supervisor_id');
+
+        let debounceTimer;
+        titleInput.addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => matchAdvisors(this.value), 350);
+        });
+
+        function matchAdvisors(title) {
+            if (title.trim().length < 3) {
+                recoBox.style.display = 'none';
+                return;
+            }
+
+            const titleWords = title.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+
+            const scored = lecturersData
+                .map(lect => {
+                    const keywords = (lect.expertise || '')   // <-- ganti dari lect.keywords
+                        .toLowerCase()
+                        .split(',')
+                        .map(k => k.trim())
+                        .filter(Boolean);
+                    const matched = keywords.filter(kw => titleWords.some(w => kw.includes(w) || w.includes(kw)));
+                    return { ...lect, matched, score: matched.length };
+                })
+                .filter(l => l.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 4);
+
+            if (scored.length === 0) {
+                recoBox.style.display = 'none';
+                return;
+            }
+
+            renderReco(scored);
+            recoBox.style.display = 'block';
+        }
+
+        function renderReco(items) {
+            recoList.innerHTML = items.map(lect => `
+                <div class="reco-item ${!lect.is_available ? 'disabled' : ''}" data-id="${lect.id}">
+                    <div>
+                        <div class="reco-name">${lect.name}</div>
+                        <div class="reco-match">${lect.matched.map(m => `<span>${m}</span>`).join('')}</div>
+                    </div>
+                    <div class="reco-capacity ${!lect.is_available ? 'full' : ''}">
+                        ${lect.approved_count}/${lect.max_supervisors}
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.reco-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    if (this.classList.contains('disabled')) return;
+
+                    supervisorSelect.value = this.dataset.id;
+                    supervisorSelect.dispatchEvent(new Event('change'));
+
+                    document.querySelectorAll('.reco-item').forEach(i => i.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
         }
     </script>
 @endsection
