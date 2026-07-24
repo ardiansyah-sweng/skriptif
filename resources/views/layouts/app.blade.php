@@ -191,6 +191,17 @@
             <a href="{{ route('log-books.index') }}" class="{{ request()->routeIs('log-books.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-notebook"></i> Log Book
             </a>
+            <a href="{{ route('lecturer-topics.index') }}" class="{{ request()->routeIs('lecturer-topics.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-lightbulb"></i> Topik Dosen
+            </a>
+            <a href="{{ route('topic-board.index') }}" class="{{ request()->routeIs('topic-board.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-chalkboard"></i> Papan Topik
+            </a>
+            @if($role === 'admin')
+            <a href="{{ route('topic-applications.index') }}" class="{{ request()->routeIs('topic-applications.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-file-signature"></i> Aplikasi Topik
+            </a>
+            @endif
             @endif
 
             @if($role === 'mahasiswa')
@@ -200,6 +211,18 @@
             </a>
             <a href="{{ route('student.skripsi.history') }}" class="{{ request()->routeIs('student.skripsi.history') ? 'active' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Skripsi
+            </a>
+            <a href="{{ route('topic-board.index') }}" class="{{ request()->routeIs('topic-board.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-chalkboard"></i> Papan Topik
+            </a>
+            <a href="{{ route('topic-applications.index') }}" class="{{ request()->routeIs('topic-applications.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-file-signature"></i> Aplikasi Topik
+            <div class="nav-section">Akun</div>
+            <a href="{{ route('student.profile.show') }}" class="{{ request()->routeIs('student.profile.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-user-gear"></i> Profil Saya
+            </a>
+            <a href="{{ route('student.password.edit') }}" class="{{ request()->routeIs('student.password.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-key"></i> Keamanan Akun
             </a>
             @endif
 
