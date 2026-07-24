@@ -42,6 +42,11 @@ class Announcement extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class,'author_id');
+    }
+
     /**
      * Scope: only published announcements.
      */

@@ -20,11 +20,10 @@ class Skripsi extends Model
         'rejection_note',
         'submission_date',
         'approval_date',
-        'elective_courses',
+        // 'elective_courses',
     ];
 
     protected $casts = [
-        'elective_courses' => 'array',
         'submission_date'  => 'date',
         'approval_date'    => 'date',
     ];
@@ -44,8 +43,21 @@ class Skripsi extends Model
         return $this->hasMany(ExamSchedule::class)->latest('tanggal_sidang');
     }
 
+
+    public function electiveCourses()
+    {
+        return $this->belongsToMany(
+            ElectiveCourse::class,
+            'elective_course_skripsi',
+            'skripsi_id',
+            'elective_course_id'
+        );
+    }
+}
+
     public function seminarProposalDocument()
     {
         return $this->hasOne(SeminarProposalDocument::class, 'skripsi_id');
     }
 }
+

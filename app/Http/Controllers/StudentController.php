@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\ImportStudentRequest;
@@ -40,6 +41,9 @@ class StudentController extends Controller
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
+        // Kalau sudah ada akun login dengan email yang sama, tautkan otomatis
+        $validated['user_id'] = User::where('email', $validated['email'])->value('id');
+
         Student::create($validated);
 
         return redirect()->route('students.index');
@@ -76,6 +80,9 @@ class StudentController extends Controller
             'year_entrance' => ['required', 'integer', 'digits:4'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
+
+        // Cek ulang tautan akun login, siapa tahu email diubah jadi cocok/tidak cocok lagi
+        $validated['user_id'] = User::where('email', $validated['email'])->value('id');
 
         $student->update($validated);
 

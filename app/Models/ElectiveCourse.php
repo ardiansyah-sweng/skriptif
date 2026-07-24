@@ -31,4 +31,14 @@ class ElectiveCourse extends Model
         'timestamp',
     ];
 
+    public function skripsis()
+    {
+        return $this->belongsToMany(
+            Skripsi::class,
+            'elective_course_skripsi',
+            'elective_course_id',
+            'skripsi_id'
+        );
+    }
+
 }

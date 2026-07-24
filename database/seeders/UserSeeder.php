@@ -27,6 +27,14 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name'       => 'Dr. Ahmad Fauzi, M.T.',
+                'email'      => 'ahmad.fauzi@tif.uad.ac.id',
+                'password'   => Hash::make('dosen123'),
+                'role'       => 'dosen',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

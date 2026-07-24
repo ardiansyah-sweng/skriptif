@@ -30,4 +30,20 @@ class User extends Authenticatable
             'role' => 'string',
         ];
     }
+
+    /**
+     * Relasi ke data mahasiswa (kalau akun ini akun mahasiswa).
+     */
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    /**
+     * Relasi ke data dosen (kalau akun ini akun dosen).
+     */
+    public function lecturer()
+    {
+        return $this->hasOne(Lecturer::class);
+    }
 }

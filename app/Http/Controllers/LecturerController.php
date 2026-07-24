@@ -51,12 +51,16 @@ class LecturerController extends Controller
             'max_supervisors.min' => 'Batas dosen pembimbing minimal 1.',
         ]);
 
+        // Cek ulang tautan akun login, siapa tahu email diubah jadi cocok/tidak cocok lagi
+        $linkedUserId = DB::table('users')->where('email', $request->email)->value('id');
+
         DB::table('lecturers')->where('id', $id)->update([
             'lecturer_id' => $request->lecturer_id,
             'name'        => $request->name,
             'email'       => $request->email,
             'expertise'   => $request->expertise,
             'max_supervisors' => (int) $request->max_supervisors,
+            'user_id'     => $linkedUserId,
             'updated_at'  => now(),
         ]);
 
@@ -79,6 +83,21 @@ class LecturerController extends Controller
             'email.unique'        => 'Email ini sudah dipakai untuk data dosen atau akun lain.',
         ]);
 
+
+        // Kalau sudah ada akun login dengan email yang sama, tautkan otomatis
+        $linkedUserId = DB::table('users')->where('email', $request->email)->value('id');
+
+        DB::table('lecturers')->insert([
+            'lecturer_id' => $request->lecturer_id,
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'expertise'   => $request->expertise,
+            'max_supervisors' => (int) $request->max_supervisors,
+            'user_id'     => $linkedUserId,
+            'created_at'  => now(),
+            'updated_at'  => now(),
+        ]);
+
         DB::transaction(function () use ($request) {
             DB::table('lecturers')->insert([
                 'lecturer_id' => $request->lecturer_id,
@@ -89,6 +108,7 @@ class LecturerController extends Controller
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ]);
+
 
             User::create([
                 'name'     => $request->name,

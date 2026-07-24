@@ -15,6 +15,7 @@ use App\Http\Controllers\StudentSeminarProposalDocumentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamScheduleController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UtilityController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -54,6 +55,38 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+
+    Route::get('elective-courses/search', [ElectiveCourseController::class, 'search'])->name('elective-courses.search');
+    Route::resource('elective-courses', ElectiveCourseController::class);
+    Route::resource('students', StudentController::class);
+    Route::post('students/import', [StudentController::class, 'import'])->name('students.import');
+    Route::get('/students-print', [StudentController::class, 'printAll'])->name('students.print');
+
+    Route::resource('exam-schedules', ExamScheduleController::class);
+    Route::patch('/exam-schedules/{schedule}/status', [ExamScheduleController::class, 'updateStatus'])->name('exam-schedules.update-status');
+
+    Route::get('/skripsi', [SkripsiController::class, 'index'])->name('skripsi.index');
+    Route::get('/skripsi/create', [SkripsiController::class, 'create'])->name('skripsi.create');
+    Route::post('/skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
+    Route::put('/skripsi/{id}/update-status', [SkripsiController::class, 'updateStatus'])->name('skripsi.updateStatus');
+    Route::get('/lecturers', [LecturerController::class, 'index'])->name('lecturers.index');
+    Route::get('/lecturers-print', [LecturerController::class, 'printAll'])->name('lecturers.print');
+    Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
+    Route::get('/lecturers/{id}/edit', [LecturerController::class, 'edit'])->name('lecturers.edit');
+    Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('lecturers.show');
+    Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
+    Route::post('/lecturers', [LecturerController::class, 'store'])->name('lecturers.store');
+    Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+    // Rute untuk mencetak log book bimbingan (seluruh mahasiswa atau per mahasiswa) ke PDF/printer
+    Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
+    Route::resource('log-books', LogBookController::class);
+    Route::post('elective-courses/import', [ElectiveCourseController::class, 'import'])
+        ->name('elective-courses.import');
 
     // Data master & manajemen penuh: khusus admin
     Route::middleware('role:admin')->group(function () {
@@ -100,6 +133,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/log-books-print', [LogBookController::class, 'printAll'])->name('log-books.print');
         Route::resource('log-books', LogBookController::class);
     });
+
 
     // Fallback untuk melayani file lampiran jika link simbolik public/storage rusak atau tidak ada
     Route::get('storage/attachments/{filename}', function ($filename) {

@@ -7,14 +7,38 @@ use App\Models\Lecturer;
 use App\Models\Skripsi;
 use App\Models\ElectiveCourse;
 use App\Models\Student;
+use App\Notifications\NewSkripsiSubmitted;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class StudentSkripsiController extends Controller
 {
+    /**
+     * Ambil data Student milik akun yang sedang login (bukan sembarang mahasiswa).
+     * Pakai relasi user_id dulu; kalau belum tertaut (data lama), fallback ke email
+     * lalu tautkan otomatis biar berikutnya lewat relasi langsung.
+     */
+    private function resolveAuthenticatedStudent()
+    {
+        $user = Auth::user();
+
+        if ($user->student) {
+            return $user->student;
+        }
+
+        $student = Student::where('email', $user->email)->first();
+        if ($student) {
+            $student->update(['user_id' => $user->id]);
+        }
+
+        return $student;
+    }
+
     public function create()
     {
-        $student = Student::first();
+        $student = $this->resolveAuthenticatedStudent();
         if (!$student) {
-            return redirect()->back()->with('error', 'Tidak ada data mahasiswa.');
+            return redirect()->back()->with('error', 'Data mahasiswa untuk akun ini tidak ditemukan.');
         }
 
         $lecturers = Lecturer::all();
@@ -47,10 +71,10 @@ class StudentSkripsiController extends Controller
 
  public function store(StoreStudentSkripsiRequest $request)
 {
-    $student = Student::first();
+    $student = $this->resolveAuthenticatedStudent();
 
     if (!$student) {
-        return redirect()->back()->with('error', 'Tidak ada data mahasiswa.');
+        return redirect()->back()->with('error', 'Data mahasiswa untuk akun ini tidak ditemukan.');
     }
 
     $lecturer = Lecturer::find($request->supervisor_id);
@@ -97,6 +121,14 @@ class StudentSkripsiController extends Controller
             'submission_date'       => now(),
         ]);
 
+        // Kirim notifikasi ke dosen pembimbing yang dipilih di form
+        $skripsi->load(['student', 'supervisor']);
+        if ($account = $skripsi->supervisor->account()) {
+            $account->notify(new NewSkripsiSubmitted($skripsi));
+        } else {
+            Log::warning('Notifikasi pengajuan skripsi baru gagal dikirim: tidak ada User dengan email ' . $skripsi->supervisor->email);
+        }
+
         return redirect()
             ->route('student.skripsi.history')
             ->with('success', 'Pengajuan berhasil!');
@@ -108,7 +140,7 @@ class StudentSkripsiController extends Controller
 
     public function history()
     {
-        $student = Student::first();
+        $student = $this->resolveAuthenticatedStudent();
         $skripsis = $student
             ? Skripsi::where('student_id', $student->id)->with('supervisor')->latest()->get()
             : collect();
